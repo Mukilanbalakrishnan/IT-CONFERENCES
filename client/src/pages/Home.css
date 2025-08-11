@@ -1,5 +1,32 @@
 /* --- Homepage Specific CSS --- */
 
+/* --- Animation Keyframes --- */
+@keyframes modernFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* NEW: Keyframes for a more dynamic letter-by-letter animation */
+@keyframes letterFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9) rotate(-5deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
+
 /* --- Hero Section --- */
 .hero {
   position: relative;
@@ -34,27 +61,56 @@
   align-items: center;
   gap: 1.5rem;
 }
-.hero h1 {
-  color: var(--white);
-  font-size: clamp(2.5rem, 5vw, 4rem);
+
+/* NEW: Styles for the animated title and its letters */
+.hero .animated-title {
+  color: var(--white) !important; /* Ensures text is white */
+  font-size: clamp(2rem, 5vw, 3.2rem); 
   font-weight: 800;
   text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  line-height: 1.2; 
+  letter-spacing: -0.02em; 
 }
+.hero .animated-title span {
+  display: inline-block;
+  opacity: 0;
+  animation: letterFadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
 .hero-subtitle {
   color: var(--white);
-  opacity: 0.9;
-  font-size: 1.1rem;
-  max-width: 500px;
+  opacity: 0; /* Start hidden for animation */
+  font-size: clamp(0.9rem, 2vw, 1.05rem); 
+  max-width: 600px;
   text-shadow: 0 1px 5px rgba(0,0,0,0.2);
+  font-weight: 500;
+  animation: modernFadeInUp 0.7s ease-out 1s forwards; /* Delayed start */
 }
 .hero-buttons {
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
+  animation: modernFadeInUp 0.7s ease-out 1.2s forwards; /* Delayed start */
+  opacity: 0; /* Start hidden for animation */
 }
 .hero-title-decoration {
-    margin-bottom: -0.5rem;
+    margin-bottom: 0rem;
 }
+
+.hero .kicker {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    backdrop-filter: blur(5px);
+    color: var(--white);
+    animation: modernFadeInUp 0.7s ease-out 0.8s forwards; /* Delayed start */
+    opacity: 0; /* Start hidden for animation */
+}
+
 
 /* --- Countdown Timer --- */
 .countdown-container {
@@ -123,7 +179,8 @@
 /* --- About Section CSS --- */
 .about-section {
   padding: 6rem 0;
-  background: var(--white);
+  background: var(--surface-light);
+  overflow-x: hidden; /* Prevent horizontal scrollbar during animation */
 }
 
 .about-grid {
@@ -135,6 +192,8 @@
 
 .about-images {
   position: relative;
+  animation: modernFadeInUp 0.8s ease-out 0.2s forwards;
+  opacity: 0;
 }
 
 .image-grid {
@@ -154,7 +213,7 @@
 }
 
 .about-image:hover {
-  transform: scale(1.05);
+  transform: scale(1.05) rotate(2deg);
   z-index: 5;
 }
 
@@ -163,9 +222,10 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: var(--white);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
   color: var(--brand-blue-dark);
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 50%;
   width: 120px;
   height: 120px;
@@ -176,14 +236,14 @@
   font-weight: 700;
   font-size: 0.9rem;
   cursor: pointer;
-  box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
   z-index: 10;
 }
 
 .promo-video-btn:hover {
   transform: translate(-50%, -50%) scale(1.1);
-  box-shadow: 0 0 0 15px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
 }
 
 .play-icon {
@@ -202,40 +262,73 @@
   font-weight: 800;
   letter-spacing: 0.08em;
   margin-bottom: 1rem;
+  animation: modernFadeInUp 0.7s ease-out 0.4s forwards;
+  opacity: 0;
 }
 
 .about-content h2 {
   font-size: 2.5rem;
   margin-bottom: 1.5rem;
+  animation: modernFadeInUp 0.7s ease-out 0.5s forwards;
+  opacity: 0;
 }
 
 .about-content .lead-quiet {
   font-size: 1.1rem;
   color: var(--text-secondary);
   margin-bottom: 2rem;
+  animation: modernFadeInUp 0.7s ease-out 0.6s forwards;
+  opacity: 0;
 }
 
 .about-features {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  gap: 1rem;
   margin-bottom: 2.5rem;
+  animation: modernFadeInUp 0.7s ease-out 0.7s forwards;
+  opacity: 0;
 }
 
 .feature-item {
   display: flex;
   align-items: center;
   gap: 1rem;
+  background: var(--white);
+  padding: 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--surface-dark);
+  transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-soft);
+    border-color: var(--brand-orange);
 }
 
 .feature-item .feature-icon {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  background: var(--brand-orange);
+  color: var(--white);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
 }
 
 .feature-item p {
   margin: 0;
   font-weight: 600;
   color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.about-content .btn {
+  animation: modernFadeInUp 0.7s ease-out 0.8s forwards;
+  opacity: 0;
 }
 
 .about-content .btn .arrow {
@@ -278,7 +371,7 @@
 @media (max-width: 600px) {
   .hero {
     min-height: 80vh;
-    padding-bottom: 15rem; /* Make space for countdown timer */
+    padding-bottom: 16rem; 
   }
   .hero-buttons {
     flex-direction: column;
