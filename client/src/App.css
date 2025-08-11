@@ -1,4 +1,4 @@
-/* --- KSR Conference Styleguide CSS --- */
+/* --- KSR Conference Global CSS --- */
 :root{
   /* Brand Palette (from reference images) */
   --brand-orange: #F57C00;        /* Vibrant orange for primary actions */
@@ -6,6 +6,7 @@
   --brand-blue-dark: #0D47A1;     /* Deep navy blue from banners/headings */
   --brand-blue-primary: #1976D2;  /* A versatile primary blue for info text */
   --brand-blue-light: #E3F2FD;    /* Very light blue for subtle backgrounds */
+  --brand-red: #D32F2F;           /* Secondary action red */
 
   /* Neutrals */
   --text-primary: #111318;      /* Dark charcoal for primary text */
@@ -13,10 +14,6 @@
   --surface-light: #f8f9fa;     /* Off-white for page backgrounds */
   --surface-dark: #e9ecef;      /* Light gray for cards/dividers */
   --white: #FFFFFF;
-
-  /* Semantic */
-  --success: #2E9A4A;
-  --danger:  #D64545;
 
   /* Spacing / layout tokens */
   --page-max-width: 1200px;
@@ -39,7 +36,6 @@ body{
   padding:0;
 }
 
-/* Mixed heading colors for brand identity and contrast */
 h1, h2, h3 { font-weight: 700; }
 h1 { font-size: 2.5rem; line-height: 1.1; color: var(--brand-blue-dark); }
 h2 { font-size: 1.75rem; color: var(--text-primary); }
@@ -55,7 +51,7 @@ p { color: var(--text-secondary); }
   padding:0 var(--gutter);
 }
 
-/* Header / nav */
+/* --- Header / Navbar --- */
 .header{
   background:var(--white);
   border-bottom:1px solid var(--surface-dark);
@@ -71,8 +67,6 @@ p { color: var(--text-secondary); }
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
 }
-
-/* Logo */
 .brand{
   display:flex;
   align-items:center;
@@ -90,36 +84,36 @@ p { color: var(--text-secondary); }
   color: var(--text-secondary);
   font-size:0.875rem;
 }
-
-/* Nav links */
 .nav{
   display:flex;
-  gap:1rem;
+  gap:1.5rem;
   align-items:center;
 }
 .nav a{
   color: var(--text-primary);
   text-decoration:none;
-  padding:0.5rem 0.5rem;
+  padding:0.5rem;
   border-radius:8px;
   font-weight:600;
   transition: all 0.2s ease;
 }
-.nav a:hover{ color: var(--brand-orange); background: rgba(245, 124, 0, 0.08); }
+.nav a:hover{ color: var(--brand-orange); }
 
-/* Buttons */
+/* --- Buttons --- */
 .btn{
   display:inline-flex;
   align-items:center;
   justify-content:center;
   gap:0.5rem;
   border:0;
-  padding:0.75rem 1.25rem;
+  padding:0.75rem 1.5rem;
   font-weight:700;
+  font-size: 0.9rem;
   border-radius:10px;
   cursor:pointer;
   text-decoration:none;
   transition: all 0.2s ease;
+  text-transform: uppercase;
 }
 .btn-primary{
   background: var(--brand-orange);
@@ -131,67 +125,18 @@ p { color: var(--text-secondary); }
   background: var(--brand-orange-dark);
   box-shadow: 0 10px 26px rgba(245, 124, 0, 0.3);
 }
-.btn-primary:disabled {
-    background: var(--text-secondary);
-    cursor: not-allowed;
-    box-shadow: none;
+.btn-secondary {
+  background: var(--brand-red);
+  color: var(--white);
+  box-shadow: 0 6px 18px rgba(211, 47, 47, 0.25);
 }
-.btn-outline{
-  background:transparent;
-  color: var(--brand-orange);
-  border:2px solid rgba(245, 124, 0, 0.2);
-}
-.btn-outline:hover {
-    background: rgba(245, 124, 0, 0.1);
-    border-color: rgba(245, 124, 0, 0.3);
+.btn-secondary:hover {
+  transform:translateY(-2px);
+  background: #B71C1C;
+  box-shadow: 0 10px 26px rgba(211, 47, 47, 0.3);
 }
 
-/* Badge */
-.badge{
-  display:inline-block;
-  padding:0.25rem 0.65rem;
-  background: rgba(245, 124, 0, 0.1);
-  color: var(--brand-orange);
-  font-weight:700;
-  border-radius:999px;
-  font-size:0.85rem;
-}
-
-/* Cards & Grid */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:1.25rem;
-}
-.card{
-  background:var(--white);
-  border-radius:10px;
-  padding:1.25rem;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid var(--surface-dark);
-}
-.card h3{
-  margin:0 0 0.5rem 0;
-  font-size:1.1rem;
-  color: var(--brand-blue-dark); /* Card titles are brand blue for emphasis */
-}
-.card p{
-  margin:0;
-  color: var(--text-secondary);
-  font-size:0.95rem;
-}
-
-/* Callout / Info strip */
-.callout{
-  background: var(--brand-blue-light);
-  border-left:4px solid var(--brand-blue-primary);
-  padding:1rem 1.25rem;
-  border-radius:8px;
-  color: var(--brand-blue-dark);
-  font-weight: 500;
-}
-
-/* Footer */
+/* --- Footer --- */
 .footer{
   background: var(--brand-blue-dark);
   padding: 2.5rem 0;
@@ -206,47 +151,9 @@ p { color: var(--text-secondary); }
 }
 .footer p {
   color: var(--surface-light);
+  margin: 0;
 }
 .footer .links { display:flex; gap:1rem; flex-wrap:wrap; }
-
-/* Small components / helpers */
-.kicker{
-  font-size:0.85rem;
-  text-transform:uppercase;
-  color: var(--brand-orange);
-  font-weight:800;
-  letter-spacing:0.08em;
-}
-.lead-quiet{ color: var(--text-secondary); font-size:1.05rem; }
-
-/* Form elements */
-input,textarea,select{
-  width:100%;
-  padding:0.75rem 0.85rem;
-  border:1px solid var(--surface-dark);
-  border-radius:8px;
-  background:var(--white);
-  color: var(--text-primary);
-  font-size:0.95rem;
-  font-family: 'Poppins', sans-serif;
-}
-input:focus,textarea:focus,select:focus{
-  outline:none;
-  box-shadow:0 0 0 3px rgba(245, 124, 0, 0.15);
-  border-color: var(--brand-orange);
-}
-.form-group {
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-}
-.form-group input {
-    flex-grow: 1;
-}
-
-/* Link styles */
-a{ color: var(--brand-orange); text-decoration:none; font-weight: 600; }
-a:hover{ text-decoration:underline }
 .footer a { 
     color: var(--white);
     font-weight: 500;
@@ -256,19 +163,30 @@ a:hover{ text-decoration:underline }
     text-decoration: none;
 }
 
+/* --- Responsive Design for Global Elements --- */
 
-/* Responsive adjustments */
-@media (max-width:900px){
-  .header .inner{ padding:0.5rem var(--gutter) }
+/* Tablet */
+@media (max-width: 900px) {
+  .nav {
+    gap: 1rem;
+  }
 }
 
-/* Page-specific styles from original HTML (can be removed if not needed) */
-body { padding-top: 0; padding-bottom: 2rem; }
-main.container { padding-top: 2rem; }
-section { margin-bottom: 3rem; }
-section h2 { margin-bottom: 1rem; }
-hr { margin: 2rem 0; border: none; height: 1px; background: var(--surface-dark); }
-
-/* Utilities */
-.mt-2 { margin-top: 1rem; }
-.text-danger { color: var(--danger); }
+/* Mobile */
+@media (max-width: 600px) {
+  .header .inner {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .nav {
+    display: none; /* Hide nav links on mobile; requires JS to toggle */
+  }
+  .header-actions {
+    display: none; /* Hide button on mobile */
+  }
+  .footer .container {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+}
