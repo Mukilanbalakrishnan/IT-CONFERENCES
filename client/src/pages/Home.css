@@ -14,15 +14,14 @@
   }
 }
 
-/* NEW: Keyframes for a more dynamic letter-by-letter animation */
 @keyframes letterFadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px) scale(0.9) rotate(-5deg);
+    transform: translateY(10px) scale(0.9);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1) rotate(0deg);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -41,7 +40,7 @@
   background-position: center;
   color: var(--white);
   text-align: center;
-  overflow: hidden; /* Prevents countdown from overflowing on small screens */
+  overflow: hidden;
 }
 .hero::before {
   content: '';
@@ -62,9 +61,8 @@
   gap: 1.5rem;
 }
 
-/* NEW: Styles for the animated title and its letters */
 .hero .animated-title {
-  color: var(--white) !important; /* Ensures text is white */
+  color: var(--white) !important;
   font-size: clamp(2rem, 5vw, 3.2rem); 
   font-weight: 800;
   text-shadow: 0 2px 10px rgba(0,0,0,0.3);
@@ -74,24 +72,24 @@
 .hero .animated-title span {
   display: inline-block;
   opacity: 0;
-  animation: letterFadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: letterFadeIn 0.5s ease-out forwards;
 }
 
 .hero-subtitle {
   color: var(--white);
-  opacity: 0; /* Start hidden for animation */
+  opacity: 0;
   font-size: clamp(0.9rem, 2vw, 1.05rem); 
   max-width: 600px;
   text-shadow: 0 1px 5px rgba(0,0,0,0.2);
   font-weight: 500;
-  animation: modernFadeInUp 0.7s ease-out 1s forwards; /* Delayed start */
+  animation: modernFadeInUp 0.7s ease-out 1s forwards;
 }
 .hero-buttons {
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
-  animation: modernFadeInUp 0.7s ease-out 1.2s forwards; /* Delayed start */
-  opacity: 0; /* Start hidden for animation */
+  animation: modernFadeInUp 0.7s ease-out 1.2s forwards;
+  opacity: 0;
 }
 .hero-title-decoration {
     margin-bottom: 0rem;
@@ -107,8 +105,8 @@
     border-radius: 50px;
     backdrop-filter: blur(5px);
     color: var(--white);
-    animation: modernFadeInUp 0.7s ease-out 0.8s forwards; /* Delayed start */
-    opacity: 0; /* Start hidden for animation */
+    animation: modernFadeInUp 0.7s ease-out 0.8s forwards;
+    opacity: 0;
 }
 
 
@@ -178,29 +176,26 @@
 
 /* --- About Section CSS --- */
 .about-section {
-  padding: 6rem 0;
-  background: var(--surface-light);
-  overflow-x: hidden; /* Prevent horizontal scrollbar during animation */
+  padding: 6rem var(--gutter);
+  background: var(--white);
 }
 
 .about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  gap: 5rem;
   align-items: center;
 }
 
 .about-images {
   position: relative;
-  animation: modernFadeInUp 0.8s ease-out 0.2s forwards;
-  opacity: 0;
 }
 
 .image-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .about-image {
@@ -261,33 +256,25 @@
   color: var(--brand-orange);
   font-weight: 800;
   letter-spacing: 0.08em;
-  margin-bottom: 1rem;
-  animation: modernFadeInUp 0.7s ease-out 0.4s forwards;
-  opacity: 0;
+  margin-bottom: 1.5rem;
 }
 
 .about-content h2 {
   font-size: 2.5rem;
-  margin-bottom: 1.5rem;
-  animation: modernFadeInUp 0.7s ease-out 0.5s forwards;
-  opacity: 0;
+  margin-bottom: 2rem;
 }
 
 .about-content .lead-quiet {
   font-size: 1.1rem;
   color: var(--text-secondary);
-  margin-bottom: 2rem;
-  animation: modernFadeInUp 0.7s ease-out 0.6s forwards;
-  opacity: 0;
+  margin-bottom: 2.5rem;
 }
 
 .about-features {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 2.5rem;
-  animation: modernFadeInUp 0.7s ease-out 0.7s forwards;
-  opacity: 0;
+  gap: 1.5rem;
+  margin-bottom: 3.5rem;
 }
 
 .feature-item {
@@ -295,7 +282,7 @@
   align-items: center;
   gap: 1rem;
   background: var(--white);
-  padding: 1rem;
+  padding: 1.25rem;
   border-radius: var(--radius);
   border: 1px solid var(--surface-dark);
   transition: all 0.3s ease;
@@ -327,8 +314,7 @@
 }
 
 .about-content .btn {
-  animation: modernFadeInUp 0.7s ease-out 0.8s forwards;
-  opacity: 0;
+  margin-top: 4vh;
 }
 
 .about-content .btn .arrow {
@@ -346,6 +332,12 @@
 
 /* Tablet */
 @media (max-width: 900px) {
+  .hero h1 {
+    font-size: clamp(2.2rem, 6vw, 3rem);
+  }
+  .hero-subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
+  }
   .countdown-container {
     flex-direction: column;
     text-align: center;

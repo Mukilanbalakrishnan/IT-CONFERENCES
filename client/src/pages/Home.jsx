@@ -69,9 +69,18 @@ const Hero = () => {
                     <p className="kicker">S3-ECBE' 2026</p>
                 </div>
                 <h1 className="animated-title">
-                    {title.split('').map((char, index) => (
-                        <span key={index} style={{ animationDelay: `${index * 0.03}s` }}>
-                            {char === ' ' ? '\u00A0' : char}
+                    {title.split(' ').map((word, wordIndex) => (
+                        <span key={wordIndex} className="animated-word">
+                            {word.split('').map((char, charIndex) => (
+                                <span
+                                    key={charIndex}
+                                    className="animated-char"
+                                    style={{ animationDelay: `${(wordIndex * 0.1) + (charIndex * 0.03)}s` }}
+                                >
+                                    {char}
+                                </span>
+                            ))}
+                            {'\u00A0'}{/* Non-breaking space */}
                         </span>
                     ))}
                 </h1>
@@ -90,35 +99,8 @@ const Hero = () => {
 
 // --- About Section Component ---
 const About = () => {
-  const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      {
-        threshold: 0.1, // Trigger when 10% of the element is visible
-      }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
-  }, []);
-
   return (
-    <section ref={sectionRef} className={`about-section ${isVisible ? 'is-visible' : ''}`}>
+    <section className="about-section">
       <div className="container">
         <div className="about-grid">
           <div className="about-images">
@@ -140,24 +122,6 @@ const About = () => {
               The S3-ECBE' 2026 conference provides a vibrant platform for researchers, academics, and industry professionals to present their latest findings and innovations. This year's theme focuses on integrated, sustainable engineering solutions across multiple disciplines.
             </p>
             <p>All accepted papers will be published in the book chapter titled: <strong>“Integrated Sustainable Engineering Solutions: An Intelligent Multidisciplinary Approach”</strong>.</p>
-            <div className="about-features">
-              <div className="feature-item">
-                <span className="feature-icon">🎓</span>
-                <p>100+ Expert Speakers</p>
-              </div>
-              <div className="feature-item">
-                <span className="feature-icon">💡</span>
-                <p>Innovative Workshops</p>
-              </div>
-              <div className="feature-item">
-                <span className="feature-icon">🌐</span>
-                <p>Global Networking</p>
-              </div>
-              <div className="feature-item">
-                <span className="feature-icon">🚀</span>
-                <p>Future-Ready Skills</p>
-              </div>
-            </div>
             <button className="btn btn-secondary">
               View Our Schedule 
               <span className="arrow">→</span>
