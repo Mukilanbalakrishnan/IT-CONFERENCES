@@ -1,73 +1,83 @@
 import React from 'react';
 import './Tracks.css';
 
-const tracksData = [
-  {
-    title: "Track 1: Electrical Engineering",
-    description: "Innovative and Sustainable Smart Technologies",
-    themes: [
-      "Smart grids and microgrids", "Renewable energy systems", "Energy storage technologies",
-      "Power electronics", "Smart metering", "Energy-efficient machines",
-      "Automation and control", "IoT and AI-enabled systems", "Sustainable materials",
-      "Electric vehicle technologies"
-    ]
-  },
-  {
-    title: "Track 2: Communication Engineering",
-    description: "Innovative and Sustainable Smart Technologies",
-    themes: [
-      "Energy-efficient wireless systems", "Green networking", "Smart IoT and sensor networks",
-      "5G/6G technologies", "Cognitive radio", "AI for communication",
-      "Low-power hardware", "Sustainable network architectures", "Smart city communication",
-      "Security and privacy"
-    ]
-  },
-  {
-    title: "Track 3: Biomedical Engineering",
-    description: "Innovative and Sustainable Smart Technologies",
-    themes: [
-      "Energy-efficient biomedical devices", "Smart wearable health systems", "Sustainable signal processing",
-      "AI for healthcare", "Low-power implantable devices", "Green manufacturing",
-      "Telemedicine technologies", "Smart prosthetics", "Biomedical data analytics",
-      "IoT in healthcare"
-    ]
-  },
-  {
-    title: "Track 4: Computer Science & Multidisciplinary Applications",
-    description: "Innovative and Sustainable Smart Technologies",
-    themes: [
-      "Energy-efficient algorithms", "Sustainable AI and machine learning", "Smart data analytics",
-      "Green cloud computing", "IoT and cyber-physical systems", "Human-computer interaction",
-      "Multidisciplinary approaches", "Smart automation and robotics", "Blockchain for sustainability",
-      "CS integration with other fields"
-    ]
-  }
+// --- Data for the Schedule Section ---
+const scheduleData = [
+    {
+        dayLabel: { day: 'Sun', date: 'Aug 2022' },
+        events: [{
+            time: '11:00 - 12:00',
+            title: 'Track 1 - Innovative and Sustainable Smart Technologies in Electrical Engineering',
+            description: 'Focuses on smart grids, renewable energy integration, and energy-efficient electrical systems. Highlights automation, electric vehicles, and AI-enabled power infrastructure for a sustainable future.',
+        },{
+            time: '09:30 - 10:30',
+            title: 'Track 2 - : Innovative and Sustainable Smart Technologies in Communication Engineering',
+            description: 'Covers energy-efficient wireless systems, 5G/6G connectivity, and smart IoT networks. Emphasizes AI-driven optimization, secure communication, and technologies for smart cities and green networking.',
+        }],
+    },
+    {
+        dayLabel: { day: 'Mon', date: 'Aug 2022' },
+        events: [
+            {
+                time: '14:00 - 15:00',
+                 title: 'Track 3 - Innovative and Sustainable Smart Technologies in Biomedical Engineering',
+                 description: 'Explores smart biomedical devices, AI-powered diagnostics, and IoT-enabled healthcare. Promotes wearable monitoring, telemedicine, and sustainable materials for medical innovation and accessibility.',
+       },
+            {
+                time: '17:00 - 18:00',
+                title: 'Track 4 - Innovative and Sustainable Smart Technologies in Computer Science and Multidisciplinary Applications',
+                description: 'Highlights green computing, sustainable AI, and smart data analytics for societal impact. Encourages cross-domain innovation in healthcare, energy, and automation through secure, intelligent systems.',
+       },
+        ],
+    },
 ];
 
-const Tracks = () => {
-  return (
-    <section className="tracks-section">
-      <div className="container">
-        <div className="section-header">
-          <p className="kicker">// CONFERENCE TRACKS</p>
-          <h2>Explore Our Themes</h2>
-        </div>
-        <div className="tracks-grid">
-          {tracksData.map((track, index) => (
-            <div className="track-card" key={index}>
-              <h3>{track.title}</h3>
-              <p className="track-description">{track.description}</p>
-              <ul className="themes-list">
-                {track.themes.map((theme, i) => (
-                  <li key={i}>{theme}</li>
-                ))}
-              </ul>
+// --- Schedule Section Component ---
+const Schedule = () => (
+    <section className="schedule-section-wrapper">
+        <div className="container">
+            <div className="section-header">
+                <p className="kicker">// SCHEDULE DATES</p>
+                <h2>Digital Business Conference</h2>
             </div>
-          ))}
+            <div className="schedule-layout">
+                {scheduleData.map((dayGroup, index) => (
+                    <div className="day-schedule-group" key={index}>
+                        <div className="date-tab">
+                            <span className="tab-text">{dayGroup.dayLabel.day} {dayGroup.dayLabel.date}</span>
+                        </div>
+                        <div className="events-list">
+                            {dayGroup.events.map((event, eventIndex) => (
+                                <div className="event-card" key={eventIndex}>
+                                    <div className="event-details">
+                                        <div className="event-time">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/></svg>
+                                            <span>{event.time}</span>
+                                        </div>
+                                        <h3>{event.title}</h3>
+                                        <p>{event.description}</p>
+                                    </div>
+                                    <button className="expand-button" aria-label="More details">+</button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
-      </div>
     </section>
-  );
+);
+
+
+
+// --- Main Page Component ---
+const ConferencePage = () => {
+    return (
+        // A simple wrapper for the main content
+        <div className="main-content-wrapper">
+            <Schedule />
+        </div>
+    );
 };
 
-export default Tracks;
+export default ConferencePage;
