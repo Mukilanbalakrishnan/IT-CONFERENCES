@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../App.css';
 import './Home.css';
-import './Tracks.css';
+import Tracks from './Tracks'; 
 import './Organizers.css';
 import Navbar from '../header/Navbar'; 
 
@@ -64,6 +64,10 @@ const Hero = () => {
     const title = "Joint International Conference on Research and Innovation";
     return (
         <section className="hero">
+            <video autoPlay loop muted className="hero-video-bg">
+                <source src="https://res.cloudinary.com/dllbh1v1m/video/upload/v1754979177/vdo1_g6wq8h.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
             <div className="hero-content">
                 <div className="hero-title-decoration">
                     <p className="kicker">S3-ECBE' 2026</p>
@@ -80,7 +84,7 @@ const Hero = () => {
                                     {char}
                                 </span>
                             ))}
-                            {'\u00A0'}{/* Non-breaking space */}
+                            {'\u00A0'}
                         </span>
                     ))}
                 </h1>
@@ -99,8 +103,35 @@ const Hero = () => {
 
 // --- About Section Component ---
 const About = () => {
+  const sectionRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      {
+        threshold: 0.1, 
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <section className="about-section">
+    <section ref={sectionRef} className={`about-section ${isVisible ? 'is-visible' : ''}`}>
       <div className="container">
         <div className="about-grid">
           <div className="about-images">
@@ -133,76 +164,6 @@ const About = () => {
   );
 };
 
-
-// --- Tracks Component ---
-const Tracks = () => {
-    const tracksData = [
-      {
-        title: "Track 1: Electrical Engineering",
-        description: "Innovative and Sustainable Smart Technologies",
-        themes: [
-          "Smart grids and microgrids", "Renewable energy systems", "Energy storage technologies",
-          "Power electronics", "Smart metering", "Energy-efficient machines",
-          "Automation and control", "IoT and AI-enabled systems", "Sustainable materials",
-          "Electric vehicle technologies"
-        ]
-      },
-      {
-        title: "Track 2: Communication Engineering",
-        description: "Innovative and Sustainable Smart Technologies",
-        themes: [
-          "Energy-efficient wireless systems", "Green networking", "Smart IoT and sensor networks",
-          "5G/6G technologies", "Cognitive radio", "AI for communication",
-          "Low-power hardware", "Sustainable network architectures", "Smart city communication",
-          "Security and privacy"
-        ]
-      },
-      {
-        title: "Track 3: Biomedical Engineering",
-        description: "Innovative and Sustainable Smart Technologies",
-        themes: [
-          "Energy-efficient biomedical devices", "Smart wearable health systems", "Sustainable signal processing",
-          "AI for healthcare", "Low-power implantable devices", "Green manufacturing",
-          "Telemedicine technologies", "Smart prosthetics", "Biomedical data analytics",
-          "IoT in healthcare"
-        ]
-      },
-      {
-        title: "Track 4: Computer Science & Multidisciplinary Applications",
-        description: "Innovative and Sustainable Smart Technologies",
-        themes: [
-          "Energy-efficient algorithms", "Sustainable AI and machine learning", "Smart data analytics",
-          "Green cloud computing", "IoT and cyber-physical systems", "Human-computer interaction",
-          "Multidisciplinary approaches", "Smart automation and robotics", "Blockchain for sustainability",
-          "CS integration with other fields"
-        ]
-      }
-    ];
-
-  return (
-    <section className="tracks-section">
-      <div className="container">
-        <div className="section-header">
-          <p className="kicker">// CONFERENCE TRACKS</p>
-          <h2>Explore Our Themes</h2>
-        </div>
-        <div className="tracks-grid">
-          {tracksData.map((track, index) => (
-            <div className="track-card" key={index}>
-              <h3>{track.title}</h3>
-              <p className="track-description">{track.description}</p>
-              <ul className="themes-list">
-                {track.themes.map((theme, i) => (
-                  <li key={i}>{theme}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
 
 // --- Organizers Component ---
 const Organizers = () => {
