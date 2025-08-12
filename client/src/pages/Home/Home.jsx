@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import '../App.css';
+import '/src/App.css';
 import './Home.css';
 import Tracks from './Tracks'; 
 import './Organizers.css';
-import Navbar from '../header/Navbar'; 
+import Navbar from '/src/header/Navbar'; 
 
 // --- Countdown Timer Component ---
 const Countdown = () => {
