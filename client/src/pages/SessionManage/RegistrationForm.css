@@ -1,0 +1,193 @@
+/* --- RegistrationForm.css --- */
+
+/* --- KSR Conference Global CSS variables and resets --- */
+:root {
+  /* Brand Palette */
+  --brand-orange: #F57C00; 
+  --brand-orange-dark: #E65100;
+  --brand-blue-dark: #0D47A1;
+  --brand-blue-primary: #1976D2;
+  --brand-blue-light: #E3F2FD;
+  --brand-red: #D32F2F;
+
+  /* Neutrals */
+  --text-primary: #111318;
+  --text-secondary: #6c757d;
+  --surface-light: #f8f9fa;
+  --surface-dark: #e9ecef;
+  --white: #FFFFFF;
+
+  /* Layout tokens */
+  --page-max-width: 1200px;
+  --gutter: 1rem;
+  --radius: 12px;
+  --shadow-soft: 0 7px 20px rgba(17, 19, 24, 0.1);
+}
+
+/* Reset */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Poppins', "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text-primary);
+  background: var(--brand-blue-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--gutter);
+}
+
+/* Container */
+.registration-container {
+  max-width: 900px;
+  width: 100%;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  min-height: 60vh;
+  animation: fadeSlideIn 0.8s ease-out;
+}
+
+/* Header */
+.form-header {
+  background: var(--brand-blue-dark);
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 3px solid var(--brand-orange);
+  animation: headerPop 0.6s ease-in-out;
+}
+
+.header-title {
+  color: var(--white);
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  margin: 0;
+  position: relative;
+  animation: titleGlow 2s infinite alternate;
+}
+
+.header-title::after {
+  content: '';
+  display: block;
+  height: 2.5px;
+  width: 35px;
+  background: var(--brand-orange);
+  margin: 0.4rem auto 0;
+  border-radius: 2px;
+}
+
+/* Card body */
+.registration-card {
+  background: var(--white);
+  padding: 1.2rem 2.2rem;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Form groups */
+.form-group {
+  margin-bottom: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.form-group:focus-within {
+  transform: scale(1.015);
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--surface-dark);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: var(--brand-blue-primary);
+  box-shadow: 0 0 0 2.5px rgba(25, 118, 210, 0.18);
+}
+
+/* Checkbox */
+.form-agreement {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.88rem;
+}
+
+.form-agreement input[type="checkbox"] {
+  margin-right: 0.6rem;
+}
+
+.form-agreement label {
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.form-agreement a {
+  color: var(--brand-blue-primary);
+  text-decoration: none;
+}
+
+.form-agreement a:hover {
+  text-decoration: underline;
+}
+
+/* Button */
+.btn-primary {
+  background: var(--brand-orange);
+  color: var(--white);
+  padding: 0.55rem 1rem;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  box-shadow: 0 5px 16px rgba(245, 124, 0, 0.25);
+  border: none;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: var(--brand-orange-dark);
+  box-shadow: 0 8px 22px rgba(245, 124, 0, 0.3);
+  transform: translateY(-1.5px);
+}
+
+/* Animations */
+@keyframes fadeSlideIn {
+  0% { opacity: 0; transform: translateY(15px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes headerPop {
+  0% { transform: scale(0.94); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes titleGlow {
+  0% { text-shadow: 0 0 3px rgba(245, 124, 0, 0.4); }
+  100% { text-shadow: 0 0 9px rgba(245, 124, 0, 0.8); }
+}
