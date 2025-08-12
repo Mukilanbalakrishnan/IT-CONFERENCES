@@ -1,0 +1,248 @@
+/* =============================
+   Global Variables & Reset
+============================= */
+:root {
+  /* Brand Palette */
+  --brand-orange: #F57C00;
+  --brand-orange-dark: #E65100;
+  --brand-blue-dark: #0D47A1;
+  --brand-blue-primary: #1976D2;
+  --brand-blue-light: #E3F2FD;
+  --brand-red: #D32F2F;
+
+  /* Neutrals */
+  --text-primary: #111318;
+  --text-secondary: #6c757d;
+  --surface-light: #f8f9fa;
+  --surface-dark: #e9ecef;
+  --white: #FFFFFF;
+
+  /* Layout tokens */
+  --page-max-width: 1200px;
+  --gutter: 1rem;
+  --radius: 12px;
+  --shadow-soft: 0 7px 20px rgba(17, 19, 24, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Poppins', "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--brand-blue-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--gutter);
+}
+
+/* =============================
+   Container & Card
+============================= */
+.auth-container {
+  width: 150%;
+  max-width: 600px;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  animation: fadeSlideIn 0.6s ease-out;
+}
+
+.auth-card {
+  padding: 1rem 1rem 1rem 1rem;  /* Reduced padding */
+  max-height: 700px;             /* Limit max height */
+  overflow-y: auto;              /* Scroll if content too tall */
+}
+
+/* =============================
+   Tab Header
+============================= */
+.tab-header {
+  display: flex;
+  border-bottom: 2px solid var(--surface-dark);
+  margin-bottom: 1rem;           /* Slightly less space */
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 0.6rem;               /* Reduced vertical padding */
+  font-size: 1rem;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+  color: var(--brand-blue-primary);
+  border-bottom: 3px solid var(--brand-orange);
+  background: var(--brand-blue-light);
+}
+
+.tab-btn:hover {
+  background: var(--surface-light);
+}
+
+/* =============================
+   Titles & Subtitles
+============================= */
+.auth-title {
+  font-size: 1.4rem;            /* Slightly smaller */
+  font-weight: 700;
+  color: var(--brand-blue-dark);
+  margin-bottom: 0.25rem;       /* Less bottom margin */
+}
+
+.auth-subtitle {
+  font-size: 0.85rem;           /* Smaller subtitle */
+  color: var(--text-secondary);
+  margin-bottom: 1rem;          /* Reduced margin */
+}
+
+/* =============================
+   Input Fields
+============================= */
+.input-group {
+  margin-bottom: 0.7rem;        /* Reduced margin */
+}
+
+.input-group label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;            /* Slightly smaller */
+  margin-bottom: 0.25rem;       /* Less margin */
+  color: var(--text-primary);
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.45rem 0.7rem;      /* Reduced padding */
+  border: 1px solid var(--surface-dark);
+  border-radius: 8px;
+  font-size: 0.9rem;            /* Smaller font */
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+  border-color: var(--brand-blue-primary);
+  box-shadow: 0 0 0 2.5px rgba(25, 118, 210, 0.18);
+  outline: none;
+}
+
+/* =============================
+   Form Options
+============================= */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.7rem;         /* Reduced margin */
+}
+
+.checkbox-container {
+  font-size: 0.8rem;             /* Smaller */
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.forgot-link {
+  font-size: 0.8rem;             /* Smaller */
+  color: var(--brand-blue-primary);
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* =============================
+   Agreement (Sign Up)
+============================= */
+.form-agreement {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.7rem;         /* Reduced margin */
+  font-size: 0.8rem;             /* Smaller */
+}
+
+.form-agreement input[type="checkbox"] {
+  margin-right: 0.4rem;          /* Slightly reduced margin */
+}
+
+.form-agreement label {
+  color: var(--text-secondary);
+}
+
+.form-agreement a {
+  color: var(--brand-blue-primary);
+  text-decoration: none;
+}
+
+.form-agreement a:hover {
+  text-decoration: underline;
+}
+
+/* =============================
+   Buttons
+============================= */
+.auth-button {
+  background: var(--brand-orange);
+  color: var(--white);
+  padding: 0.45rem 1rem;         /* Reduced vertical padding */
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 0.9rem;            /* Slightly smaller */
+  text-transform: uppercase;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.auth-button:hover {
+  background: var(--brand-orange-dark);
+  box-shadow: 0 8px 22px rgba(245, 124, 0, 0.3);
+  transform: translateY(-1.5px);
+}
+
+/* Spinner */
+.spinner {
+  border: 3px solid var(--surface-dark);
+  border-top: 3px solid var(--white);
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+/* =============================
+   Animations
+============================= */
+@keyframes fadeSlideIn {
+  0% { opacity: 0; transform: translateY(15px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Apply fade-in for switching tabs */
+.fade-in {
+  animation: fadeIn 0.4s ease-in-out;
+}
