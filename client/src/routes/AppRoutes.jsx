@@ -6,6 +6,10 @@ import VenueAccommodation from '../pages/VenueAccommodation';
 import Footer from '../footer/footer';
 import KnowOurCity from '../pages/KnowOurCity';
 import SpeakersPage from '../pages/SpeakersPage';
+import LoginPage from '../pages/LoginPage';
+import AdvisoryBoardPage from '../pages/AdvisoryBoardPage';
+import OrganizingCommitteePage from '../pages/OrganizingCommitteePage';
+import Researchandreview from '../pages/Researchandreview';
 
 const AppRoutes = () => {
   return (
@@ -18,6 +22,10 @@ const AppRoutes = () => {
         <Route path='/venue' element={<VenueAccommodation />} />
         <Route path='/city' element={<KnowOurCity/>} />
         <Route path='/speaker' element={<SpeakersPage/>} />
+        <Route path='/login' element={<LoginPage/>} />
+        <Route path='/advisory' element={<AdvisoryBoardPage/>} />
+        <Route path='/oraganising' element={<OrganizingCommitteePage/>} />
+        <Route path='/research' element={<Researchandreview/>} />
       </Routes>
       <Footer/>
     </BrowserRouter>
