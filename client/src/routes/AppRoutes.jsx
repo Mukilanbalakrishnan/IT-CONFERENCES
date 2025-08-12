@@ -1,15 +1,25 @@
-import React from 'react'
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home';
+import VenueAccommodation from '../pages/VenueAccommodation';
+import Navbar from '../header/Navbar'
+import Footer from '../footer/footer';
+import KnowOurCity from '../pages/KnowOurCity';
 
 const AppRoutes = () => {
   return (
-       <BrowserRouter>
-       <Routes>
-        <Route index to='/' element={<Home/>}/>
-       </Routes>
-       </BrowserRouter>
-  )
-}
+    <BrowserRouter>
+    <Navbar/>
+      <Routes>
+        
+        {/* Use the 'path' prop to define the URL for the route */}
+        <Route path='/' element={<Home />} />
+        <Route path='/venue' element={<VenueAccommodation />} />
+        <Route path='/city' element={<KnowOurCity/>} />
+      </Routes>
+      <Footer/>
+    </BrowserRouter>
+  );
+};
 
-export default AppRoutes
+export default AppRoutes;
