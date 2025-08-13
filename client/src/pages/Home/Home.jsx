@@ -4,6 +4,7 @@ import './Home.css';
 import Tracks from './Tracks'; 
 import './Organizers.css';
 import Navbar from '/src/header/Navbar'; 
+import Footer from '/src/Footer/Footer';
 
 // --- Countdown Timer Component ---
 const Countdown = () => {
@@ -206,19 +207,6 @@ const Organizers = () => {
   );
 };
 
-
-// --- Footer Component ---
-const Footer = () => (
-  <footer className="footer">
-    <div className="container">
-      <p>© 2026 KSR Educational Institutions & INTI International University</p>
-      <div className="links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Contact</a>
-      </div>
-    </div>
-  </footer>
-);
 
 // --- Home Page Component ---
 const Home = () => {
