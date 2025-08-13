@@ -25,21 +25,36 @@
   }
 }
 
+/* --- Global Responsive Typography --- */
+h1, .hero .animated-title {
+  font-size: clamp(2rem, 1.2rem + 4vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.2;
+}
+h2 {
+  font-size: clamp(1.6rem, 1.2rem + 2vw, 2.5rem);
+  font-weight: 700;
+}
+h3 {
+  font-size: clamp(1.1rem, 0.9rem + 1vw, 1.3rem);
+  font-weight: 700;
+}
+p, li {
+  font-size: clamp(0.9rem, 0.85rem + 0.25vw, 1rem);
+  line-height: 1.6;
+}
+
 
 /* --- Hero Section --- */
 .hero {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 90vh;
-  padding: 4rem var(--gutter);
-  background-size: cover;
-  background-position: center;
+  min-height: 100vh;
+  padding: 4rem var(--gutter) 2rem; /* Added bottom padding */
+  background-color: #111318; /* Fallback color */
   color: var(--white);
   text-align: center;
-  overflow: hidden;
 }
 
 .hero-video-bg {
@@ -71,17 +86,20 @@
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
+  flex-grow: 1; /* Allows content to take up space */
+  justify-content: center; /* Centers content vertically */
 }
 
 .hero .animated-title {
-  color: var(--white) !important;
-  font-size: clamp(2rem, 5vw, 3.2rem);
-  font-weight: 800;
+  color: var(--white);
   text-shadow: 0 4px 15px rgba(0,0,0,0.4);
-  line-height: 1.25; 
   letter-spacing: -0.025em; 
 }
-.hero .animated-title span {
+.animated-word {
+  display: inline-block;
+  margin-right: 0.25em;
+}
+.animated-char {
   display: inline-block;
   opacity: 0;
   animation: letterFadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
@@ -90,7 +108,7 @@
 .hero-subtitle {
   color: var(--white);
   opacity: 0;
-  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  font-size: clamp(0.9rem, 0.8rem + 0.5vw, 1.1rem); 
   max-width: 650px;
   text-shadow: 0 2px 8px rgba(0,0,0,0.3);
   font-weight: 500;
@@ -108,7 +126,7 @@
 }
 
 .hero .kicker {
-    font-size: 1rem;
+    font-size: clamp(0.9rem, 0.8rem + 0.5vw, 1rem);
     font-weight: 700;
     letter-spacing: 0.1em;
     padding: 0.6rem 1.75rem;
@@ -124,11 +142,10 @@
 
 /* --- Countdown Timer --- */
 .countdown-container {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative; /* Changed from absolute */
+  z-index: 3;
   width: clamp(300px, 90%, 800px);
+  margin: auto auto 0 auto; /* Pushes to the bottom */
   background: rgba(13, 71, 161, 0.6);
   padding: 1.5rem 2.5rem;
   border-radius: var(--radius);
@@ -137,7 +154,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 3;
   backdrop-filter: blur(10px);
 }
 .countdown-info {
@@ -147,12 +163,13 @@
   margin: 0;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.8);
+  font-size: clamp(0.8rem, 0.7rem + 0.5vw, 0.9rem);
 }
 .countdown-title {
   margin: 0;
-  font-size: 1.2rem;
   font-weight: 700;
   color: var(--white);
+  font-size: clamp(1rem, 0.8rem + 1vw, 1.2rem);
 }
 .countdown-timer {
   display: flex;
@@ -175,12 +192,12 @@
     background: rgba(255, 255, 255, 0.15);
 }
 .countdown-number {
-  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  font-size: clamp(2rem, 1rem + 4.5vw, 3.2rem);
   font-weight: 800;
   color: var(--white);
 }
 .countdown-label {
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 0.6rem + 0.5vw, 0.8rem);
   font-weight: 600;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.7);
@@ -190,6 +207,7 @@
 .about-section {
   padding: 6rem var(--gutter);
   background: var(--white);
+  overflow-x: hidden;
 }
 
 .about-grid {
@@ -205,18 +223,19 @@
 }
 
 .image-grid {
-  position: relative;
-  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
   height: 100%;
 }
 
 .about-image {
-  position: absolute;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 24px;
   box-shadow: 0 15px 30px rgba(0,0,0,0.15);
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  border: 4px solid var(--white);
 }
 
 .about-image:hover {
@@ -224,36 +243,6 @@
   z-index: 15;
   box-shadow: 0 25px 40px rgba(0,0,0,0.2);
 }
-
-.img-1 {
-  width: 55%;
-  height: 50%;
-  top: -5%;
-  left: -4%;
-  z-index: 2;
-}
-.img-2 {
-  width: 60%;
-  height: 65%;
-  top: -10%;
-  right: -12%;
-  z-index: 1;
-}
-.img-3 {
-  width: 50%;
-  height: 55%;
-  bottom: -12%;
-  right: 5%;
-  z-index: 3;
-}
-.img-4 {
-  width: 55%;
-  height: 60%;
-  bottom: -7%;
-  left: -12%;
-  z-index: 4;
-}
-
 
 .promo-video-btn {
   position: absolute;
@@ -293,9 +282,19 @@
   margin-bottom: 5px;
 }
 
-.about-content{
-  margin-left: 2rem;
+.about-content > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
 }
+
+.about-section.is-visible .kicker { opacity: 1; transform: translateY(0); transition-delay: 0.3s; }
+.about-section.is-visible h2 { opacity: 1; transform: translateY(0); transition-delay: 0.4s; }
+.about-section.is-visible .lead-quiet { opacity: 1; transform: translateY(0); transition-delay: 0.5s; }
+.about-section.is-visible p:not(.lead-quiet) { opacity: 1; transform: translateY(0); transition-delay: 0.6s; }
+.about-section.is-visible .about-features { opacity: 1; transform: translateY(0); transition-delay: 0.7s; }
+.about-section.is-visible .btn { opacity: 1; transform: translateY(0); transition-delay: 0.8s; }
+
 
 .about-content .kicker {
   font-size: 0.85rem;
@@ -306,13 +305,8 @@
   margin-bottom: 1.5rem;
 }
 
-.about-content h2 {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-}
-
 .about-content .lead-quiet {
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 0.9rem + 0.5vw, 1.1rem);
   color: var(--text-secondary);
   margin-bottom: 2.5rem;
 }
@@ -321,7 +315,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 3.5rem;
 }
 
 .feature-item {
@@ -357,13 +351,11 @@
   margin: 0;
   font-weight: 600;
   color: var(--text-primary);
-  line-height: 1.4;
 }
 
-.about-content .btn {
+.about-content .btn { 
   margin-top: 2rem;
 }
-
 .about-content .btn .arrow {
   transition: transform 0.2s ease;
   display: inline-block;
@@ -377,29 +369,50 @@
 
 /* --- Responsive Design for Homepage --- */
 
-/* Tablet */
+/* Laptops */
+@media (max-width: 1440px) {
+    .hero {
+        padding-bottom: 2rem;
+    }
+}
+
+/* Small Laptops & iPad Pro/Air */
+@media (max-width: 1024px) {
+    .about-grid {
+        gap: 3rem;
+    }
+    .about-images {
+        height: 400px;
+    }
+    .countdown-timer {
+        gap: 2rem;
+    }
+}
+
+/* Tablet & iPad Mini */
 @media (max-width: 900px) {
-  .hero h1 {
-    font-size: clamp(2.2rem, 6vw, 3rem);
-  }
-  .hero-subtitle {
-    font-size: clamp(1rem, 2.5vw, 1.1rem);
-  }
   .countdown-container {
     flex-direction: column;
     text-align: center;
     gap: 1.5rem;
     padding: 1.5rem;
-    bottom: 1rem;
+    position: relative;
+    margin-top: 2rem;
+  }
+  .hero {
+    min-height: auto;
+    padding-bottom: 4rem;
   }
   .countdown-info {
     text-align: center;
   }
   .countdown-timer {
-    gap: 1.5rem;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
   }
   .countdown-item:not(:last-child)::after {
-    right: -0.75rem;
+    right: -1rem;
   }
   .about-grid {
     grid-template-columns: 1fr;
@@ -408,48 +421,29 @@
   .about-images {
     height: 400px;
   }
-  
-  .image-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
-  .about-image {
-    position: static;
-    width: 100%;
-    height: 100%;
-  }
 }
 
 /* Mobile */
 @media (max-width: 600px) {
-  .hero {
-    min-height: 80vh;
-    padding-bottom: 16rem; 
-  }
+  
   .hero-buttons {
     flex-direction: column;
     width: 100%;
     max-width: 280px;
   }
   .countdown-container {
-    padding: 1rem;
-    width: calc(100% - 2 * var(--gutter));
-  }
-  .countdown-timer {
+    padding: 1.5rem;
+    width: 100%;
     gap: 1rem;
   }
-  .countdown-number {
-    font-size: 1.8rem;
+  .countdown-timer {
+    gap: 1.5rem;
   }
   .countdown-item:not(:last-child)::after {
-    right: -0.5rem;
+    display: none;
   }
   .about-section {
     padding: 4rem 0;
-  }
-  .about-content h2 {
-    font-size: 2rem;
   }
   .about-features {
     grid-template-columns: 1fr;
@@ -457,4 +451,17 @@
   .about-images {
     height: 350px;
   }
+}
+
+/* Very Small Mobile */
+@media (max-width: 380px) {
+    .countdown-timer {
+        gap: 1rem;
+    }
+    .countdown-info {
+        display: none;
+    }
+    .countdown-container {
+        justify-content: center;
+    }
 }
