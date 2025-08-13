@@ -205,7 +205,7 @@ p, li {
 
 /* --- About Section CSS --- */
 .about-section {
-  padding: 6rem var(--gutter);
+  padding: 8rem var(--gutter);
   background: var(--white);
   overflow-x: hidden;
 }
@@ -219,13 +219,13 @@ p, li {
 
 .about-images {
   position: relative;
-  height: 450px;
+  height: 550px;
 }
 
 .image-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  gap: 2rem;
   height: 100%;
 }
 

@@ -1,0 +1,155 @@
+/* --- Venue/Map Section CSS --- */
+.venue-section {
+  padding: 6rem var(--gutter);
+  background: var(--surface-light);
+}
+
+.venue-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.venue-info .section-header {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.venue-info .kicker {
+  color: var(--brand-orange);
+}
+
+.venue-info h2 {
+  font-size: clamp(1.8rem, 1.5rem + 1.5vw, 2.2rem);
+  color: var(--text-primary);
+}
+
+.venue-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--surface-dark);
+}
+
+.venue-tab {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.venue-tab::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--brand-orange);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.venue-tab.active {
+  color: var(--brand-orange);
+}
+
+.venue-tab.active::after {
+  transform: scaleX(1);
+}
+
+.tab-pane h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.tab-pane h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tab-pane p {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.location-item {
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.location-item:hover {
+    background-color: var(--surface-light);
+}
+
+.location-item.active {
+    background-color: var(--brand-blue-light);
+}
+
+.location-item h4 {
+    margin-bottom: 0.25rem;
+}
+
+.location-item p {
+    margin-bottom: 0;
+}
+
+.venue-map {
+  position: relative;
+  height: 520px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+@keyframes fadeInPin {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.map-pin {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--brand-orange);
+    color: var(--white);
+    backdrop-filter: blur(5px);
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    animation: fadeInPin 0.4s ease-out;
+    white-space: nowrap;
+}
+
+/* --- Responsive Design for Venue Section --- */
+@media (max-width: 900px) {
+  .venue-grid {
+    grid-template-columns: 1fr;
+  }
+  .venue-map {
+    order: -1;
+    height: 350px;
+  }
+}

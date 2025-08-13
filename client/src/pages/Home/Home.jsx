@@ -4,6 +4,7 @@ import './Home.css';
 import Tracks from './Tracks'; 
 import './Organizers.css';
 import Navbar from '/src/header/Navbar'; 
+import Map from './Map'; 
 
 // --- Countdown Timer Component ---
 const Countdown = () => {
@@ -217,6 +218,7 @@ const Home = () => {
         <About />
         <Tracks />
         <Organizers />
+        <Map />
       </main>
     </>
   );
