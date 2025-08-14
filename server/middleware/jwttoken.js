@@ -1,0 +1,21 @@
+// import jwt from "jsonwebtoken";
+// const generateToken = (userId, email) => {
+//   return jwt.sign(
+//     { id: userId, email },
+//     process.env.JWT_SECRET,
+//     { expiresIn: "1d" }
+//   );
+// };
+// export default generateToken;
+
+import jwt from "jsonwebtoken";
+
+const generateToken = (userId, email) => {
+  return jwt.sign(
+    { id: userId, email },
+    process.env.JWT_SECRET,
+    { expiresIn: "1d" }
+  );
+};
+
+export default generateToken;
