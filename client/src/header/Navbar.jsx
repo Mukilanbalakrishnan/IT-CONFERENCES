@@ -44,12 +44,6 @@ const Navbar = () => {
   return (
     <header className={headerClass}>
       <div className="header-container">
-        {/* Logo */}
-        <Link to="/" className="logo-link">
-          <span className="logo-text">KSR</span>
-          <span className="logo-subtext">Educational Institutions</span>
-        </Link>
-
         {/* Desktop Menu */}
         <ul className="desktop-nav">
           <li>
