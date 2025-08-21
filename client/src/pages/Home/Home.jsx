@@ -62,7 +62,7 @@ const Countdown = () => {
 
 // --- Hero Component ---
 const Hero = () => {
-    const title = "Joint International Conference on Research and Innovation";
+    const title = "Joint International Conference on Research and Innovation On ";
     return (
         <section className="hero">
             <video autoPlay loop muted className="hero-video-bg">
@@ -100,6 +100,53 @@ const Hero = () => {
             <Countdown />
         </section>
     );
+};
+
+// --- Collaboration Section Component ---
+const Collaboration = () => {
+  const sectionRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
+  return (
+    <section ref={sectionRef} className={`collaboration-section ${isVisible ? 'is-visible' : ''}`}>
+      <div className="container">
+        <div className="collaboration-title-wrapper">
+            <h3 className="collaboration-title">In Collaboration With</h3>
+        </div>
+        <div className="collaboration-logos">
+          <div className="logo-item">
+            <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1755753114/uhlv9wulx2dexlv6bnz2.png " alt="INTI International University" />
+          </div>
+          <div className="logo-item">
+            <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1755753110/pcytcphmgc1irewg4suw.webp " alt="KSR College of Engineering" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 // --- About Section Component ---
@@ -215,6 +262,7 @@ const Home = () => {
       <Navbar />
       <main>
         <Hero />
+        <Collaboration />
         <About />
         <Tracks />
         <Organizers />

@@ -108,12 +108,13 @@ p, li {
 .hero-subtitle {
   color: var(--white);
   opacity: 0;
-  font-size: clamp(0.9rem, 0.8rem + 0.5vw, 1.1rem); 
+  font-size: clamp(1.1rem, 1rem + 0.5vw, 1.4rem); 
   max-width: 650px;
   text-shadow: 0 2px 8px rgba(0,0,0,0.3);
   font-weight: 500;
   animation: modernFadeInUp 0.8s ease-out 1s forwards;
 }
+
 .hero-buttons {
   display: flex;
   gap: 1.5rem;
@@ -202,6 +203,116 @@ p, li {
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.7);
 }
+
+/* --- Collaboration Section --- */
+.collaboration-section {
+  padding: 6rem 0;
+  background-color: var(--surface-light);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.collaboration-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.collaboration-title-wrapper {
+    margin-bottom: 4rem;
+}
+
+.collaboration-title-wrapper::before {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background-color: var(--brand-orange);
+    margin: 0 auto 1rem auto;
+    border-radius: 2px;
+}
+
+.collaboration-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 0;
+}
+
+.collaboration-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6rem;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+/* The connecting plus sign */
+.collaboration-logos::after {
+    content: '+';
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--surface-dark);
+    position: absolute;
+    left: 51%;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    transition: all 0.6s ease 0.5s; /* Added delay */
+    z-index: 0;
+}
+
+.logo-item {
+  /* Glassmorphism effect */
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 2.5rem 3rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-md);
+  z-index: 1;
+  transform: translateY(0) scale(1);
+  transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.logo-item img {
+  max-height: 65px;
+  width: auto;
+  filter: grayscale(100%) opacity(0.8);
+  transition: filter 0.6s ease;
+}
+
+/* --- Scroll-triggered Animations --- */
+.collaboration-section.is-visible .collaboration-logos::after {
+    transform: translate(-50%, -50%) rotate(90deg) scale(1.2);
+    color: var(--brand-orange);
+}
+
+.collaboration-section.is-visible .logo-item {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: var(--shadow-lg);
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Stagger the logo animations */
+.collaboration-section.is-visible .logo-item:nth-child(1) {
+  transition-delay: 0.2s;
+}
+.collaboration-section.is-visible .logo-item:nth-child(2) {
+  transition-delay: 0.4s;
+}
+
+.collaboration-section.is-visible .logo-item img {
+  filter: grayscale(0%) opacity(1);
+}
+
 
 /* --- About Section CSS --- */
 .about-section {
@@ -308,7 +419,8 @@ p, li {
 .about-content .lead-quiet {
   font-size: clamp(1rem, 0.9rem + 0.5vw, 1.1rem);
   color: var(--text-secondary);
-  margin-bottom: 2.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .about-features {
