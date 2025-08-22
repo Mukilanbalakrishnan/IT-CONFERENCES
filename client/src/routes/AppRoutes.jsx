@@ -7,6 +7,9 @@ import Contact from '../pages/Contact/contact';
 import Agenda from '../pages/Agenda/agenda';
 import Navbar from '../header/Navbar';
 import Footer from '../Footer/Footer';
+import AdvisoryBoard from '../pages/AdvisoryBoard/AdvisoryBoardPage';
+import OrganizingCom from '../pages/OrganizingCommittee/OrganizingCommitteePage';
+import ResearchCom from '../pages/Researchandreview/Researchandreview';
 
 const AppRoutes = () => {
   return (
@@ -18,6 +21,9 @@ const AppRoutes = () => {
         <Route path ='/speaker' element={<Speaker />}/>
         <Route path ='/contact' element={<Contact />}/>
         <Route path ='/agenda' element={<Agenda />}/>
+        <Route path ='/committees/advisory-board' element={<AdvisoryBoard />}/>
+        <Route path ='/committees/organizing-committee' element={<OrganizingCom />}/>
+        <Route path ='/committees/research-and-review-committee' element={<ResearchCom />}/>
        </Routes>
       <Footer/>
       </BrowserRouter>

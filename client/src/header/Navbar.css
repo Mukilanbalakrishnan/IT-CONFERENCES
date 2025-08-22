@@ -1,3 +1,11 @@
+/* --- Global Styles & Resets --- */
+body {
+  overflow-x: hidden;
+}
+body.body-no-scroll {
+  overflow: hidden; /* Locks page scroll when mobile menu is open */
+}
+
 /* --- Header / Navbar CSS --- */
 .header {
   background: rgba(108, 108, 109, 0.5);
@@ -16,17 +24,22 @@
   border-bottom: 1px solid var(--surface-dark);
 }
 .header-container {
-  width: 100%; /* MODIFIED: Fits screen width */
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-end; /* Pushes action items to the right */
   padding: 0.75rem 1rem;
-  position: relative;
-  box-sizing: border-box; /* Ensures padding is included in the width */
+  position: relative; /* Needed for the absolute-positioned nav */
+  box-sizing: border-box;
 }
+
+/* --- Logo Styling (REMOVED) --- */
+
 /* --- Desktop Navigation --- */
 .desktop-nav {
-  display: none;
+  display: none; /* Hidden on mobile by default */
   list-style: none;
   padding: 0;
   margin: 0;
@@ -34,6 +47,7 @@
   font-weight: 600;
   align-items: center;
   font-size: 1.1rem;
+  /* ADDED BACK: Absolute positioning to perfectly center the nav */
   position: absolute;
   left: 50%;
   top: 50%;
@@ -57,6 +71,7 @@
 .nav-item-dropdown:hover .dropdown-trigger {
   color: var(--brand-orange);
 }
+
 /* --- Dropdown Menus --- */
 .nav-item-dropdown {
   position: relative;
@@ -113,6 +128,7 @@
 .nav-item-dropdown:hover .dropdown-trigger svg {
     transform: rotate(180deg);
 }
+
 /* --- Header Actions (Login Button) --- */
 .header-actions {
   display: flex;
@@ -144,6 +160,7 @@
     border-color: var(--white);
     transform: none;
 }
+
 /* --- Mobile Menu --- */
 .mobile-menu-button {
   cursor: pointer;
@@ -164,7 +181,7 @@
   transition: transform 0.3s ease-in-out;
   transform: translateX(100%);
   overflow-y: auto;
-  z-index: 50;
+  z-index: 60; /* Ensures menu is on top */
   width: 18rem;
 }
 .mobile-sidemenu.open {
@@ -224,6 +241,7 @@
   font-size: 0.875rem;
   color: #4b5563;
 }
+
 /* --- Responsive Design --- */
 @media (min-width: 1024px) {
   .desktop-nav {

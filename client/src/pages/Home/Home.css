@@ -1,4 +1,4 @@
-/* --- Homepage Specific CSS --- */
+/* --- Homepage Specific CSS (Final Corrected Version) --- */
 
 /* --- Animation Keyframes --- */
 @keyframes modernFadeInUp {
@@ -51,10 +51,11 @@ p, li {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding: 4rem var(--gutter) 2rem; /* Added bottom padding */
-  background-color: #111318; /* Fallback color */
+  padding: 4rem clamp(1rem, 5vw, 3rem) 2rem;
+  background-color: #111318;
   color: var(--white);
   text-align: center;
+  overflow: hidden;
 }
 
 .hero-video-bg {
@@ -67,7 +68,6 @@ p, li {
     transform: translate(-50%, -50%);
     z-index: 0;
 }
-
 
 .hero::before {
   content: '';
@@ -86,8 +86,11 @@ p, li {
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-  flex-grow: 1; /* Allows content to take up space */
-  justify-content: center; /* Centers content vertically */
+  flex-grow: 1;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .hero .animated-title {
@@ -143,12 +146,13 @@ p, li {
 
 /* --- Countdown Timer --- */
 .countdown-container {
-  position: relative; /* Changed from absolute */
+  position: relative;
   z-index: 3;
-  width: clamp(300px, 90%, 800px);
-  margin: auto auto 0 auto; /* Pushes to the bottom */
+  width: 100%;
+  max-width: 800px;
+  margin: auto auto 0 auto;
   background: rgba(13, 71, 161, 0.6);
-  padding: 1.5rem 2.5rem;
+  padding: clamp(1rem, 4vw, 1.5rem) clamp(1rem, 5vw, 2.5rem);
   border-radius: var(--radius);
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -159,50 +163,48 @@ p, li {
 }
 .countdown-info {
   text-align: left;
+  flex-shrink: 0;
+  margin-right: 1.5rem;
 }
 .countdown-date {
   margin: 0;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.8);
-  font-size: clamp(0.8rem, 0.7rem + 0.5vw, 0.9rem);
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
 }
 .countdown-title {
   margin: 0;
   font-weight: 700;
   color: var(--white);
-  font-size: clamp(1rem, 0.8rem + 1vw, 1.2rem);
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
 }
 .countdown-timer {
   display: flex;
-  gap: 2.5rem;
+  justify-content: space-around;
+  flex-grow: 1;
+  gap: clamp(0.5rem, 2vw, 1.5rem);
 }
 .countdown-item {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   line-height: 1;
-}
-.countdown-item:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: -1.25rem;
-    top: 10%;
-    height: 80%;
-    width: 1px;
-    background: rgba(255, 255, 255, 0.15);
+  flex-basis: 60px;
+  flex-grow: 1;
 }
 .countdown-number {
-  font-size: clamp(2rem, 1rem + 4.5vw, 3.2rem);
+  font-size: clamp(1.6rem, 6vw, 3rem);
   font-weight: 800;
   color: var(--white);
 }
 .countdown-label {
-  font-size: clamp(0.7rem, 0.6rem + 0.5vw, 0.8rem);
+  font-size: clamp(0.6rem, 1.8vw, 0.75rem);
   font-weight: 600;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.25rem;
 }
+
 
 /* --- Collaboration Section --- */
 .collaboration-section {
@@ -215,16 +217,13 @@ p, li {
   transform: translateY(20px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
-
 .collaboration-section.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
-
 .collaboration-title-wrapper {
     margin-bottom: 4rem;
 }
-
 .collaboration-title-wrapper::before {
     content: '';
     display: block;
@@ -234,7 +233,6 @@ p, li {
     margin: 0 auto 1rem auto;
     border-radius: 2px;
 }
-
 .collaboration-title {
   font-size: 1.1rem;
   font-weight: 600;
@@ -243,7 +241,6 @@ p, li {
   letter-spacing: 0.15em;
   margin: 0;
 }
-
 .collaboration-logos {
   display: flex;
   justify-content: center;
@@ -252,8 +249,6 @@ p, li {
   flex-wrap: wrap;
   position: relative;
 }
-
-/* The connecting plus sign */
 .collaboration-logos::after {
     content: '+';
     font-size: 2.5rem;
@@ -263,12 +258,10 @@ p, li {
     left: 51%;
     top: 50%;
     transform: translate(-50%, -50%) rotate(0deg) scale(1);
-    transition: all 0.6s ease 0.5s; /* Added delay */
+    transition: all 0.6s ease 0.5s;
     z-index: 0;
 }
-
 .logo-item {
-  /* Glassmorphism effect */
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -280,35 +273,28 @@ p, li {
   transform: translateY(0) scale(1);
   transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
-
 .logo-item img {
   max-height: 65px;
   width: auto;
   filter: grayscale(100%) opacity(0.8);
   transition: filter 0.6s ease;
 }
-
-/* --- Scroll-triggered Animations --- */
 .collaboration-section.is-visible .collaboration-logos::after {
     transform: translate(-50%, -50%) rotate(90deg) scale(1.2);
     color: var(--brand-orange);
 }
-
 .collaboration-section.is-visible .logo-item {
   transform: translateY(-10px) scale(1.05);
   box-shadow: var(--shadow-lg);
   background: rgba(255, 255, 255, 0.8);
   border-color: rgba(255, 255, 255, 0.5);
 }
-
-/* Stagger the logo animations */
 .collaboration-section.is-visible .logo-item:nth-child(1) {
   transition-delay: 0.2s;
 }
 .collaboration-section.is-visible .logo-item:nth-child(2) {
   transition-delay: 0.4s;
 }
-
 .collaboration-section.is-visible .logo-item img {
   filter: grayscale(0%) opacity(1);
 }
@@ -320,26 +306,22 @@ p, li {
   background: var(--white);
   overflow-x: hidden;
 }
-
 .about-grid {
   display: grid;
   grid-template-columns: 1fr 1.1fr;
   gap: 5rem;
   align-items: center;
 }
-
 .about-images {
   position: relative;
   height: 550px;
 }
-
 .image-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
   height: 100%;
 }
-
 .about-image {
   width: 100%;
   height: 100%;
@@ -348,13 +330,11 @@ p, li {
   box-shadow: 0 15px 30px rgba(0,0,0,0.15);
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
-
 .about-image:hover {
   transform: translateY(-10px) scale(1.05);
   z-index: 15;
   box-shadow: 0 25px 40px rgba(0,0,0,0.2);
 }
-
 .promo-video-btn {
   position: absolute;
   top: 50%;
@@ -378,12 +358,10 @@ p, li {
   transition: all 0.3s ease;
   z-index: 10;
 }
-
 .promo-video-btn:hover {
   transform: translate(-50%, -50%) scale(1.1);
   box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
 }
-
 .play-icon {
   width: 0;
   height: 0;
@@ -392,21 +370,17 @@ p, li {
   border-left: 15px solid var(--brand-orange);
   margin-bottom: 5px;
 }
-
 .about-content > * {
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.7s ease-out, transform 0.7s ease-out;
 }
-
 .about-section.is-visible .kicker { opacity: 1; transform: translateY(0); transition-delay: 0.3s; }
 .about-section.is-visible h2 { opacity: 1; transform: translateY(0); transition-delay: 0.4s; }
 .about-section.is-visible .lead-quiet { opacity: 1; transform: translateY(0); transition-delay: 0.5s; }
 .about-section.is-visible p:not(.lead-quiet) { opacity: 1; transform: translateY(0); transition-delay: 0.6s; }
 .about-section.is-visible .about-features { opacity: 1; transform: translateY(0); transition-delay: 0.7s; }
 .about-section.is-visible .btn { opacity: 1; transform: translateY(0); transition-delay: 0.8s; }
-
-
 .about-content .kicker {
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -415,21 +389,18 @@ p, li {
   letter-spacing: 0.08em;
   margin-bottom: 1.5rem;
 }
-
 .about-content .lead-quiet {
   font-size: clamp(1rem, 0.9rem + 0.5vw, 1.1rem);
   color: var(--text-secondary);
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
-
 .about-features {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
   margin-bottom: 3.5rem;
 }
-
 .feature-item {
   display: flex;
   align-items: center;
@@ -440,13 +411,11 @@ p, li {
   border: 1px solid var(--surface-dark);
   transition: all 0.3s ease;
 }
-
 .feature-item:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-soft);
     border-color: var(--brand-orange);
 }
-
 .feature-item .feature-icon {
   font-size: 1.2rem;
   background: var(--brand-orange);
@@ -458,13 +427,11 @@ p, li {
   place-items: center;
   flex-shrink: 0;
 }
-
 .feature-item p {
   margin: 0;
   font-weight: 600;
   color: var(--text-primary);
 }
-
 .about-content .btn { 
   margin-top: 2rem;
 }
@@ -473,22 +440,12 @@ p, li {
   display: inline-block;
   margin-left: 0.5rem;
 }
-
 .about-content .btn:hover .arrow {
   transform: translateX(5px);
 }
 
 
 /* --- Responsive Design for Homepage --- */
-
-/* Laptops */
-@media (max-width: 1440px) {
-    .hero {
-        padding-bottom: 2rem;
-    }
-}
-
-/* Small Laptops & iPad Pro/Air */
 @media (max-width: 1024px) {
     .about-grid {
         gap: 3rem;
@@ -496,35 +453,27 @@ p, li {
     .about-images {
         height: 400px;
     }
-    .countdown-timer {
-        gap: 2rem;
-    }
 }
 
 /* Tablet & iPad Mini */
 @media (max-width: 900px) {
-  .countdown-container {
-    flex-direction: column;
-    text-align: center;
-    gap: 1.5rem;
-    padding: 1.5rem;
-    position: relative;
-    margin-top: 2rem;
-  }
   .hero {
     min-height: auto;
     padding-bottom: 4rem;
   }
+  .countdown-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
   .countdown-info {
     text-align: center;
+    margin-right: 0;
   }
   .countdown-timer {
-    gap: 2rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .countdown-item:not(:last-child)::after {
-    right: -1rem;
+    width: 100%;
+    gap: clamp(0.5rem, 3vw, 1rem);
   }
   .about-grid {
     grid-template-columns: 1fr;
@@ -535,27 +484,29 @@ p, li {
   }
 }
 
+/* === MOBILE FIX STARTS HERE === */
 /* Mobile */
 @media (max-width: 600px) {
-  
   .hero-buttons {
     flex-direction: column;
     width: 100%;
     max-width: 280px;
   }
-  .countdown-container {
-    padding: 1.5rem;
-    width: 100%;
-    gap: 1rem;
-  }
   .countdown-timer {
-    gap: 1.5rem;
+    gap: clamp(0.2rem, 1.5vw, 0.5rem); /* MORE AGGRESSIVE gap reduction */
   }
-  .countdown-item:not(:last-child)::after {
-    display: none;
+  .countdown-item {
+    flex-basis: 0; /* Allow items to shrink */
+    flex-shrink: 1; /* Explicitly allow shrinking */
+  }
+  .countdown-number {
+    font-size: clamp(1rem, 4.5vw, 1.4rem); /* MORE AGGRESSIVE font reduction */
+  }
+  .countdown-label {
+    font-size: 0.55rem; /* MORE AGGRESSIVE font reduction */
   }
   .about-section {
-    padding: 4rem 0;
+    padding: 4rem 1rem;
   }
   .about-features {
     grid-template-columns: 1fr;
@@ -564,16 +515,11 @@ p, li {
     height: 350px;
   }
 }
+/* === MOBILE FIX ENDS HERE === */
 
 /* Very Small Mobile */
 @media (max-width: 380px) {
-    .countdown-timer {
-        gap: 1rem;
-    }
-    .countdown-info {
-        display: none;
-    }
-    .countdown-container {
-        justify-content: center;
-    }
+  .countdown-info {
+    display: none;
+  }
 }
