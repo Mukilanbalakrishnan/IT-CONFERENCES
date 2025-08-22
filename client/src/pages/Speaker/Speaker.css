@@ -1,0 +1,128 @@
+
+/* --- Animation Keyframes --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+/* --- Page Header --- */
+/* --- Page Header --- */
+.page-header {
+    text-align: center;
+    padding: 3rem 0;
+    /* Removed the background color to make it transparent */
+     background-color:aqua;
+    animation: fadeInUp 0.5s ease-out;
+    margin-top: 4rem;  
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    color: var(--brand-blue-dark);
+    margin: 0;
+}
+
+.page-header p {
+    font-size: 1.1rem;
+    color: var(--brand-blue-primary);
+    max-width: 700px;
+    margin: 0.5rem auto 0;
+}
+
+
+/* --- Event Speakers Section --- */
+.speakers-section {
+    padding: 5rem 0;
+}
+
+.speakers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 8rem 4rem; /* More row gap for the overlapping images */
+    margin-top: 80px;
+}
+
+.speaker-profile {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    padding-top: 80px;
+    box-shadow: var(--shadow-soft);
+    text-align: center;
+    opacity: 0;
+    animation: fadeInUp 0.7s ease-out forwards;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+
+.speaker-profile:hover {
+    transform: translateY(-10px) scale(1.03); /* Subtle enlargement */
+    box-shadow: var(--shadow-strong);
+}
+
+.speaker-image-wrapper {
+    width: 180px;
+    height: 180px;
+    position: absolute;
+    top: -90px; /* Position half of the image outside the card */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.speaker-svg-border path {
+    fill: none;
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-dasharray: 236;
+    stroke-dashoffset: 236;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.border-path-1 {
+    stroke: var(--brand-blue-primary);
+}
+.border-path-2 {
+    stroke: var(--brand-orange);
+}
+
+.speaker-profile:hover .speaker-svg-border path {
+    stroke-dashoffset: 0;
+}
+
+/* Stagger the animation for the two halves */
+.speaker-profile:hover .border-path-2 {
+    transition-delay: 0.2s;
+}
+
+.speaker-info {
+    margin-top: 1rem;
+}
+
+.speaker-info .name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem 0;
+}
+
+.speaker-info .title {
+    font-size: 0.9rem;
+    color: var(--brand-orange);
+    margin: 0 0 1rem 0;
+    font-weight: 600;
+}
+
+.speaker-info .bio {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    text-align: left;
+}
