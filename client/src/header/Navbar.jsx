@@ -51,11 +51,9 @@ const Navbar = () => {
     <>
       <header className={headerClass}>
         <div className="header-container">
-          {/* 1. Logo Item has been removed */}
-
-          {/* 2. Center Item (Desktop Navigation) */}
           <ul className="desktop-nav">
             <li><NavLink to="/" className={navLinkClass}>Home</NavLink></li>
+
 
 
             <li><NavLink to="/agenda" className={navLinkClass}>Agenda</NavLink></li>
@@ -73,6 +71,7 @@ const Navbar = () => {
             </li>
 
             <li><NavLink to="/agenda" className={navLinkClass}>Agenda</NavLink></li>
+
             <li><NavLink to="/speaker" className={navLinkClass}>Speaker</NavLink></li>
 
             <li className="nav-item-dropdown">
@@ -87,6 +86,7 @@ const Navbar = () => {
                 </div>
               </div>
             </li>
+
             <li><NavLink to="/venue" className={navLinkClass}>Venue</NavLink></li>
             <li><NavLink to="/sponsors" className={navLinkClass}>Sponsors</NavLink></li>
             <li><NavLink to="/contact" className={navLinkClass}>Contact</NavLink></li>
@@ -94,7 +94,7 @@ const Navbar = () => {
 
           {/* 3. Right Item (Actions) */}
           <div className="header-actions">
-            <Link to="/login" className="login-btn">Login</Link>
+            <Link to="/login" className="login-btn">SUBMIT A PAPER</Link>
             <HiOutlineMenuAlt3
               className="mobile-menu-button"
               onClick={() => setSideMenu(true)}
