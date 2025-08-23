@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Map from '../Home/Map';
-import './Contact.css'; 
+import './contact.css'; 
 
 const ContactUsPreview = () => {
     // Form state

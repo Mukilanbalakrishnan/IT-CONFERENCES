@@ -1,16 +1,15 @@
 import React from 'react';
-import './Speaker.css'; 
-import '/src/App.css';
+import './Speaker.css';
 
 // --- Main Component ---
 const Speaker = () => {
     const speakers = [
         {
             id: 'spk1',
-            name: 'James Killer',
-            title: 'Founder, Edikts',
-            image: 'https://placehold.co/140x140/EFEFEF/333?text=JK',
-            bio: 'James is a serial entrepreneur with a passion for disruptive technologies and building scalable businesses from the ground up.'
+            name: 'Dr.Malathy Batumalay',
+            title: 'Professor at INTI International University',
+            image: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755754148/nvbpdwncdrxpekuksahy.webp',
+            bio: 'Ir. Dr. Malathy Batumalay, Associate Professor at INTI International University.Expert in photonics, fiber optics, and laser technology. Develops fiber optic sensors for environmental and biosensing applications'
         },
         {
             id: 'spk2',
@@ -21,9 +20,9 @@ const Speaker = () => {
         },
         {
             id: 'spk3',
-            name: 'Agaton Ronald',
+            name: 'Dr. Sathish Kumar Selvaperumal',
             title: 'Developer Expert',
-            image: 'https://placehold.co/140x140/EFEFEF/333?text=AR',
+            image: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755757219/ranhkwbfv4ghrqlyg4ma.jpg ',
             bio: 'Ronald is a full-stack developer specializing in modern JavaScript frameworks and building robust, scalable web applications.'
         },
         {
@@ -48,7 +47,11 @@ const Speaker = () => {
                 <div className="container">
                     <div className="speakers-grid">
                         {speakers.map((speaker, index) => (
-                            <div className="speaker-profile" key={`speaker.id} style={{ animationDelay: ${0.15 * (index + 1)}s }`}>
+                            <div 
+                                className="speaker-profile" 
+                                key={speaker.id} 
+                                style={{ animationDelay: `${0.15 * (index + 1)}s` }}
+                            >
                                 <div className="speaker-image-wrapper">
                                     <svg width="100%" height="100%" viewBox="0 0 160 160" className="speaker-svg-border">
                                         <defs>

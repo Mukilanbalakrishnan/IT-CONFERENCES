@@ -1,0 +1,150 @@
+
+/* --- Animation Keyframes --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Global Variables --- */
+:root {
+    --brand-orange: #F57C00;
+    --brand-blue-dark: #0D47A1;
+    --brand-blue-primary: #1976D2;
+    --text-primary: #111318;
+    --text-secondary: #6c757d;
+    --page-max-width: 1200px;
+    --gutter: 1.25rem;
+}
+
+/* --- General Container (reusable) --- */
+.container {
+    width: 100%;
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+}
+
+/* --- Page Section --- */
+.team-section {
+    padding: 5rem 0;
+    text-align: center;
+}
+
+.team-header {
+    margin-bottom: 3rem;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.team-header .subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.team-header .title {
+    font-size: 2.5rem;
+    color: var(--text-primary);
+    font-weight: 800;
+    margin: 0.5rem 0;
+}
+
+.team-header .title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background-color: var(--brand-orange);
+    margin: 1rem auto 0;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2.5rem;
+}
+
+/* --- Team Member Profile Card --- */
+.team-member-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    animation: fadeInUp 0.7s ease-out forwards;
+}
+
+.image-container {
+    width: 180px;
+    height: 180px;
+    margin-bottom: 1.5rem;
+    position: relative;
+    cursor: pointer;
+}
+
+.hexagon-svg {
+    transition: transform 0.3s ease;
+}
+
+.team-member-profile:hover .hexagon-svg {
+    transform: scale(1.05);
+}
+
+/* --- SVG Hexagon Border Animation --- */
+.hexagon-border {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+    /* Total path length is 565. Half is ~282.5 */
+    /* This creates a pattern of a dash and a gap of equal length */
+    stroke-dasharray: 282.5 282.5; 
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Blue half of the border */
+.border-blue {
+    stroke: var(--brand-blue-primary);
+    stroke-dashoffset: 0;
+}
+
+/* Orange half of the border */
+.border-orange {
+    stroke: var(--brand-orange);
+    /* This offset makes the orange part draw the second half */
+    stroke-dashoffset: -282.5; 
+}
+
+/* On hover, animate both halves */
+.team-member-profile:hover .hexagon-border {
+    stroke-dashoffset: 282.5;
+}
+
+
+.team-member-profile .name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.team-member-profile .role {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin: 0.25rem 0 1rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.team-member-profile .bio {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
