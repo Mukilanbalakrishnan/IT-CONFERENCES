@@ -54,6 +54,11 @@ const Navbar = () => {
           <ul className="desktop-nav">
             <li><NavLink to="/" className={navLinkClass}>Home</NavLink></li>
 
+
+
+            <li><NavLink to="/agenda" className={navLinkClass}>Agenda</NavLink></li>
+            <li><NavLink to="/speaker" className={navLinkClass}>Speaker</NavLink></li>
+
             <li className="nav-item-dropdown">
               <p className="dropdown-trigger">Committees <IoIosArrowDown /></p>
               <div className="nav-item-dropdown-content">
