@@ -13,18 +13,10 @@ const chairsData = [
   },
   {
     id: 2,
-    name: 'Dr. Veena',
-    role: 'Conference Chair',
-    imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755927599/d04cng0plsplt36g1dzl.webp', // Placeholder image
-    blobColor: '#F57C00',
-    type: 'Chair',
-  },
-  {
-    id: 3,
     name: 'Dr. Malathy Batumalay',
     role: 'Conference Co-Chair',
     imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755754148/nvbpdwncdrxpekuksahy.webp', // Placeholder image
-    blobColor: '#0d47a1',
+    blobColor: '#F57C00',
     type: 'Co-Chair',
   },
 ];

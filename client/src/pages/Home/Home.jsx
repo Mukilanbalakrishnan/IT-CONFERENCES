@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '/src/App.css';
 import './Home.css';
-import Tracks from './Tracks'; 
-import Navbar from '/src/header/Navbar'; 
-import Map from './Map'; 
+import Tracks from './Tracks';
+import Navbar from '/src/header/Navbar';
+import Map from './Map';
 import Patrons from './Patrons';
 import Chair from './Chair';
 import ChiefPatron from './Chiefpatron';
@@ -64,7 +64,7 @@ const Countdown = () => {
 
 // --- Hero Component ---
 const Hero = () => {
-    const title = "Joint International Conference on Research and Innovation On ";
+    const title = "Joint International Conference on";
     return (
         <section className="hero">
             <video autoPlay loop muted className="hero-video-bg">
@@ -92,7 +92,10 @@ const Hero = () => {
                     ))}
                 </h1>
                 <p className="hero-subtitle">
-                    Smart and Sustainable Solutions in Electrical, Communication and Biomedical Engineering
+                    Research and Innovation Smart and Sustainable Solutions in Electrical, Communication and Biomedical Engineering
+                </p>
+                <p className="hero-date">
+                    March 26th Thursday & 27th Friday, 2026
                 </p>
                 <div className="hero-buttons">
                     <button className="btn btn-primary">Submit a Paper</button>
@@ -138,13 +141,21 @@ const Collaboration = () => {
         <div className="collaboration-title-wrapper">
             <h3 className="collaboration-title">In Collaboration With</h3>
         </div>
-        <div className="collaboration-logos">
-          <div className="logo-item">
-            <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1755753114/uhlv9wulx2dexlv6bnz2.png " alt="INTI International University" />
-          </div>
-          <div className="logo-item">
-            <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1755753110/pcytcphmgc1irewg4suw.webp " alt="KSR College of Engineering" />
-          </div>
+        <div className="collaboration-content-wrapper">
+            <div className="logo-item">
+                <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1755753110/pcytcphmgc1irewg4suw.webp " alt="KSR College of Engineering" />
+                <div className="host-details">
+                    <h4>Host Institution</h4>
+                    <p>Department of Electronics and Communication, Electrical and Electronics & Biomedical Engineering, K.S.R. College of Engineering (Autonomous), Tiruchengode, Namakkal – 637215, Tamilnadu, India</p>
+                </div>
+            </div>
+            <div className="logo-item">
+                <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1755753114/uhlv9wulx2dexlv6bnz2.png " alt="INTI International University" />
+                <div className="host-details">
+                    <h4>Co-Host University</h4>
+                    <p>INTI International University, Persiaran Perdana BBN, Putra Nilai 71800 Nilai, Negeri Sembilan, Malaysia</p>
+                </div>
+            </div>
         </div>
       </div>
     </section>
@@ -180,6 +191,13 @@ const About = () => {
     };
   }, []);
 
+  const objectives = [
+    "To showcase cutting-edge research in electrical, communication, and biomedical engineering.",
+    "To explore smart and sustainable solutions for modern engineering challenges.",
+    "To create opportunities for industry-academia collaboration and technology transfer.",
+    "To provide a platform for young researchers to present their work and gain expert feedback."
+  ];
+
   return (
     <section ref={sectionRef} className={`about-section ${isVisible ? 'is-visible' : ''}`}>
       <div className="container">
@@ -198,15 +216,18 @@ const About = () => {
           </div>
           <div className="about-content">
             <p className="kicker">// ABOUT THE CONFERENCE</p>
-            <h2>An Intelligent Multidisciplinary Approach</h2>
+            <h2>Conference Overview</h2>
             <p className="lead-quiet">
-              The S3-ECBE' 2026 conference provides a vibrant platform for researchers, academics, and industry professionals to present their latest findings and innovations. This year's theme focuses on integrated, sustainable engineering solutions across multiple disciplines.
+              The International Conference on Research and Innovative on Smart and Sustainable Solutions in Electrical, Communication, and Biomedical Engineering serves as a premier platform for researchers, academicians, industry professionals, and students to exchange ideas and advancements in engineering and technology.
             </p>
-            <p>All accepted papers will be published in the book chapter titled: <strong>“Integrated Sustainable Engineering Solutions: An Intelligent Multidisciplinary Approach”</strong>.</p>
-            <button className="btn btn-secondary">
-              View Our Schedule 
-              <span className="arrow">→</span>
-            </button>
+            <div className="objectives-section">
+                <h3>Objectives</h3>
+                <ul className="objectives-list">
+                    {objectives.map((objective, index) => (
+                        <li key={index}>{objective}</li>
+                    ))}
+                </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -235,3 +256,4 @@ const Home = () => {
 }
 
 export default Home;
+
