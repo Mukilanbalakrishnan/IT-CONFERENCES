@@ -15,7 +15,7 @@ const Speaker = () => {
             id: 'spk2',
             name: 'Melisa Rock',
             title: 'Lead Designer, Psylol',
-            image: 'https://placehold.co/140x140/EFEFEF/333?text=MR',
+            image: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755757219/sgphhfiniml8lavztk6w.jpg',
             bio: 'Melisa’s award-winning work focuses on human-centered design and creating intuitive, beautiful user experiences.'
         },
         {
