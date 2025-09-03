@@ -7,6 +7,9 @@ import Map from './Map';
 import Patrons from './Patrons';
 import Chair from './Chair';
 import ChiefPatron from './Chiefpatron';
+import Modal from '/src/pages/Login/Modal';
+import SignInForm from '/src/pages/Login/Signin';
+import RegistrationForm from '/src/pages/Login/loginForm';
 
 // --- Countdown Timer Component ---
 const Countdown = () => {
@@ -63,7 +66,7 @@ const Countdown = () => {
 };
 
 // --- Hero Component ---
-const Hero = () => {
+const Hero = ({ onOpenLogin }) => {
     const title = "Joint International Conference on";
     return (
         <section className="hero">
@@ -94,11 +97,11 @@ const Hero = () => {
                 <p className="hero-subtitle">
                     Research and Innovation Smart and Sustainable Solutions in Electrical, Communication and Biomedical Engineering
                 </p>
-                <p className="hero-date">
+                 <p className="hero-date">
                     March 26th Thursday & 27th Friday, 2026
                 </p>
                 <div className="hero-buttons">
-                    <button className="btn btn-primary">Submit a Paper</button>
+                    <button onClick={onOpenLogin} className="btn btn-primary">Submit a Paper</button>
                     <button className="btn btn-secondary">View Tracks</button>
                 </div>
             </div>
@@ -144,7 +147,7 @@ const Collaboration = () => {
         <div className="collaboration-content-wrapper">
             <div className="logo-item">
                 <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1755753110/pcytcphmgc1irewg4suw.webp " alt="KSR College of Engineering" />
-                <div className="host-details">
+                 <div className="host-details">
                     <h4>Host Institution</h4>
                     <p>Department of Electronics and Communication, Electrical and Electronics & Biomedical Engineering, K.S.R. College of Engineering (Autonomous), Tiruchengode, Namakkal – 637215, Tamilnadu, India</p>
                 </div>
@@ -192,10 +195,10 @@ const About = () => {
   }, []);
 
   const objectives = [
-    "To showcase cutting-edge research in electrical, communication, and biomedical engineering.",
-    "To explore smart and sustainable solutions for modern engineering challenges.",
-    "To create opportunities for industry-academia collaboration and technology transfer.",
-    "To provide a platform for young researchers to present their work and gain expert feedback."
+    { text: "Showcase cutting-edge research in electrical, communication, and biomedical engineering." },
+    { text: "Explore smart and sustainable solutions for modern engineering challenges." },
+    { text: "Create opportunities for industry-academia collaboration and technology transfer." },
+    { text: "Provide a platform for young researchers to present their work and gain expert feedback." }
   ];
 
   return (
@@ -218,15 +221,18 @@ const About = () => {
             <p className="kicker">// ABOUT THE CONFERENCE</p>
             <h2>Conference Overview</h2>
             <p className="lead-quiet">
-              The International Conference on Research and Innovative on Smart and Sustainable Solutions in Electrical, Communication, and Biomedical Engineering serves as a premier platform for researchers, academicians, industry professionals, and students to exchange ideas and advancements in engineering and technology.
+             The International Conference on Research and Innovative on Smart and Sustainable Solutions in Electrical, Communication, and Biomedical Engineering serves as a premier platform for researchers, academicians, industry professionals, and students to exchange ideas and advancements in engineering and technology.
             </p>
             <div className="objectives-section">
                 <h3>Objectives</h3>
-                <ul className="objectives-list">
+                <div className="objectives-grid">
                     {objectives.map((objective, index) => (
-                        <li key={index}>{objective}</li>
+                        <div className="objective-card" key={index}>
+                            <div className="objective-card-icon">{index + 1}</div>
+                            <p>{objective.text}</p>
+                        </div>
                     ))}
-                </ul>
+                </div>
             </div>
           </div>
         </div>
@@ -238,11 +244,23 @@ const About = () => {
 
 // --- Home Page Component ---
 const Home = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState("signin"); // "signin" or "signup"
+
+  const handleOpenLogin = (mode = "signin") => {
+    setAuthMode(mode);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       <Navbar />
       <main>
-        <Hero />
+        <Hero onOpenLogin={() => handleOpenLogin("signin")} />
         <Collaboration />
         <About />
         <ChiefPatron/>
@@ -251,6 +269,16 @@ const Home = () => {
         <Tracks />
         <Map />
       </main>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        {authMode === "signin" ? (
+          <SignInForm onSwitch={() => setAuthMode("signup")}
+          onClose={handleCloseModal}  />
+          
+        ) : (
+          <RegistrationForm onSwitch={() => setAuthMode("signin")} 
+          onClose={handleCloseModal} />
+        )}
+      </Modal>
     </>
   );
 }
