@@ -1,127 +1,266 @@
+// import React, { useState, useEffect } from 'react';
+// import './agenda.css'; // Import the new stylesheet
+// import { FaRegCheckCircle, FaClock, FaMapMarkerAlt, FaUsers, FaMugHot, FaAward } from 'react-icons/fa';
+
+// // --- Countdown Timer Component ---
+// const Countdown = () => {
+//     const calculateTimeLeft = () => {
+//         const difference = +new Date('2026-03-26T09:00:00') - +new Date();
+//         let timeLeft = {};
+
+//         if (difference > 0) {
+//             timeLeft = {
+//                 Days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+//                 Hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+//                 Minutes: Math.floor((difference / 1000 / 60) % 60),
+//                 Seconds: Math.floor((difference / 1000) % 60),
+//             };
+//         }
+//         return timeLeft;
+//     };
+
+//     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+//     useEffect(() => {
+//         const timer = setTimeout(() => setTimeLeft(calculateTimeLeft()), 1000);
+//         return () => clearTimeout(timer);
+//     });
+
+//     return (
+//         <div className="countdown-container">
+//             {Object.keys(timeLeft).length > 0 ? (
+//                 Object.entries(timeLeft).map(([unit, value]) => (
+//                     <div className="countdown-item" key={unit}>
+//                         <span className="countdown-number">{String(value).padStart(2, '0')}</span>
+//                         <span className="countdown-label">{unit}</span>
+//                     </div>
+//                 ))
+//             ) : (
+//                 <span className="conference-live">The Conference is Live!</span>
+//             )}
+//         </div>
+//     );
+// };
+
+// // --- Main Agenda Page Component ---
+// const agenda = () => {
+//     const [activeTab, setActiveTab] = useState('day1');
+//     const [currentTime, setCurrentTime] = useState(new Date());
+
+//     useEffect(() => {
+//         // Update the current time every minute to refresh the timeline status
+//         const interval = setInterval(() => setCurrentTime(new Date()), 60000);
+//         return () => clearInterval(interval);
+//     }, []);
+
+//     const scheduleData = {
+//         day1: {
+//             date: '2026-03-26', // Use YYYY-MM-DD for easier parsing
+//             events: [
+//                 { startTime: '09:00', endTime: '10:00', title: 'Registration & Welcome Coffee', icon: <FaMugHot /> },
+//                 { startTime: '10:00', endTime: '10:30', title: 'Opening Ceremony', icon: <FaUsers />, venue: 'Main Auditorium' },
+//                 { startTime: '10:30', endTime: '12:00', title: 'Keynote: The Future of AI', icon: <FaUsers /> },
+//                 { startTime: '12:00', endTime: '13:00', title: 'Networking Lunch', icon: <FaMugHot />, venue: 'Banquet Hall' },
+//             ],
+//         },
+//         day2: {
+//             date: '2026-03-27',
+//             events: [
+//                 { startTime: '09:30', endTime: '11:00', title: 'Track Sessions 1 & 2', icon: <FaUsers />, venue: 'Halls A & B' },
+//                 { startTime: '11:00', endTime: '11:30', title: 'Coffee Break & Poster Presentations', icon: <FaMugHot /> },
+//                 { startTime: '11:30', endTime: '13:00', title: 'Track Session 3', icon: <FaUsers />, venue: 'Hall A' },
+//                 { startTime: '13:00', endTime: '14:00', title: 'Lunch', icon: <FaMugHot />, venue: 'Banquet Hall' },
+//                 { startTime: '16:00', endTime: '17:00', title: 'Awards Ceremony & Closing Remarks', icon: <FaAward />, venue: 'Main Auditorium' },
+//             ],
+//         },
+//     };
+
+//     const getEventStatus = (eventDate, startTime, endTime) => {
+//         const startDateTime = new Date(`${eventDate}T${startTime}`);
+//         const endDateTime = new Date(`${eventDate}T${endTime}`);
+
+//         if (currentTime > endDateTime) {
+//             return 'completed';
+//         }
+//         if (currentTime >= startDateTime && currentTime <= endDateTime) {
+//             return 'in-progress';
+//         }
+//         return 'upcoming';
+//     };
+
+//     const activeDay = scheduleData[activeTab];
+
+//     return (
+//         <main className="agenda-page">
+//             <section className="agenda-hero">
+//                 <div className="container">
+//                     <h1 className="hero-title">Conference Agenda</h1>
+//                     <p className="hero-subtitle">Explore our schedule of insightful talks, workshops, and networking events.</p>
+//                     <Countdown />
+//                 </div>
+//             </section>
+
+//             <div className="container schedule-container">
+//                 <div className="tabs">
+//                     <button className={`tab-btn ${activeTab === 'day1' ? 'active' : ''}`} onClick={() => setActiveTab('day1')}>Day 1</button>
+//                     <button className={`tab-btn ${activeTab === 'day2' ? 'active' : ''}`} onClick={() => setActiveTab('day2')}>Day 2</button>
+//                 </div>
+
+//                 <div className="timeline-content" key={activeTab}>
+//                     <div className="timeline">
+//                         {activeDay.events.map((event, index) => {
+//                             const status = getEventStatus(activeDay.date, event.startTime, event.endTime);
+//                             return (
+//                                 <div className={`timeline-item ${status}`} key={index}>
+//                                     <div className="timeline-icon">
+//                                         {status === 'completed' ? <FaRegCheckCircle /> : event.icon}
+//                                     </div>
+//                                     <div className="timeline-card">
+//                                         <p className="event-time"><FaClock /> {event.startTime} - {event.endTime}</p>
+//                                         <h4 className="event-title">{event.title}</h4>
+//                                         {event.venue && <p className="event-venue"><FaMapMarkerAlt /> {event.venue}</p>}
+//                                     </div>
+//                                 </div>
+//                             );
+//                         })}
+//                     </div>
+//                 </div>
+//             </div>
+//         </main>
+//     );
+// };
+
+// export default agenda
+
+
+
+
+
 import React, { useState, useEffect } from 'react';
-import './agenda.css';
+import './agenda.css'; // Import the new stylesheet
+import { FaRegCheckCircle, FaClock, FaMapMarkerAlt, FaUsers, FaMugHot, FaAward } from 'react-icons/fa';
 
 // --- Countdown Timer Component ---
-const Countdown = () => {
-  const calculateTimeLeft = () => {
-    const difference = +new Date('2026-03-26T00:00:00') - +new Date();
-    let timeLeft = {};
+const Countdown = ({ targetDate }) => {
+    const calculateTimeLeft = () => {
+        const difference = +new Date(targetDate) - +new Date();
+        let timeLeft = {};
 
-    if (difference > 0) {
-      timeLeft = {
-        weeks: Math.floor(difference / (1000 * 60 * 60 * 24 * 7)),
-        days: Math.floor((difference / (1000 * 60 * 60 * 24)) % 7),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60),
-      };
-    }
-    return timeLeft;
-  };
+        if (difference > 0) {
+            timeLeft = {
+                Days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+                Hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+                Minutes: Math.floor((difference / 1000 / 60) % 60),
+                Seconds: Math.floor((difference / 1000) % 60),
+            };
+        }
+        return timeLeft;
+    };
 
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-    return () => clearTimeout(timer);
-  });
+    useEffect(() => {
+        const timer = setTimeout(() => setTimeLeft(calculateTimeLeft()), 1000);
+        return () => clearTimeout(timer);
+    });
 
-  const timerComponents = Object.keys(timeLeft).map((interval) => {
-    if (!timeLeft[interval] && timeLeft[interval] !== 0) {
-      return null;
-    }
     return (
-      <div className="countdown-item" key={interval}>
-        <span className="countdown-number">
-          {String(timeLeft[interval]).padStart(2, '0')}
-        </span>
-        <span className="countdown-label">{interval}</span>
-      </div>
+        <div className="agenda-countdown-container">
+            {Object.keys(timeLeft).length > 0 ? (
+                Object.entries(timeLeft).map(([unit, value]) => (
+                    <div className="agenda-countdown-item" key={unit}>
+                        <span className="agenda-countdown-number">{String(value).padStart(2, '0')}</span>
+                        <span className="agenda-countdown-label">{unit}</span>
+                    </div>
+                ))
+            ) : (
+                <span className="agenda-conference-live">The Conference is Live!</span>
+            )}
+        </div>
     );
-  });
-
-  return (
-    <div className="countdown-container">
-        <div className="countdown-info">
-            <p className="countdown-date">March 26th & 27th, 2026</p>
-            <p className="countdown-title">Conference Countdown</p>
-        </div>
-        <div className="countdown-timer">
-            {timerComponents.length ? timerComponents : <span>The Conference has started!</span>}
-        </div>
-    </div>
-  );
 };
 
-
-// Main component for the conference schedule page
+// --- Main Agenda Page Component ---
 const agenda = () => {
-  // State to manage the active tab (day)
-  const [activeTab, setActiveTab] = useState('day1');
+    const [activeTab, setActiveTab] = useState('day1');
+    const [currentTime, setCurrentTime] = useState(new Date());
 
-  // Data for the schedule
-  const scheduleData = {
-    day1: {
-      date: 'Thursday, September 18, 2025',
-      events: [
-        { time: '1:00 pm - 2:00 pm', title: 'Pre-Conference Workshop Registration', isWorkshop: true },
-        { time: '2:00 pm - 6:30 pm', title: 'Workshop 1: Stem Cell Biology', venue: 'SCSCR, SIT Building, 2nd floor' },
-        { time: '2:00 pm - 6:30 pm', title: 'Workshop 2: Nanoscience and Nanotechnology', venue: 'SCNN, SIT Building, 6th Floor & Dept. of Radiology' },
-      ],
-    },
-    day2: {
-      date: 'Friday, September 19, 2025',
-      events: [
-        { time: '8:00 am - 9:00 am', title: 'Registration and Breakfast' },
-        { time: '9:00 am - 10:30 am', title: 'Plenary Speaker & Oral Presentations', description: 'Tracks: Personalized Medicine, Microbial Research, Biomedical Imaging, Environmental Engineering, AI in Healthcare' },
-        { time: '10:30 am - 11:00 am', title: 'Tea Break', venue: 'SMCW Foyer' },
-      ],
-    },
-    day3: {
-      date: 'Saturday, September 20, 2025',
-      events: [
-        { time: '9:00 am - 10:45 am', title: 'Plenary Speaker & Oral Presentations' },
-        { time: '10:45 am - 11:15 am', title: 'Tea Break', venue: 'SMCW Foyer' },
-        { time: '4:00 pm - 5:00 pm', title: 'Awards Ceremony and Valedictory', venue: 'Moringa Auditorium, SUHRC' },
-      ],
-    },
-  };
+    useEffect(() => {
+        const interval = setInterval(() => setCurrentTime(new Date()), 60000);
+        return () => clearInterval(interval);
+    }, []);
+    
+    const scheduleData = {
+        day1: {
+            date: '2025-09-03',
+            events: [
+                { startTime: '09:00', endTime: '10:00', title: 'Registration & Welcome Coffee', icon: <FaMugHot /> },
+                { startTime: '10:00', endTime: '12:00', title: 'Keynote: The Future of AI', icon: <FaUsers />, venue: 'Main Auditorium' },
+                { startTime: '12:00', endTime: '13:00', title: 'Networking Lunch', icon: <FaMugHot />, venue: 'Banquet Hall' },
+                { startTime: '18:00', endTime: '20:00', title: 'Panel Discussion: AI in Healthcare', icon: <FaUsers />, venue: 'Hall A' },
+                { startTime: '20:30', endTime: '21:30', title: 'Evening Social & Mixer', icon: <FaUsers />, venue: 'Rooftop Lounge' },
+            ],
+        },
+        day2: {
+            date: '2025-09-04',
+            events: [
+                { startTime: '09:30', endTime: '11:00', title: 'Track Sessions 1 & 2', icon: <FaUsers />, venue: 'Halls A & B' },
+                { startTime: '11:00', endTime: '11:30', title: 'Coffee Break & Poster Presentations', icon: <FaMugHot /> },
+                { startTime: '11:30', endTime: '13:00', title: 'Track Session 3', icon: <FaUsers />, venue: 'Hall A' },
+                { startTime: '16:00', endTime: '17:00', title: 'Awards Ceremony & Closing Remarks', icon: <FaAward />, venue: 'Main Auditorium' },
+            ],
+        },
+    };
 
-  return (
-    <div className="schedule-page">
-      <section className="hero-section">
-        <h1>Conference Schedule</h1>
-        <h2>Join us for an inspiring event full of knowledge and networking.</h2>
-        <Countdown />
-        <button className="register-btn">REGISTER NOW</button>
-      </section>
+    const getEventStatus = (eventDate, startTime, endTime) => {
+        const startDateTime = new Date(`${eventDate}T${startTime}:00`);
+        const endDateTime = new Date(`${eventDate}T${endTime}:00`);
 
-      <div className="schedule-container">
-        <div className="tabs">
-          <button className={`tab-btn ${activeTab === 'day1' ? 'active' : ''}} onClick={() => setActiveTab('day1')`}>Day 1</button>
-          <button className={`tab-btn ${activeTab === 'day2' ? 'active' : ''}} onClick={() => setActiveTab('day2')`}>Day 2</button>
-          <button className={`tab-btn ${activeTab === 'day3' ? 'active' : ''}} onClick={() => setActiveTab('day3')`}>Day 3</button>
-        </div>
+        if (currentTime > endDateTime) return 'completed';
+        if (currentTime >= startDateTime && currentTime <= endDateTime) return 'in-progress';
+        return 'upcoming';
+    };
 
-        <div className="tab-content" key={activeTab}>
-          <h3>{scheduleData[activeTab].date}</h3>
-          <div className="timeline">
-            {scheduleData[activeTab].events.map((event, index) => (
-              <div key={index} className="timeline-item" style={{animationDelay: `${index * 0.1}s`}}>
-                <p className="timeline-time">{event.time}</p>
-                <h4 className="timeline-title">{event.title}</h4>
-                {event.venue && <p className="timeline-venue">{event.venue}</p>}
-                {event.description && <p className="timeline-description">{event.description}</p>}
-              </div>
-            ))}
-          </div>
-        </div>
-        <p className="tentative-note">* Tentative schedule, subject to change</p>
-      </div>
-    </div>
-  );
+    const activeDay = scheduleData[activeTab];
+
+    return (
+        <main className="agenda-page">
+            <section className="agenda-hero">
+                <div className="agenda-container">
+                    <h1 className="agenda-hero-title">Conference Agenda</h1>
+                    <p className="agenda-hero-subtitle">Explore our schedule of insightful talks, workshops, and networking events.</p>
+                    <Countdown targetDate={'2025-08-25T09:00:00'} />
+                </div>
+            </section>
+
+            <div className="agenda-container agenda-schedule-container">
+                <div className="agenda-tabs">
+                    <button className={`agenda-tab-btn ${activeTab === 'day1' ? 'active' : ''}`} onClick={() => setActiveTab('day1')}>Day 1</button>
+                    <button className={`agenda-tab-btn ${activeTab === 'day2' ? 'active' : ''}`} onClick={() => setActiveTab('day2')}>Day 2</button>
+                </div>
+
+                <div className="agenda-timeline-content" key={activeTab}>
+                    <div className="agenda-timeline">
+                        {activeDay.events.map((event, index) => {
+                            const status = getEventStatus(activeDay.date, event.startTime, event.endTime);
+                            return (
+                                <div className={`agenda-timeline-item ${status}`} key={index}>
+                                    <div className="agenda-timeline-icon">
+                                        {status === 'completed' ? <FaRegCheckCircle /> : event.icon}
+                                    </div>
+                                    <div className="agenda-timeline-card">
+                                        <p className="agenda-event-time"><FaClock /> {event.startTime} - {event.endTime}</p>
+                                        <h4 className="agenda-event-title">{event.title}</h4>
+                                        {event.venue && <p className="agenda-event-venue"><FaMapMarkerAlt /> {event.venue}</p>}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+        </main>
+    );
 };
 
 export default agenda;
