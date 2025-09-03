@@ -6,6 +6,7 @@ import Navbar from '/src/header/Navbar';
 import Map from './Map'; 
 import Patrons from './Patrons';
 import Chair from './Chair';
+import ChiefPatron from './Chiefpatron';
 
 // --- Countdown Timer Component ---
 const Countdown = () => {
@@ -223,6 +224,7 @@ const Home = () => {
         <Hero />
         <Collaboration />
         <About />
+        <ChiefPatron/>
         <Patrons />
         <Chair />
         <Tracks />
