@@ -10,6 +10,7 @@ import ChiefPatron from './Chiefpatron';
 import Modal from '/src/pages/Login/Modal';
 import SignInForm from '/src/pages/Login/Signin';
 import RegistrationForm from '/src/pages/Login/loginForm';
+import UpcomingDeadlines from './ImportentDates';
 
 // --- Countdown Timer Component ---
 const Countdown = () => {
@@ -266,6 +267,7 @@ const Home = () => {
         <ChiefPatron/>
         <Patrons />
         <Chair />
+        <UpcomingDeadlines />
         <Tracks />
         <Map />
       </main>
