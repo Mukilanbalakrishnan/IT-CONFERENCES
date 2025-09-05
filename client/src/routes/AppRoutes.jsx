@@ -29,6 +29,8 @@ const AppRoutes = () => {
         <Route path='/register' element={<RegistrationForm/>}/>
         <Route path='/status-tracker' element={<SubmissionStatusTracker/>}/>
        </Routes>
+
+
       <Footer/>
       </BrowserRouter>
   )
