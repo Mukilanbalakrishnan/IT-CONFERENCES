@@ -3,20 +3,24 @@ import './Researchandreview.css';
 
 // --- Main Component ---
 const Researchandreview = () => {
-    const boardMembers = [
-        { name: 'Prof. Ajit Kelkar', affiliation: 'Professor, College of Engineering, North Carolina Agricultural & Technical State University, USA' },
-        { name: 'Prof. Anurag Agrawal', affiliation: 'Head, Koria Center for Digital Health at Ashoka University Dean, Biosciences and Health Research, India' },
-        { name: 'Prof. Christian Roux', affiliation: 'Professor Emeritus, IMT Atlantique, France' },
-        { name: 'Prof. K. N. Ganesh', affiliation: 'SERB National Science Chair, JNCASR, India' },
-        { name: 'Prof. K. V. S. Hari', affiliation: 'Senior Professor and Director, Centre for Brain Research, India' },
-        { name: 'Mr. NandhaKumar Raju', affiliation: 'Director, Software Engineering, UnitedHealth Group, USA' },
-    ];
+const boardMembers = [
+  { name: 'Dr.R. Poornima', affiliation: 'Assistant Professor, Electronics and Communication Engineering, KSR College of Engineering, Tiruchengode, Tamilnadu, India' },
+  { name: 'Mr.R. Veeramani', affiliation: 'Assistant Professor, Electronics and Communication Engineering, KSR College of Engineering, Tiruchengode, Tamilnadu, India' },
+  { name: 'Dr.M. Vijayakumar', affiliation: 'Assistant Professor, Electrical and Electronics Engineering, KSR College of Engineering, Tiruchengode, Tamilnadu, India' },
+  { name: 'Dr.M. Ramasamy', affiliation: 'Associate Professor, Electrical and Electronics Engineering, KSR College of Engineering, Tiruchengode, Tamilnadu, India' },
+  { name: 'Mr.B.B. Sangameswaran', affiliation: 'Assistant Professor, Biomedical Engineering, KSR College of Engineering, Tiruchengode, Tamilnadu, India' },
+  { name: 'Dr. Zuraidah Harith', affiliation: 'Associate Professor, Faculty of Engineering and Quantity Surveying, INTI International University, Malaysia' },
+  { name: 'Ts. Dr. Siti Sarah Maidin', affiliation: 'Professor, Faculty of Data Science and Information Technology (FDSIT), INTI International University, Malaysia' },
+  { name: 'Ts. Dr. Jeya Gopi Raman', affiliation: 'Professor, Faculty of Engineering & Quantity Surveying, INTI International University, Malaysia' },
+];
+
+
 
     return (
         <main>
             <header className="page-header">
                 <div className="container">
-                    <h1>Research and Review Board</h1>
+                    <h1>Editorial and Review Board</h1>
                 </div>
             </header>
 
