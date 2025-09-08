@@ -11,6 +11,7 @@ import Modal from '/src/pages/Login/Modal';
 import SignInForm from '/src/pages/Login/Signin';
 import RegistrationForm from '/src/pages/Login/LoginForm';
 import UpcomingDeadlines from './ImportentDates';
+import Convenor from './Convenor';
 
 // --- Countdown Timer Component ---
 const Countdown = () => {
@@ -267,6 +268,7 @@ const Home = () => {
         <ChiefPatron/>
         <Patrons />
         <Chair />
+        <Convenor/>
         <UpcomingDeadlines />
         <Tracks />
         <Map />
