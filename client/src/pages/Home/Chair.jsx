@@ -6,7 +6,8 @@ const chairsData = [
   {
     id: 1,
     name: 'Dr. G. Singaravel',
-    role: 'Conference Chair',
+    role: 'Head – International Relation',
+    organization:'KSR College of Engineering',
     imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755927904/t5tivhg7kx10mgurtnjx.webp', // Placeholder image
     blobColor: '#0d47a1',
     type: 'Chair',
@@ -14,7 +15,8 @@ const chairsData = [
   {
     id: 2,
     name: 'Dr. Malathy Batumalay',
-    role: 'Conference Co-Chair',
+    role: 'Associate Professor',
+    organization:'INTI International University',
     imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755754148/nvbpdwncdrxpekuksahy.webp', // Placeholder image
     blobColor: '#F57C00',
     type: 'Co-Chair',
@@ -22,7 +24,7 @@ const chairsData = [
 ];
 
 // Reusable card component
-const ChairCard = ({ name, role, imageUrl, blobColor }) => (
+const ChairCard = ({ name, role, imageUrl, blobColor, organization }) => (
   <div className="chair-card">
     <div className="chair-card__image-wrapper">
       <div className="chair-card__blob" style={{ backgroundColor: blobColor }}></div>
@@ -36,6 +38,7 @@ const ChairCard = ({ name, role, imageUrl, blobColor }) => (
     <div className="chair-card__details">
       <h3 className="chair-card__name">{name}</h3>
       <p className="chair-card__role">{role}</p>
+      <p className="chair-card__organization">{organization}</p>
     </div>
   </div>
 );

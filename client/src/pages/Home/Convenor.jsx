@@ -6,7 +6,9 @@ const chairsData = [
 {
   id: 1,
   name: 'Dr.C. Gowri Shankar',
-  role: 'Professor and Head, Electronics and Communication Engineering, KSR College of Engineering',
+  role: 'Professor and Head of ECE',
+  department:' Electronics and Communication Engineering',
+  organization:'KSR College of Engineering',
   imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1757312482/u9f6suylf9n6bwuyjzkn.webp', // Placeholder image
   blobColor: '#0d47a1',
   type: 'convenor',
@@ -14,7 +16,9 @@ const chairsData = [
 {
   id: 2,
   name: 'Dr.S. Ramesh',
-  role: 'Professor and Head, Electrical and Electronics Engineering, KSR College of Engineering',
+  role: 'Professor and Head of EEE',
+  department:' Electrical and Electronics Engineering',
+  organization:'KSR College of Engineering',
   imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1757312857/rqwklwozt9ie8nvh8sia.webp', // Placeholder image
   blobColor: '#F57C00',
   type: 'convenor',
@@ -22,7 +26,9 @@ const chairsData = [
 {
   id: 3,
   name: 'Dr.R. Prabu',
-  role: 'Associate Professor and Head, Biomedical Engineering, KSR College of Engineering',
+  role: 'Professor and Head of BME',
+  department:' Biomedical Engineering',
+  organization:'KSR College of Engineering',
   imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1757314953/jtjvt8ytoflnqhku8ntq.jpg', // Placeholder image
   blobColor: '#388E3C',
   type: 'convenor',
@@ -31,7 +37,7 @@ const chairsData = [
 ];
 
 // Reusable card component
-const ConvenorCard = ({ name, role, imageUrl, blobColor }) => (
+const ConvenorCard = ({ name, role, imageUrl, blobColor,organization }) => (
   <div className="chair-card">
     <div className="chair-card__image-wrapper">
       <div className="chair-card__blob" style={{ backgroundColor: blobColor }}></div>
@@ -45,6 +51,8 @@ const ConvenorCard = ({ name, role, imageUrl, blobColor }) => (
     <div className="chair-card__details">
       <h3 className="chair-card__name">{name}</h3>
       <p className="chair-card__role">{role}</p>
+      {/* <p className="chair-card__department">{department}</p> */}
+      <p className="chair-card__organization">{organization}</p>
     </div>
   </div>
 );
