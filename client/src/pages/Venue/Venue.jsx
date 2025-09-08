@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import './Venue.css'; // Import the new stylesheet
 
@@ -10,7 +11,7 @@ const eventData = [
         time: '09:30 AM',
         description: 'The official opening of the Global Summit 2025, featuring a welcome address by the Chairman.',
         image: 'https://placehold.co/600x400/0D47A1/FFFFFF?text=KSR+Auditorium',
-        map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!m12!1m3!1d412.3821538239442!2d77.8316064585666!3d11.358322062973798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964017038dfe3%3A0xd5a68d71e9c1aec7!2sK%20S%20R%20College%20of%20Engineering!5e0!3m2!1sen!2sin!4v1754895362135!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
+        map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d412.3821538239442!2d77.8316064585666!3d11.358322062973798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964017038dfe3%3A0xd5a68d71e9c1aec7!2sK%20S%20R%20College%20of%20Engineering!5e0!3m2!1sen!2sin!4v1754895362135!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
     },
     {
         id: 'evt2',
@@ -20,7 +21,7 @@ const eventData = [
         time: '11:00 AM',
         description: 'A thought-provoking keynote address by renowned AI researcher Dr. Maya Singh.',
         image: 'https://placehold.co/600x400/F57C00/FFFFFF?text=Conference+Hall',
-        map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!m12!1m3!1d412.3821538239442!2d77.8316064585666!3d11.358322062973798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964017038dfe3%3A0xd5a68d71e9c1aec7!2sK%20S%20R%20College%20of%20Engineering!5e0!3m2!1sen!2sin!4v1754895362135!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
+        map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d412.3821538239442!2d77.8316064585666!3d11.358322062973798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964017038dfe3%3A0xd5a68d71e9c1aec7!2sK%20S%20R%20College%20of%20Engineering!5e0!3m2!1sen!2sin!4v1754895362135!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
     },
 ];
 
@@ -34,7 +35,7 @@ const hostelData = [
         lunch: '12:30 - 1:30 PM',
         dinner: '7:30 - 8:30 PM',
         image: 'https://placehold.co/600x400/1976D2/FFFFFF?text=Men%27s+Hostel',
-        map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!m12!1m3!1d412.3821538239442!2d77.8316064585666!3d11.358322062973798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964017038dfe3%3A0xd5a68d71e9c1aec7!2sK%20S%20R%20College%20of%20Engineering!5e0!3m2!1sen!2sin!4v1754895362135!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
+        map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d412.3821538239442!2d77.8316064585666!3d11.358322062973798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964017038dfe3%3A0xd5a68d71e9c1aec7!2sK%20S%20R%20College%20of%20Engineering!5e0!3m2!1sen!2sin!4v1754895362135!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
     },
     {
         id: 'hst2',
@@ -45,7 +46,7 @@ const hostelData = [
         lunch: '12:30 - 1:30 PM',
         dinner: '7:30 - 8:30 PM',
         image: 'https://placehold.co/600x400/D32F2F/FFFFFF?text=Women%27s+Hostel',
-        map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!m12!1m3!1d412.3821538239442!2d77.8316064585666!3d11.358322062973798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964017038dfe3%3A0xd5a68d71e9c1aec7!2sK%20S%20R%20College%20of%20Engineering!5e0!3m2!1sen!2sin!4v1754895362135!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
+        map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d412.3821538239442!2d77.8316064585666!3d11.358322062973798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964017038dfe3%3A0xd5a68d71e9c1aec7!2sK%20S%20R%20College%20of%20Engineering!5e0!3m2!1sen!2sin!4v1754895362135!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
     },
 ];
 
@@ -82,7 +83,6 @@ const Venue = () => {
             <main className="venue-page">
                 <section id="venue" className="content-section">
                     <h2>Event Schedule</h2>
-                    {/* ADDED THIS WRAPPER DIV */}
                     <div className="content-box">
                         <table className="info-table">
                             <thead>
@@ -113,8 +113,7 @@ const Venue = () => {
 
                 <section id="accommodation" className="content-section">
                     <h2>Hostel & Dining</h2>
-                     {/* ADDED THIS WRAPPER DIV */}
-                    <div className="content-box">
+                     <div className="content-box">
                         <table className="info-table">
                             <thead>
                                 <tr>
