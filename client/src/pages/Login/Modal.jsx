@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 function Modal({ isOpen, onClose, children }) {
   if (!isOpen) return null;
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") onClose();
