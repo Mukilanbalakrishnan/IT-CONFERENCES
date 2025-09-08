@@ -7,7 +7,7 @@ const patrons = [
   name: 'Mr. R. Srinivasan, B.B.M.',
   role: 'Chairman',
   tagline: 'KSR Educational Institutions',
-  tagline1:'Tiruchengode, Tamil Nadu, India',
+  tagline1:'India',
   imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755754288/zqoqdnu8hskpabyhylqk.webp',
 },
 {
@@ -15,14 +15,14 @@ const patrons = [
   name: 'Mr. S. Sachin',
   role: 'Vice Chairman',
   tagline: 'KSR Educational Institutions',
-  tagline1:'Tiruchengode, Tamil Nadu, India',
+  tagline1:'India',
   imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755755590/u5rxh0jpmvigqmiennoi.webp',
 },
 {
   id: 3,
   name: 'Dr. Joseph Lee Yu Khang, Ph.D.',
   role: 'Vice Chancellor',
-  tagline: 'INTI International University, Malaysia',
+  tagline: 'INTI International University',
   imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1756132702/f5kj5ciravj77we2tz4b.jpg',
 },
 
@@ -42,7 +42,6 @@ const ChiefPatron = () => {
                         <div className="patrons-card__wrapper" key={patron.id}>
                             <div className={`patrons-card patrons-card--tilt-${index + 1}`}>
                                 <div className="patrons-card__header">
-                                    <span className="patrons-card__role">{patron.role}</span>
                                 </div>
                                 <div className="patrons-card__image-container">
                                     <img
@@ -53,6 +52,7 @@ const ChiefPatron = () => {
                                 </div>
                             </div>
                             <h3 className="patrons-card__name">{patron.name}</h3>
+                            <span className="patrons-card__role">{patron.role}</span>
                             <div className="patrons-card__topic">
                                         <p>{patron.tagline}</p>
                             </div>
