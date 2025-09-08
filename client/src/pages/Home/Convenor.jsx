@@ -23,7 +23,7 @@ const chairsData = [
   id: 3,
   name: 'Dr.R. Prabu',
   role: 'Associate Professor and Head, Biomedical Engineering, KSR College of Engineering',
-  imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755927904/placeholder3.webp', // Placeholder image
+  imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1757314953/jtjvt8ytoflnqhku8ntq.jpg', // Placeholder image
   blobColor: '#388E3C',
   type: 'convenor',
 },
