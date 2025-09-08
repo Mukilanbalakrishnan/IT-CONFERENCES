@@ -1,5 +1,5 @@
 import React from 'react';
-import './ChiefPatron.css'; // Import the stylesheet
+import './Chiefpatron.css'; // Import the stylesheet
 
 // --- Data for the Patrons ---
 const patrons = [
