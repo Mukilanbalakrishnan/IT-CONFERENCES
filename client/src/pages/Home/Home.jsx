@@ -9,7 +9,7 @@ import Chair from './Chair';
 import ChiefPatron from './Chiefpatron';
 import Modal from '/src/pages/Login/Modal';
 import SignInForm from '/src/pages/Login/Signin';
-import RegistrationForm from '/src/pages/Login/loginForm';
+import RegistrationForm from '/src/pages/Login/LoginForm';
 import UpcomingDeadlines from './ImportentDates';
 
 // --- Countdown Timer Component ---
