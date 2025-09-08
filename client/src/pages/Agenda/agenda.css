@@ -1,208 +1,224 @@
-/* --- Countdown Timer --- */
-.countdown-container {
-  position: relative; /* Changed from absolute */
-  z-index: 3;
-  width: clamp(300px, 90%, 800px);
-  margin: auto auto 0 auto; /* Pushes to the bottom */
-  background: rgba(13, 71, 161, 0.6);
-  padding: 1.5rem 2.5rem;
-  border-radius: var(--radius);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  backdrop-filter: blur(10px);
+/* --- Animation Keyframes --- */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
-.countdown-info {
-  text-align: left;
-}
-.countdown-date {
-  margin: 0;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: clamp(0.8rem, 0.7rem + 0.5vw, 0.9rem);
-}
-.countdown-title {
-  margin: 0;
-  font-weight: 700;
-  color: var(--white);
-  font-size: clamp(1rem, 0.8rem + 1vw, 1.2rem);
-}
-.countdown-timer {
-  display: flex;
-  gap: 2.5rem;
-}
-.countdown-item {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 1;
-}
-.countdown-item:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: -1.25rem;
-    top: 10%;
-    height: 80%;
-    width: 1px;
-    background: rgba(255, 255, 255, 0.15);
-}
-.countdown-number {
-  font-size: clamp(2rem, 1rem + 4.5vw, 3.2rem);
-  font-weight: 800;
-  color: var(--white);
-}
-.countdown-label {
-  font-size: clamp(0.7rem, 0.6rem + 0.5vw, 0.8rem);
-  font-weight: 600;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
-}
-.schedule-page {
-  font-family: 'Inter', sans-serif;
-  background-color: #f8f9fa;
-}
-.hero-section {
-  background: linear-gradient(
-      rgba(10, 20, 40, 0.8),
-      rgba(10, 20, 40, 0.8)
-    ),
-    url('https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=2070&auto=format&fit=crop')
-      no-repeat center center;
-  background-size: cover;
-  color: white;
-  padding: 60px 20px;
-  text-align: center;
-}
-.hero-section h1 {
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 800;
-  margin-bottom: 1rem;
-  animation: fadeInUp 0.8s ease-out;
-}
-.hero-section h2 {
-  font-size: 1.5rem;
-  font-weight: 300;
-  margin-bottom: 2rem;
-  animation: fadeInUp 0.8s ease-out 0.2s;
-  animation-fill-mode: backwards;
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(245, 124, 0, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(245, 124, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(245, 124, 0, 0); }
 }
 
-.register-btn {
-  background-color: #e63946;
-  color: white;
-  border: none;
-  padding: 15px 35px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-  animation: fadeInUp 0.8s ease-out 0.6s;
-  animation-fill-mode: backwards;
+/* --- Global Variables (Assumed to be in a global CSS file like index.css) --- */
+:root {
+    --brand-orange: #F57C00;
+    --brand-blue-dark: #0D47A1;
+    --brand-blue-primary: #1976D2;
+    --brand-blue-light: #E3F2FD;
+    --text-primary: #111318;
+    --text-secondary: #6c757d;
+    --white: #FFFFFF;
+    --surface-light: #f8f9fa;
+    --surface-dark: #e9ecef;
+    --page-max-width: 1200px;
+    --gutter: 1.25rem;
+    --radius: 12px;
 }
-.register-btn:hover {
-  background-color: #d0313d;
-  transform: scale(1.05);
+
+/* --- Page-Specific Styles for Agenda --- */
+.agenda-page {
+    background-color: var(--surface-light);
 }
-.schedule-container {
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+.agenda-container {
+    width: 100%;
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
 }
-.tabs {
-  display: flex;
-  border-bottom: 2px solid #e9ecef;
-  margin-bottom: 30px;
+
+/* --- Hero Section --- */
+.agenda-hero {
+    padding: 5rem 0;
+    text-align: center;
+    color: var(--white);
+    background: linear-gradient(rgba(13, 71, 161, 0.8), rgba(13, 71, 161, 0.8)), url('https://placehold.co/1920x1080/0D47A1/FFFFFF?text=Conference+Venue') no-repeat center center/cover;
 }
-.tab-btn {
-  padding: 15px 25px;
-  cursor: pointer;
-  border: none;
-  background: none;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #6c757d;
-  position: relative;
-  transition: color 0.3s;
+.agenda-hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin: 0 0 0.5rem;
+    animation: fadeInUp 0.5s ease-out;
 }
-.tab-btn.active {
-  color: #0d6efd;
+.agenda-hero-subtitle {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    opacity: 0.9;
+    animation: fadeInUp 0.5s 0.2s ease-out backwards;
 }
-.tab-btn.active::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: #0d6efd;
+
+/* --- Countdown Timer --- */
+.agenda-countdown-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    animation: fadeInUp 0.5s 0.4s ease-out backwards;
 }
-.tab-content {
-  animation: fadeIn 0.5s ease;
+.agenda-countdown-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: var(--radius);
+    min-width: 100px;
 }
-.tab-content h3 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #343a40;
+.agenda-countdown-number {
+    font-size: 2.5rem;
+    font-weight: 700;
 }
-.timeline {
-  position: relative;
-  padding-left: 40px;
+.agenda-countdown-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    opacity: 0.8;
 }
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 10px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background-color: #dee2e6;
+.agenda-conference-live {
+    font-size: 1.5rem;
+    font-weight: 700;
 }
-.timeline-item {
-  margin-bottom: 30px;
-  position: relative;
-  animation: fadeInUp 0.5s ease-out;
-  animation-fill-mode: backwards;
+
+/* --- Schedule Container --- */
+.agenda-schedule-container {
+    margin-top: -50px;
+    position: relative;
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    padding: 2rem;
+    margin-bottom: 4rem;
 }
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: -35px;
-  top: 5px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: #0d6efd;
-  border: 2px solid white;
+
+/* --- Tabs --- */
+.agenda-tabs {
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid var(--surface-dark);
+    margin-bottom: 2rem;
 }
-.timeline-time {
-  font-weight: 600;
-  color: #495057;
-  margin-bottom: 5px;
+.agenda-tab-btn {
+    padding: 1rem 1.5rem;
+    border: none;
+    background: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    position: relative;
 }
-.timeline-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #212529;
+.agenda-tab-btn.active {
+    color: var(--brand-orange);
 }
-.timeline-venue {
-  font-style: italic;
-  color: #6c757d;
+.agenda-tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--brand-orange);
 }
-.timeline-description {
-  color: #495057;
-  font-size: 0.95rem;
+
+/* --- Tracker Timeline --- */
+.agenda-timeline {
+    position: relative;
+    padding-left: 50px;
 }
-.tentative-note {
-  text-align: center;
-  margin-top: 30px;
-  font-style: italic;
-  color: #6c757d;
+.agenda-timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: var(--surface-dark);
+}
+.agenda-timeline-item {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+.agenda-timeline-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: -42px;
+    top: 0;
+    background-color: var(--white);
+    border: 2px solid var(--surface-dark);
+}
+.agenda-timeline-card {
+    width: 100%;
+    background-color: var(--surface-light);
+    padding: 1.25rem;
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+}
+.agenda-event-time {
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.agenda-event-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+.agenda-event-venue {
+    font-weight: 500;
+    color: var(--brand-blue-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+/* --- Status Styling --- */
+.agenda-timeline-item.upcoming .agenda-timeline-icon {
+    border-color: var(--surface-dark);
+    color: var(--text-secondary);
+}
+.agenda-timeline-item.upcoming .agenda-timeline-card {
+    background-color: var(--surface-light);
+}
+
+.agenda-timeline-item.in-progress .agenda-timeline-icon {
+    background-color: var(--brand-orange);
+    border-color: var(--brand-orange);
+    color: var(--white);
+    animation: pulse 2s infinite;
+}
+.agenda-timeline-item.in-progress .agenda-timeline-card {
+    border-color: var(--brand-orange);
+    background-color: #fff3e0;
+}
+.agenda-timeline-item.in-progress .agenda-event-title {
+    color: var(--brand-orange);
+}
+
+.agenda-timeline-item.completed .agenda-timeline-icon {
+    background-color: var(--brand-blue-primary);
+    border-color: var(--brand-blue-primary);
+    color: var(--white);
+}
+.agenda-timeline-item.completed .agenda-timeline-card {
+    opacity: 0.7;
+}
+.agenda-timeline-item.completed .agenda-event-title {
+    text-decoration: line-through;
 }
