@@ -6,7 +6,7 @@ const patrons = [
     {
         id: 1,
         name: 'Mr. R. Srinivasan, B.B.M.',
-        role: 'Chairman',
+        role: 'CHAIRMAN',
         tagline: 'KSR Educational Institutions',
         tagline1:'India',
         imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755754288/zqoqdnu8hskpabyhylqk.webp',
@@ -14,7 +14,7 @@ const patrons = [
     {
         id: 2,
         name: 'Mr. S. Sachin',
-        role: 'Vice Chairman',
+        role: 'VICE CHAIRMAN',
         tagline: 'KSR Educational Institutions',
         tagline1:'India',
         imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755755590/u5rxh0jpmvigqmiennoi.webp',
@@ -22,7 +22,7 @@ const patrons = [
     {
         id: 3,
         name: 'Dr. Joseph Lee Yu Khang, Ph.D.',
-        role: 'Vice Chancellor',
+        role: 'VICE CHANCELLOR',
         tagline: 'INTI International University',
         tagline1: 'Malaysia',
         imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1756132702/f5kj5ciravj77we2tz4b.jpg',

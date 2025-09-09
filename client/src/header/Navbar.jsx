@@ -124,7 +124,7 @@ const Navbar = () => {
           </li>
           <li><NavLink to="/conferencetrack" className={navLinkClass} onClick={() => setSideMenu(false)}>Tracks</NavLink></li>
           <li><NavLink to="/venue" className={navLinkClass} onClick={() => setSideMenu(false)}>Venue</NavLink></li>
-          <li><NavLink to="/sponsors" className={navLinkClass} onClick={() => setSideMenu(false)}>Sponsors</NavLink></li>
+          <li><NavLink to="/journal" className={navLinkClass} onClick={() => setSideMenu(false)}>Journal</NavLink></li>
           <li><NavLink to="/contact" className={navLinkClass} onClick={() => setSideMenu(false)}>Contact</NavLink></li>
         </ul>
       </div>
