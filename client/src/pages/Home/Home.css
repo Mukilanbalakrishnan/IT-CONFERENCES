@@ -514,7 +514,7 @@ p, li {
     flex-direction: column;
     text-align: center;
     gap: 1.5rem;
-    margin-top: 2rem;
+    margin-top: 5rem;
   }
   .countdown-info {
     text-align: center;
