@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { getMyStatus } from "../controllers/statusController.js";
-import { authRequired } from "../middleware/authtoken.js";
+import { authRequest } from "../middleware/constants.js";
 
 const router = Router();
-router.get("/", authRequired, getMyStatus);
+router.get("/", authRequest, getMyStatus);
 export default router;

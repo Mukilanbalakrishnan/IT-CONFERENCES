@@ -1,18 +1,3 @@
-// import mongoose from "mongoose";
-
-// const registerSchema = new mongoose.Schema({
-//   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, unique: true },
-//   fullName: { type: String },
-//   college: { type: String },
-//   category: { type: String, enum: ["student", "faculty", "industry"], default: "student" },
-//   affiliation: String,
-//   phone: String,
-//   abstractTitle: String,
-//   abstractContent: { type: String },
-//   paperUrl: String,
-// }, { timestamps: true });
-
-// export default mongoose.model("Registration", registerSchema);
 
 import mongoose from "mongoose";
 
@@ -57,10 +42,10 @@ const registerSchema = new mongoose.Schema({
   // This defines the array of participants using the schema above.
   participants: {
     type: [participantSchema],
-    validate: {
-      validator: (arr) => arr.length >= 1 && arr.length <= 4,
-      message: "You must provide between 1 and 4 participants."
-    },
+    // validate: {
+    //   validator: (arr) => arr.length >= 1 && arr.length <= 4,
+    //   message: "You must provide between 1 and 4 participants."
+    // },
     required: true
   },
 
