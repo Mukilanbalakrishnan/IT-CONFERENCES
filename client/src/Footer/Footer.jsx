@@ -58,10 +58,10 @@ export const Footer = () => {
                         <div className="footer-column">
                             <h3 className="footer-heading">Tracks</h3>
                             <ul className="footer-list">
-                                <li><NavLink to="/tracks/1" className="footer-link">Track 1</NavLink></li>
-                                <li><NavLink to="/tracks/2" className="footer-link">Track 2</NavLink></li>
+                                <li><NavLink to="/conferencetrack" className="footer-link">Track</NavLink></li>
+                                {/* <li><NavLink to="/tracks/2" className="footer-link">Track 2</NavLink></li>
                                 <li><NavLink to="/tracks/3" className="footer-link">Track 3</NavLink></li>
-                                <li><NavLink to="/tracks/4" className="footer-link">Track 4</NavLink></li>
+                                <li><NavLink to="/tracks/4" className="footer-link">Track 4</NavLink></li> */}
                             </ul>
                         </div>
                         <div className="footer-column">
@@ -83,4 +83,4 @@ export const Footer = () => {
     );
 };
 
-export default Footer;
+export default Footer; 

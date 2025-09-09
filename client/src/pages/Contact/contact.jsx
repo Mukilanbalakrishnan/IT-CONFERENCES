@@ -1,9 +1,9 @@
+
 import React, { useState } from 'react';
 import Map from '../Home/Map';
 import './contact.css'; 
 
 const ContactUsPreview = () => {
-    // Form state
     const [form, setForm] = useState({
         firstName: '',
         lastName: '',
@@ -14,7 +14,6 @@ const ContactUsPreview = () => {
     const [touched, setTouched] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Validation logic
     const validate = () => {
         const errors = {};
         if (!form.firstName) errors.firstName = 'First name is required';
@@ -42,7 +41,6 @@ const ContactUsPreview = () => {
         const errs = validate();
         if (Object.keys(errs).length === 0) {
             setIsSubmitting(true);
-            // Simulate API call
             setTimeout(() => {
                 alert('Message sent! (mock)');
                 setForm({ firstName: '', lastName: '', email: '', contact: '', message: '' });
@@ -62,10 +60,10 @@ const ContactUsPreview = () => {
                 
                 <main className="main-content">
                     <div className="page-header">
-                        <h1 className="page-title">Get In Touch</h1>
+                        <h1 className="page-title">K.S.R. College of Engineering – Get In Touch</h1>
                         <p className="page-subtitle">
-                            Have questions about the KSR Conference? We're here to help! Reach out to our team for 
-                            assistance with registration, event details, or any other inquiries.
+                            Have questions about K.S.R. College of Engineering? We're here to help! Reach out to our team for 
+                            assistance with admission, campus details, or any other inquiries.
                         </p>
                     </div>
                     
@@ -162,42 +160,55 @@ const ContactUsPreview = () => {
                         
                         <aside className="info-card-container">
                             <h3>Contact Information</h3>
-                            <div className="info-item">
+
+                            <div className="info-item interactive">
                                 <i className="fas fa-phone-alt"></i>
                                 <div>
-                                    <strong>Hotline:</strong>
-                                    <span>+91 427 409 9999</span>
+                                    <strong>Phone:</strong>
+                                    <span><a href="tel:+914288274213">+91 4288 274213</a></span>
                                 </div>
                             </div>
-                            <div className="info-item">
+
+                            <div className="info-item interactive">
                                 <i className="far fa-envelope"></i>
                                 <div>
                                     <strong>Email:</strong>
-                                    <span>info@ksrconference.com</span>
+                                    <span><a href="mailto:principal@ksrce.ac.in">principal@ksrce.ac.in</a></span>
                                 </div>
                             </div>
-                            <div className="info-item">
+
+                            <div className="info-item interactive">
                                 <i className="fas fa-map-marker-alt"></i>
                                 <div>
-                                    <strong>Venue:</strong>
-                                    <span>KSR College of Engineering, Tiruchengode</span>
+                                    <strong>Address:</strong>
+                                    <span>K.S.R. College of Engineering, K.S.R. Kalvi Nagar, Tiruchengode – 637 215, Namakkal District, Tamil Nadu, India</span>
                                 </div>
                             </div>
-                            <div className="info-item">
+
+                            <div className="info-item interactive">
                                 <i className="far fa-clock"></i>
                                 <div>
-                                    <strong>Response Time:</strong>
-                                    <span>Within 24 hours</span>
+                                    <strong>Website:</strong>
+                                    <span><a href="https://ksrce.ac.in" target="_blank" rel="noopener noreferrer">ksrce.ac.in</a></span>
                                 </div>
                             </div>
-                            
+
                             <div className="social-connect">
                                 <p>Follow us on social media</p>
                                 <div className="social-icons">
-                                    <a href="#" aria-label="Facebook"><i className="fab fa-facebook-f"></i></a>
-                                    <a href="#" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
-                                    <a href="#" aria-label="LinkedIn"><i className="fab fa-linkedin-in"></i></a>
-                                    <a href="#" aria-label="Twitter"><i className="fab fa-twitter"></i></a>
+                                    <a href="https://www.instagram.com/ksrce_official/?hl=en" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                                        <i className="fab fa-instagram"></i>
+                                    </a>
+                                    <a href="https://in.linkedin.com/company/ksrce" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                                        <i className="fab fa-linkedin-in"></i>
+                                    </a>
+                                    <a href="https://x.com/ksrceofficial" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                                        <i className="fab fa-twitter"></i>
+                                    </a>
+                                    <a href="https://www.youtube.com/@KSRCEITES" target="_blank" rel="noopener noreferrer" aria-label="YouTube Channel">
+                                        <i className="fab fa-youtube"></i>
+                                    </a>
+
                                 </div>
                             </div>
                         </aside>
@@ -207,22 +218,21 @@ const ContactUsPreview = () => {
                         <h2 className="faq-title">Frequently Asked Questions</h2>
                         <div className="faq-grid">
                             <div className="faq-item">
-                                <h4><i className="far fa-question-circle"></i>Registration Process</h4>
-                                <p>Learn about our simple registration process, payment options, and how to confirm your participation in the conference.</p>
+                                <h4><i className="far fa-question-circle"></i>Admissions Process</h4>
+                                <p>Learn about our admission process, eligibility criteria, and how to apply to K.S.R. College of Engineering.</p>
                             </div>
                             <div className="faq-item">
-                                <h4><i className="far fa-question-circle"></i>Accommodation</h4>
-                                <p>Information about recommended hotels, special conference rates, and transportation options to the venue.</p>
+                                <h4><i className="far fa-question-circle"></i>Campus Facilities</h4>
+                                <p>Information about hostels, library, labs, and other facilities available for students on campus.</p>
                             </div>
                             <div className="faq-item">
-                                <h4><i className="far fa-question-circle"></i>Presentation Guidelines</h4>
-                                <p>Details on presentation formats, time allocations, and technical requirements for speakers.</p>
+                                <h4><i className="far fa-question-circle"></i>Contact Guidelines</h4>
+                                <p>Details on how to get in touch with administration, faculty, and support staff effectively.</p>
                             </div>
                         </div>
                     </section>
                     
                     <Map/>
-                    
                 </main>
             </div>
         </>
