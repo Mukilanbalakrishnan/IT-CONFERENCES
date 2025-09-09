@@ -25,11 +25,10 @@
  
 /* --- Patron Grid Layout --- */
 .patrons-grid {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 2.5rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 cards in desktop */
+    gap: 3rem; /* space between the cards */
+    justify-items: center; /* centers the cards in each column */
 }
  
 /* --- Card Wrapper (Card + Name) --- */
@@ -37,16 +36,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem; /* This controls the space between the card and the text block */
+    gap: 1.5rem; /* space between card and text */
 }
  
-/* --- Individual Patron Card Styling (Your Original Glass Morphism with Gradient) --- */
+/* --- Individual Patron Card Styling --- */
 .patrons-card {
     width: 280px;
     height: 400px;
     border-radius: 16px;
     padding: 1.25rem;
-    background: linear-gradient(to bottom, rgba(101, 150, 241, 0.4), rgba(255, 197, 105, 0.4)); /* Light blue to light orange with transparency */
+    background: linear-gradient(to bottom, rgba(101, 150, 241, 0.4), rgba(255, 197, 105, 0.4));
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     box-shadow: 0px 15px 35px -5px hsl(220, 10%, 80%);
@@ -56,21 +55,18 @@
     transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
  
-/* Tilted effect for each card */
+/* Tilted effect */
 .patrons-card--tilt-1 { transform: rotate(-3deg); }
 .patrons-card--tilt-2 { transform: rotate(1deg); }
 .patrons-card--tilt-3 { transform: rotate(4deg); }
  
+/* Hover effect */
 .patrons-card__wrapper:hover .patrons-card {
     transform: rotate(0) translateY(-15px);
     box-shadow: 0px 20px 40px -5px hsl(220, 10%, 80%);
 }
  
 /* --- Card Content --- */
-.patrons-card__header {
-    /* Kept for potential future use */
-}
- 
 .patrons-card__image-container {
     height: 100%;
     overflow: hidden;
@@ -84,10 +80,10 @@
     object-position: top center;
 }
  
-/* --- CORRECTED Text Info Block Styling --- */
+/* --- Text Info --- */
 .patrons-card__info {
     text-align: center;
-    line-height: 1.4; /* Tighter line height for the whole block */
+    line-height: 1.4;
 }
  
 .patrons-card__name {
@@ -109,7 +105,7 @@
     color: var(--text-secondary);
     margin: 0.25rem 0 0 0;
 }
-
+ 
 .patrons-card__tagline--country {
     font-weight: 600;
 }
@@ -117,18 +113,19 @@
 /* --- Responsive Design --- */
 @media (max-width: 1024px) {
     .patrons-grid {
-        gap: 4rem;
+        grid-template-columns: repeat(2, 1fr); /* 2 cards on medium screens */
+        gap: 2.5rem;
     }
 }
  
 @media (max-width: 768px) {
     .patrons-grid {
-        flex-direction: column;
+        grid-template-columns: 1fr; /* vertical stacking on mobile */
+        gap: 2rem;
     }
     .patrons-card--tilt-1,
     .patrons-card--tilt-2,
     .patrons-card--tilt-3 {
-        transform: rotate(0);
+        transform: rotate(0); /* remove tilt in mobile */
     }
 }
-

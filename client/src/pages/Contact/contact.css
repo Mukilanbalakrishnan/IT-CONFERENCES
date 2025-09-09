@@ -49,6 +49,7 @@
     max-width: var(--page-max-width);
     margin: 0 auto;
     padding: 30px var(--gutter);
+    margin-top: 100px;
 }
 
 .page-header {
