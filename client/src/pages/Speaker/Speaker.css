@@ -118,6 +118,7 @@
 /* --- Speaker Info --- */
 .event-speaker-info {
     margin-top: 1.5rem;
+    gap: 100px;
 }
 
 .event-speaker-info .event-name {
@@ -125,6 +126,7 @@
     font-weight: 700;
     color: var(--text-primary);
     margin: 0 0 0.5rem 0;
+    text-align: left;
 }
 
 .event-speaker-info .event-title {
@@ -132,6 +134,14 @@
     color: var(--brand-orange);
     margin: 0 0 1rem 0;
     font-weight: 600;
+    text-align: left;
+}
+.event-speaker-info .event-title2 {
+    font-size: 1rem;
+    color: var(--brand-blue);
+    margin: 0 0 1rem 0;
+    font-weight: 600;
+    text-align: left;
 }
 
 .event-speaker-info .event-bio {
