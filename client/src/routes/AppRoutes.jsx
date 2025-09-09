@@ -10,6 +10,9 @@ import Footer from '../Footer/Footer';
 import AdvisoryBoard from '../pages/AdvisoryBoard/AdvisoryBoardPage';
 import OrganizingCom from '../pages/OrganizingCommittee/OrganizingCommitteePage';
 import ResearchCom from '../pages/Researchandreview/Researchandreview';
+import RegistrationForm from '../pages/Register/RegisterForm';
+import SubmissionStatusTracker from '../pages/statustracker/SubmissionStatusTracker';
+import ConferenceTracksPage from '../pages/ConferenceTrack/ConferenceTracksPage';
 
 const AppRoutes = () => {
   return (
@@ -24,7 +27,12 @@ const AppRoutes = () => {
         <Route path ='/committees/advisory-board' element={<AdvisoryBoard />}/>
         <Route path ='/committees/organizing-committee' element={<OrganizingCom />}/>
         <Route path ='/committees/research-and-review-committee' element={<ResearchCom />}/>
+        <Route path='/register' element={<RegistrationForm/>}/>
+        <Route path='/status-tracker' element={<SubmissionStatusTracker/>}/>
+        <Route path='/conferencetrack' element={<ConferenceTracksPage/>}/>
        </Routes>
+
+
       <Footer/>
       </BrowserRouter>
   )

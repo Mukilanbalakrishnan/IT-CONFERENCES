@@ -89,7 +89,7 @@
   }
   
   .patrons-card__topic p {
-      font-size: 0.8rem;
+      font-size: 1.2rem;
       margin: 0.25rem 0 0 0;
       color: var(--brand-orange);
       opacity: 0.9;

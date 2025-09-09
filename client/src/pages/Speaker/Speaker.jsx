@@ -24,14 +24,7 @@ const Speaker = () => {
             title: 'Developer Expert',
             image: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755757219/ranhkwbfv4ghrqlyg4ma.jpg ',
             bio: 'Ronald is a full-stack developer specializing in modern JavaScript frameworks and building robust, scalable web applications.'
-        },
-        {
-            id: 'spk4',
-            name: 'Devid Arone',
-            title: 'Founder, Cards',
-            image: 'https://placehold.co/140x140/EFEFEF/333?text=DA',
-            bio: 'After two successful exits, Devid now focuses on mentoring the next generation of startup founders in the fintech space.'
-        },
+        }
     ];
 
     return (
