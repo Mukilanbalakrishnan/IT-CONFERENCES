@@ -13,6 +13,7 @@ import ResearchCom from '../pages/Researchandreview/Researchandreview';
 import RegistrationForm from '../pages/Register/RegisterForm';
 import SubmissionStatusTracker from '../pages/statustracker/SubmissionStatusTracker';
 import ConferenceTracksPage from '../pages/ConferenceTrack/ConferenceTracksPage';
+import Journal from '../pages/Journal/journal'
 
 const AppRoutes = () => {
   return (
@@ -30,6 +31,8 @@ const AppRoutes = () => {
         <Route path='/register' element={<RegistrationForm/>}/>
         <Route path='/status-tracker' element={<SubmissionStatusTracker/>}/>
         <Route path='/conferencetrack' element={<ConferenceTracksPage/>}/>
+        <Route path='/journal' element={<Journal/>}/>
+        
        </Routes>
 
 

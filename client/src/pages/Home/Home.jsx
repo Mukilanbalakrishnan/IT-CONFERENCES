@@ -104,7 +104,7 @@ const Hero = ({ onOpenLogin }) => {
                 </p>
                 <div className="hero-buttons">
                     <button onClick={onOpenLogin} className="btn btn-primary">Submit a Paper</button>
-                    <button className="btn btn-secondary">View Tracks</button>
+                    <button onClick={onOpenLogin} className="btn btn-secondary">View Tracks</button>
                 </div>
             </div>
             <Countdown />
