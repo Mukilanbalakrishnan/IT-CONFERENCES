@@ -29,7 +29,7 @@ const router = express.Router();
 // Admin access only
 router.get("/users", protectAdmin, admin, getAllUsers);        // list all users
 router.get("/users/:id", protectAdmin, admin, getUserById);   // get user details
-router.put("/users/:id", protectAdmin, admin, updateUserApproval); // update workflow
+router.put("/users/abstract-status/:id", protectAdmin, admin, updateUserApproval); // update workflow
 
 // Signup
 router.post("/signup", registerAdmin);

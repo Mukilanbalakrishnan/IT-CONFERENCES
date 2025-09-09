@@ -55,7 +55,7 @@ import connectDB from "./config/mongodb.js";
 
 import registerRoutes from "./routes/registerRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-import statusRoutes from "./routes/statusRoutes.js";
+// import statusRoutes from "./routes/statusRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 
 dotenv.config();
@@ -78,7 +78,7 @@ app.use(cookieParser());
 // app.use("/api/auth", authRoutes);
 app.use("/api/register", registerRoutes);
 app.use("/api/users", userRoutes); // 🔥 removed trailing slash
-app.use("/api/status", statusRoutes);
+// app.use("/api/status", statusRoutes);
 app.use("/api/admin", adminRoutes);
 
 // Health

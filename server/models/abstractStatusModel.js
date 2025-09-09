@@ -8,9 +8,42 @@ const abstractStatusSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    abstractSubmitted: { type: Boolean, default: false },
-    abstractApproved: { type: Boolean, default: false }, // ✅ Admin will toggle this
-    paperSubmitted: { type: Boolean, default: false },
+
+    // Step 1: Abstract workflow
+    abstractStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+    },
+    abstractApprovedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Admin",
+      default: null,
+    },
+
+    // Step 2: Final Paper workflow
+    finalPaperStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+    },
+    paperApprovedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Admin",
+      default: null,
+    },
+
+    // Step 3: Payment workflow
+    paymentStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+    },
+    paymentApprovedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Admin",
+      default: null,
+    },
   },
   { timestamps: true }
 );

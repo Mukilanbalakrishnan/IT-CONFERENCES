@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import Admin from "../models/adminModel.js";
 import AbstractStatus from "../models/abstractStatusModel.js"; // ✅ your schema file
+// import Registration from "../models/registrationModel.js"; // ✅ your schema file
 import { generateToken } from "../middleware/authMiddleware.js";
 // Admin Signup
 export const registerAdmin = asyncHandler(async (req, res) => {
@@ -56,133 +57,198 @@ export const getUserById = asyncHandler(async (req, res) => {
 
 
 // Update user's approval workflow
-export const updateUserApproval = asyncHandler(async (req, res) => {
-  const { id } = req.params; // now expecting User._id
-  const { abstractApproved, paperSubmitted, paymentDone } = req.body;
-
-  // find status record by userId instead of status _id
-  const status = await AbstractStatus.findOne({ userId: id })
-    .populate("userId", "name email userId");
-
-  if (!status) {
-    return res.status(404).json({ message: "Status record not found for this user" });
-  }
-
-  // Step 1: Abstract
-  if (abstractApproved !== undefined) {
-    status.abstractApproved = abstractApproved;
-    if (!abstractApproved) {
-      status.paperSubmitted = false;
-      status.paymentDone = false;
-    }
-  }
-
-  // Step 2: Paper
-  if (paperSubmitted !== undefined) {
-    if (!status.abstractApproved) {
-      return res.status(400).json({
-        message: "Paper cannot be marked before Abstract approval",
-      });
-    }
-    status.paperSubmitted = paperSubmitted;
-    if (!paperSubmitted) {
-      status.paymentDone = false;
-    }
-  }
-
-  // Step 3: Payment
-  if (paymentDone !== undefined) {
-    if (!status.paperSubmitted) {
-      return res.status(400).json({
-        message: "Payment cannot be processed before Paper submission",
-      });
-    }
-    status.paymentDone = paymentDone;
-  }
-
-  const updatedStatus = await status.save();
-
-  res.json({
-    _id: updatedStatus._id,
-    userId: updatedStatus.userId._id,
-    userName: updatedStatus.userId.name,
-    email: updatedStatus.userId.email,
-    abstractSubmitted: updatedStatus.abstractSubmitted,
-    abstractApproved: updatedStatus.abstractApproved,
-    paperSubmitted: updatedStatus.paperSubmitted,
-    paymentDone: updatedStatus.paymentDone,
-  });
-});
-
 // export const updateUserApproval = asyncHandler(async (req, res) => {
-//   const { id } = req.params; // expecting User._id
-//   const { abstractApproved, paperSubmitted, paymentDone } = req.body;
+//   const { id } = req.params; // User ID
+//   const { abstractStatus, finalPaperStatus, paymentStatus } = req.body;
 
-//   // find status by userId
-//   const status = await AbstractStatus.findOne({ userId: id })
-//     .populate("userId", "name email userId")
-//     .populate("abstractApprovedBy", "name email")
-//     .populate("paperApprovedBy", "name email")
-//     .populate("paymentApprovedBy", "name email");
-
-//   if (!status) {
-//     return res.status(404).json({ message: "Status record not found for this user" });
-//   }
+//   const status = await AbstractStatus.findOne({ userId: id }).populate("userId", "name email");
+//   if (!status) return res.status(404).json({ message: "Status record not found for this user" });
 
 //   // Step 1: Abstract
-// if (abstractApproved !== undefined) {
-//   status.abstractApproved = abstractApproved;
-//   status.abstractApprovedBy = req.admin._id; // ✅ track admin
-
-//   if (!abstractApproved) {
-//     // reset later stages if rejected
-//     status.paperSubmitted = false;
-//     status.paperApprovedBy = null;
-//     status.paymentDone = false;
-//     status.paymentApprovedBy = null;
-//   }
-// }
-
-//   // Step 2: Paper
-//   if (paperSubmitted !== undefined) {
-//     if (!status.abstractApproved) {
-//       return res.status(400).json({ message: "Paper cannot be marked before Abstract approval" });
+//   if (abstractStatus) {
+//     status.abstractStatus = abstractStatus;
+//     status.abstractApprovedBy = req.user._id; // ✅ track admin
+//     if (abstractStatus === "rejected") {
+//       status.finalPaperStatus = "pending";
+//       status.finalPaperApprovedBy = null;
+//       status.paymentStatus = "pending";
+//       status.paymentApprovedBy = null;
 //     }
-//     status.paperSubmitted = paperSubmitted;
-//     status.paperApprovedBy = req.admin._id; // ✅ track admin
-//     if (!paperSubmitted) {
-//       status.paymentDone = false;
+//   }
+
+//   // Step 2: Final Paper
+//   if (finalPaperStatus) {
+//     if (status.abstractStatus !== "approved") {
+//       return res.status(400).json({ message: "Final paper cannot be updated before Abstract approval" });
+//     }
+//     status.finalPaperStatus = finalPaperStatus;
+//     status.paperApprovedBy = req.user._id;
+//     if (finalPaperStatus === "rejected") {
+//       status.paymentStatus = "pending";
 //       status.paymentApprovedBy = null;
 //     }
 //   }
 
 //   // Step 3: Payment
-//   if (paymentDone !== undefined) {
-//     if (!status.paperSubmitted) {
-//       return res.status(400).json({ message: "Payment cannot be processed before Paper submission" });
+//   if (paymentStatus) {
+//     if (status.finalPaperStatus !== "approved") {
+//       return res.status(400).json({ message: "Payment cannot be updated before Final Paper approval" });
 //     }
-//     status.paymentDone = paymentDone;
-//     status.paymentApprovedBy = req.admin._id; // ✅ track admin
+//     status.paymentStatus = paymentStatus;
+//     status.paymentApprovedBy = req.user._id;
 //   }
 
 //   const updatedStatus = await status.save();
 
 //   res.json({
-//     _id: updatedStatus._id,
 //     userId: updatedStatus.userId._id,
 //     userName: updatedStatus.userId.name,
 //     email: updatedStatus.userId.email,
-//     abstractSubmitted: updatedStatus.abstractSubmitted,
-//     abstractApproved: updatedStatus.abstractApproved,
+//     abstractStatus: updatedStatus.abstractStatus,
 //     abstractApprovedBy: updatedStatus.abstractApprovedBy,
-//     paperSubmitted: updatedStatus.paperSubmitted,
+//     finalPaperStatus: updatedStatus.finalPaperStatus,
 //     paperApprovedBy: updatedStatus.paperApprovedBy,
-//     paymentDone: updatedStatus.paymentDone,
+//     paymentStatus: updatedStatus.paymentStatus,
 //     paymentApprovedBy: updatedStatus.paymentApprovedBy,
 //   });
 // });
 
 
+// Update user's approval workflow
+// export const updateUserApproval = asyncHandler(async (req, res) => {
+//   const { id } = req.params; // User ID
+//   const { abstractStatus, finalPaperStatus, paymentStatus } = req.body;
+
+//   const status = await AbstractStatus.findOne({ userId: id }).populate("userId", "name email");
+//   if (!status) return res.status(404).json({ message: "Status record not found for this user" });
+
+//   // Step 1: Abstract
+//   if (abstractStatus) {
+//     status.abstractStatus = abstractStatus;
+//     status.abstractApprovedBy = req.user._id;
+
+//     // 🔥 sync with User & Registration
+//     await User.findByIdAndUpdate(id, { abstractStatus });
+//     await Registration.findOneAndUpdate({ userId: id }, { abstractStatus });
+
+//     if (abstractStatus === "rejected") {
+//       status.finalPaperStatus = "pending";
+//       status.finalPaperApprovedBy = null;
+//       status.paymentStatus = "pending";
+//       status.paymentApprovedBy = null;
+
+//       await User.findByIdAndUpdate(id, { finalPaperStatus: "pending", paymentStatus: "unpaid" });
+//       await Registration.findOneAndUpdate(
+//         { userId: id },
+//         { finalPaperStatus: "pending", paymentStatus: "unpaid" }
+//       );
+//     }
+//   }
+
+//   // Step 2: Final Paper
+//   if (finalPaperStatus) {
+//     if (status.abstractStatus !== "approved") {
+//       return res.status(400).json({ message: "Final paper cannot be updated before Abstract approval" });
+//     }
+//     status.finalPaperStatus = finalPaperStatus;
+//     status.paperApprovedBy = req.user._id;
+
+//     await User.findByIdAndUpdate(id, { finalPaperStatus });
+//     await Registration.findOneAndUpdate({ userId: id }, { finalPaperStatus });
+
+//     if (finalPaperStatus === "rejected") {
+//       status.paymentStatus = "pending";
+//       status.paymentApprovedBy = null;
+
+//       await User.findByIdAndUpdate(id, { paymentStatus: "unpaid" });
+//       await Registration.findOneAndUpdate({ userId: id }, { paymentStatus: "unpaid" });
+//     }
+//   }
+
+//   // Step 3: Payment
+//   if (paymentStatus) {
+//     if (status.finalPaperStatus !== "approved") {
+//       return res.status(400).json({ message: "Payment cannot be updated before Final Paper approval" });
+//     }
+//     status.paymentStatus = paymentStatus;
+//     status.paymentApprovedBy = req.user._id;
+
+//     // 🔥 sync User & Registration
+//     await User.findByIdAndUpdate(id, { paymentStatus });
+//     await Registration.findOneAndUpdate({ userId: id }, { paymentStatus });
+//   }
+
+//   const updatedStatus = await status.save();
+
+//   res.json({
+//     userId: updatedStatus.userId._id,
+//     userName: updatedStatus.userId.name,
+//     email: updatedStatus.userId.email,
+//     abstractStatus: updatedStatus.abstractStatus,
+//     abstractApprovedBy: updatedStatus.abstractApprovedBy,
+//     finalPaperStatus: updatedStatus.finalPaperStatus,
+//     paperApprovedBy: updatedStatus.paperApprovedBy,
+//     paymentStatus: updatedStatus.paymentStatus,
+//     paymentApprovedBy: updatedStatus.paymentApprovedBy,
+//   });
+// });
+
+export const updateUserApproval = asyncHandler(async (req, res) => {
+  const { id } = req.params; // User ID
+  const { abstractStatus, finalPaperStatus, paymentStatus } = req.body;
+
+  const status = await AbstractStatus.findOne({ userId: id }).populate("userId", "name email");
+  if (!status) return res.status(404).json({ message: "Status record not found" });
+
+  // Step 1: Abstract
+  if (abstractStatus) {
+    status.abstractStatus = abstractStatus;
+    status.abstractApprovedBy = req.user._id;
+
+    await User.findByIdAndUpdate(id, { abstractStatus });
+    await Registration.findOneAndUpdate({ userId: id }, { abstractStatus });
+
+    if (abstractStatus === "rejected") {
+      status.finalPaperStatus = "pending";
+      status.finalPaperApprovedBy = null;
+      status.paymentStatus = "pending";
+      status.paymentApprovedBy = null;
+
+      await User.findByIdAndUpdate(id, { finalPaperStatus: "pending", paymentStatus: "unpaid" });
+      await Registration.findOneAndUpdate({ userId: id }, { finalPaperStatus: "pending", paymentStatus: "unpaid" });
+    }
+  }
+
+  // Step 2: Final Paper
+  if (finalPaperStatus) {
+    if (status.abstractStatus !== "approved") return res.status(400).json({ message: "Final paper cannot be updated before Abstract approval" });
+    status.finalPaperStatus = finalPaperStatus;
+    status.paperApprovedBy = req.user._id;
+
+    await User.findByIdAndUpdate(id, { finalPaperStatus });
+    await Registration.findOneAndUpdate({ userId: id }, { finalPaperStatus });
+
+    if (finalPaperStatus === "rejected") {
+      status.paymentStatus = "pending";
+      status.paymentApprovedBy = null;
+      await User.findByIdAndUpdate(id, { paymentStatus: "unpaid" });
+      await Registration.findOneAndUpdate({ userId: id }, { paymentStatus: "unpaid" });
+    }
+  }
+
+  // Step 3: Payment
+  if (paymentStatus) {
+    if (status.finalPaperStatus !== "approved") return res.status(400).json({ message: "Payment cannot be updated before Final Paper approval" });
+    status.paymentStatus = paymentStatus;
+    status.paymentApprovedBy = req.user._id;
+
+    await User.findByIdAndUpdate(id, { paymentStatus });
+    await Registration.findOneAndUpdate({ userId: id }, { paymentStatus });
+  }
+
+  const updatedStatus = await status.save();
+  res.json(updatedStatus);
+});
 // Get all users (Admin Dashboard)
 export const getAllUsers = asyncHandler(async (req, res) => {
   const users = await User.find().select("-password");
