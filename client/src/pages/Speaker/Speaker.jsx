@@ -7,23 +7,34 @@ const EventSpeaker = () => {
         {
             id: 'spk1',
             name: 'Dr.Malathy Batumalay',
-            title: 'Professor at INTI International University',
+            title: 'Associate Professor',
+            title2:'Faculty of Data Science and Information Technology',
             image: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755754148/nvbpdwncdrxpekuksahy.webp',
-            bio: 'Ir. Dr. Malathy Batumalay, Associate Professor at INTI International University.Expert in photonics, fiber optics, and laser technology. Develops fiber optic sensors for environmental and biosensing applications'
+            bio: 'INTI International University, Malaysia'
         },
         {
             id: 'spk2',
-            name: 'Melisa Rock',
-            title: 'Lead Designer, Psylol',
+            name: 'Dr. Sandeepan Mila',
+            title: 'Associate Professor',
+            title2:'Department of Electronics and Communication Engineering',
             image: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755757219/sgphhfiniml8lavztk6w.jpg',
-            bio: 'Melisa’s award-winning work focuses on human-centered design and creating intuitive, beautiful user experiences.'
+            bio: 'NIST University (National Institute of Science and Technology), Odisha, India.'
         },
         {
             id: 'spk3',
             name: 'Dr. Sathish Kumar Selvaperumal',
-            title: 'Developer Expert',
-            image: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755757219/ranhkwbfv4ghrqlyg4ma.jpg ',
-            bio: 'Ronald is a full-stack developer specializing in modern JavaScript frameworks and building robust, scalable web applications.'
+            title: 'Associate Professor',
+            title2:'Department of Electrical and Electronic Engineering',
+            image: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413874/wwr3oyysqlzuxeomkobj.webp ',
+            bio: 'Asia Pacific University of Technology and Innovation (APU), Malaysia.'
+        },
+        {
+            id: 'spk4',
+            name: 'Dr. Sathish Kumar Selvaperumal',
+            title: 'Associate Professor',
+            title2:'Department of Electrical and Electronic Engineering',
+            image: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413874/wwr3oyysqlzuxeomkobj.webp ',
+            bio: 'Asia Pacific University of Technology and Innovation (APU), Malaysia.'
         }
     ];
 
@@ -66,6 +77,7 @@ const EventSpeaker = () => {
                                 <div className="event-speaker-info">
                                     <h3 className="event-name">{spk.name}</h3>
                                     <p className="event-title">{spk.title}</p>
+                                    <p className="event-title2">{spk.title2}</p>
                                     <p className="event-bio">{spk.bio}</p>
                                 </div>
                             </div>

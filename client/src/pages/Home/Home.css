@@ -27,7 +27,8 @@
 
 /* --- Global Responsive Typography --- */
 h1, .hero .animated-title {
-  font-size: clamp(2.2rem, 1.2rem + 5vw, 4.2rem);
+  /* Slightly reduced the max size and viewport scaling for better balance */
+  font-size: clamp(2.2rem, 1.5rem + 4vw, 4rem);
   font-weight: 800;
   line-height: 1.2;
 }
@@ -50,23 +51,30 @@ p, li {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  padding: 4rem clamp(1rem, 5vw, 3rem) 2rem;
+  min-height: 100vh; /* Use min-height for flexibility */
   background-color: #111318;
   color: var(--white);
   text-align: center;
+  /* This is the fix: pull the hero section up behind the navbar */
+  margin-top: calc(-1 * var(--nav-height-desktop, 88px)); 
+  padding-top: var(--nav-height-desktop, 88px); /* Push content back down */
+  padding-bottom: 4rem; /* Added generous bottom padding */
+  padding-left: clamp(1rem, 5vw, 3rem);
+  padding-right: clamp(1rem, 5vw, 3rem);
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .hero-video-bg {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transform: translate(-50%, -50%);
     z-index: 0;
 }
+
 
 .hero::before {
   content: '';
@@ -90,6 +98,7 @@ p, li {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 2rem 0; /* Removed horizontal padding */
 }
 
 .hero .animated-title {
@@ -153,6 +162,14 @@ p, li {
   margin-top: 1.5rem;
   animation: modernFadeInUp 0.8s ease-out 1.3s forwards;
   opacity: 0;
+}
+
+.hero .btn-secondary {
+    background-color: var(--danger, #D64545);
+}
+
+.hero .btn-secondary:hover {
+    background-color: #b82e2e; /* Darker Red */
 }
 
 .hero-title-decoration {
@@ -223,7 +240,8 @@ p, li {
   flex-grow: 1;
 }
 .countdown-number {
-  font-size: clamp(1.6rem, 6vw, 3rem);
+  /* Reduced viewport scaling to prevent overflow on mid-size screens */
+  font-size: clamp(1.6rem, 4.5vw, 3rem);
   font-weight: 800;
   color: var(--white);
 }
@@ -292,8 +310,8 @@ p, li {
     font-weight: 300;
     color: var(--surface-dark);
     position: absolute;
-    left: 50%;
-    top: 100px;
+    left: 50.5%;
+    top: 140px;
     transform: translate(-50%, -50%);
     z-index: 0;
     transition: all 0.6s ease 0.5s;
@@ -446,55 +464,60 @@ p, li {
 }
 
 .objectives-section {
-    margin: 2.5rem 0;
+    margin: 2.5rem 0 0 0;
     text-align: left;
 }
 .objectives-section h3 {
-    font-size: clamp(1.2rem, 1rem + 1vw, 1.5rem);
+    font-size: clamp(1.4rem, 1.2rem + 1vw, 1.8rem);
     color: var(--brand-blue-dark);
-    margin-bottom: 1.5rem;
-    position: relative;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--surface-dark);
-    display: inline-block;
+    margin-bottom: 2rem;
+    border-bottom: none;
+    display: block;
 }
 .objectives-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+.objective-item {
     display: flex;
-    flex-direction: column;
+    align-items: center; /* Center items vertically */
     gap: 1rem;
 }
-.objectives-list li {
-    position: relative;
-    padding-left: 2rem;
-    color: var(--text-secondary);
-}
-.objectives-list li::before {
-    content: '✔';
-    position: absolute;
-    left: 0;
-    top: 2px;
+.objective-item__number {
+    font-size: 1.75rem; /* Adjusted for balance */
+    font-weight: 700;
     color: var(--brand-orange);
-    font-weight: 900;
-    font-size: 1.1rem;
+    flex-shrink: 0;
+    width: 2.5rem; /* Give it a fixed width */
+    text-align: left; /* Align to the left */
+    opacity: 0.5;
 }
-
-.about-content .btn { 
-  margin-top: 2rem;
-}
-.about-content .btn .arrow {
-  transition: transform 0.2s ease;
-  display: inline-block;
-  margin-left: 0.5rem;
-}
-.about-content .btn:hover .arrow {
-  transform: translateX(5px);
+.objective-item__text {
+    color: var(--text-secondary);
+    margin: 0;
 }
 
 
 /* --- Responsive Design for Homepage --- */
+@media (max-width: 1200px) {
+    .hero-content {
+        gap: 1.25rem;
+    }
+    .hero .animated-title {
+        font-size: clamp(2.2rem, 1.5rem + 3.5vw, 3.5rem);
+    }
+    .hero-subtitle {
+        font-size: clamp(1rem, 0.9rem + 0.5vw, 1.2rem);
+    }
+    .countdown-container {
+        padding: clamp(1rem, 3vw, 1.25rem) clamp(1rem, 4vw, 2rem);
+    }
+    .countdown-timer {
+        gap: clamp(0.5rem, 2.5vw, 1.25rem);
+    }
+}
+
 @media (max-width: 1024px) {
     .about-grid {
         gap: 3rem;
@@ -504,17 +527,22 @@ p, li {
     }
 }
 
-/* Tablet & iPad Mini */
 @media (max-width: 900px) {
   .hero {
     min-height: auto;
-    padding-bottom: 4rem;
+    margin-top: calc(-1 * var(--nav-height-mobile, 68px));
+    padding-top: var(--nav-height-mobile, 68px);
+    padding-bottom: 8rem; /* Increased space at the bottom */
   }
   .countdown-container {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
     flex-direction: column;
     text-align: center;
     gap: 1.5rem;
-    margin-top: 5rem;
+    margin-top: 3rem;
   }
   .countdown-info {
     text-align: center;
@@ -533,7 +561,6 @@ p, li {
   }
 }
 
-/* Mobile */
 @media (max-width: 600px) {
   .hero-buttons {
     flex-direction: column;
@@ -548,16 +575,13 @@ p, li {
     flex-shrink: 1;
   }
   .countdown-number {
-    font-size: clamp(1rem, 4.5vw, 1.4rem);
+    font-size: clamp(1.2rem, 5vw, 1.8rem);
   }
   .countdown-label {
-    font-size: 0.55rem;
+    font-size: 0.6rem;
   }
   .about-section {
     padding: 4rem 1rem;
-  }
-  .about-features {
-    grid-template-columns: 1fr;
   }
   .about-images {
     height: 350px;
@@ -572,8 +596,5 @@ p, li {
 
 /* Very Small Mobile */
 @media (max-width: 380px) {
-  .countdown-info {
-    display: none;
-  }
+  /* No longer hiding the countdown info */
 }
-

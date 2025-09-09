@@ -544,6 +544,10 @@ const RegistrationForm = () => {
     const [wordCount, setWordCount] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [submittedData, setSubmittedData] = useState(null);
+    const [genuineSubmission, setGenuineSubmission] = useState(false);
+    const [termsAccepted, setTermsAccepted] = useState(false);
+const [isTermsModalOpen, setIsTermsModalOpen] = useState(false); // since you're also calling setIsTermsModalOpen
+
 
     const handleParticipantChange = (index, event) => {
         const { name, value, type, checked } = event.target;
@@ -575,6 +579,20 @@ const RegistrationForm = () => {
     };
 
     const handleSubmit = (event) => {
+        event.preventDefault();
+        if (!genuineSubmission || !termsAccepted) {
+            alert("Please confirm the submission details and accept the terms and conditions.");
+            return;
+        }
+        const finalData = {
+             participants,
+            ...formData
+            };
+            setSubmittedData(finalData);
+            setIsModalOpen(true);
+         };
+
+    const handleSubmits = (event) => {
         event.preventDefault();
         const finalData = {
             participants,
@@ -613,7 +631,7 @@ const RegistrationForm = () => {
                         <h2 className="form-title">Conference Registration Form</h2>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="form-body">
+                    <form onSubmit={handleSubmits} className="form-body">
                         <fieldset className="form-fieldset">
                             <legend className="fieldset-legend">Participant Details (1-4)</legend>
                             <div className="participant-list">
@@ -682,11 +700,48 @@ const RegistrationForm = () => {
                                 </div>
                             </div>
                         </fieldset>
+
+                        <fieldset className="form-fieldset">
+                                <legend className="fieldset-legend">Final Confirmation</legend>
+                                <div className="confirmation-group">
+                                    <input
+                                        type="checkbox"
+                                        id="genuineSubmission"
+                                        checked={genuineSubmission}
+                                        onChange={(e) => setGenuineSubmission(e.target.checked)}
+                                        className="form-checkbox"
+                                    />
+                                    <label htmlFor="genuineSubmission" className="form-label-sm">
+                                        I hereby declare that the information and documents submitted are genuine and accurate to the best of my knowledge.
+                                    </label>
+                                </div>
+                                <div className="confirmation-group">
+  <input
+    type="checkbox"
+    id="termsAccepted"
+    checked={termsAccepted}
+    readOnly   // Prevents direct user checking
+    className="form-checkbox"
+  />
+  <label htmlFor="termsAccepted" className="form-label-sm">
+    I have read and agree to the{" "}
+    <span
+      onClick={() => setIsTermsModalOpen(true)}
+      className="terms-link"
+      style={{ color: "blue", cursor: "pointer", textDecoration: "underline" }}
+    >
+      Terms and Conditions
+    </span>.
+  </label>
+</div>
+
+                            </fieldset>
                         
                         <div>
-                            <button type="submit" className="btn btn-primary">
-                                Submit Registration
-                            </button>
+                            <button type="submit" className="btn btn-primary" disabled={!genuineSubmission || !termsAccepted}>
+  Submit Registration
+</button>
+
                         </div>
                     </form>
                 </div>
@@ -705,10 +760,50 @@ const RegistrationForm = () => {
                         </div>
                     </div>
                 )}
+
+                {isTermsModalOpen && (
+  <div className="modal-overlay">
+    <div className="modal-content">
+      <button onClick={() => setIsTermsModalOpen(false)} className="modal-close-btn">&times;</button>
+      <h3 className="modal-title">Terms & Conditions</h3>
+      <div className="modal-data-preview">
+        {/* Replace with your actual terms */}
+        <p>
+          1. All information provided must be accurate.<br/>
+          2. Abstracts must follow the given word limit.<br/>
+          3. Registrations are non-transferable.<br/>
+          4. The organizers reserve the right to modify rules.<br/>
+          5. By accepting, you agree to abide by all conditions.
+        </p>
+      </div>
+      <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
+        <button
+          className="btn btn-primary"
+          onClick={() => {
+            setTermsAccepted(true);
+            setIsTermsModalOpen(false);
+          }}
+        >
+          Accept
+        </button>
+        <button
+          className="btn"
+          style={{ backgroundColor: "#e5e7eb", color: "#111" }}
+          onClick={() => {
+            setTermsAccepted(false);
+            setIsTermsModalOpen(false);
+          }}
+        >
+          Decline
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
             </div>
         </React.Fragment>
     );
 };
 
 export default RegistrationForm;
-
