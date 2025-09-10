@@ -9,6 +9,7 @@ const componentStyles = `
     --brand-blue-dark: #0D47A1;
     --brand-blue-primary: #1976D2;
     --brand-red: #D32F2F;
+    --brand-gray: #6c757d;
     --text-primary: #111318;
     --text-secondary: #6c757d;
 }
@@ -23,7 +24,7 @@ body {
 .main-container {
     width: 100%;
     max-width: 72rem; /* 1152px */
-    margin: 4rem auto 1rem; /* Increased top margin for mobile */
+    margin: 4rem auto 1rem;
     display: grid;
     grid-template-columns: 1fr;
     border-radius: 1.5rem;
@@ -31,10 +32,9 @@ body {
     overflow: hidden;
 }
 
-/* Tablet and larger screens */
 @media (min-width: 1024px) {
     .main-container {
-        margin: 6rem auto 2rem; /* Increased top margin */
+        margin: 6rem auto 2rem;
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
@@ -58,7 +58,7 @@ body {
 }
 
 .left-panel-title {
-    font-size: 1.5rem; /* Adjusted for mobile */
+    font-size: 1.5rem;
     font-weight: 800;
     margin-bottom: 0.5rem;
 }
@@ -70,10 +70,10 @@ body {
 
 
 .left-panel-subtitle {
-    font-size: 1rem; /* Adjusted for mobile */
+    font-size: 1rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
-    color: #bfdbfe; /* blue-200 */
+    color: #bfdbfe;
 }
 @media (min-width: 768px) {
     .left-panel-subtitle {
@@ -82,14 +82,14 @@ body {
 }
 
 .left-panel-description {
-    color: #dbeafe; /* blue-100 */
+    color: #dbeafe;
     line-height: 1.6;
     font-size: 0.9rem;
 }
 
 .left-panel-info {
     margin-top: 2rem;
-    border-top: 1px solid #60a5fa; /* blue-400 */
+    border-top: 1px solid #60a5fa;
     padding-top: 1.5rem;
 }
 
@@ -102,7 +102,7 @@ body {
     list-style-type: disc;
     margin-top: 0.5rem;
     font-size: 0.875rem;
-    color: #bfdbfe; /* blue-200 */
+    color: #bfdbfe;
 }
 
 .info-list li {
@@ -127,7 +127,7 @@ body {
 }
 
 .form-title {
-    font-size: 1.25rem; /* Adjusted for mobile */
+    font-size: 1.25rem;
     color: white;
     font-weight: 700;
 }
@@ -138,7 +138,7 @@ body {
 }
 
 .form-body {
-    padding: 1.5rem; /* Adjusted for mobile */
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -157,7 +157,7 @@ body {
 }
 
 .fieldset-legend {
-    font-size: 1.125rem; /* Adjusted for mobile */
+    font-size: 1.125rem;
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: 1rem;
@@ -174,10 +174,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-}
-
-.form-group-spacing {
-    margin-top: 1.5rem;
 }
 
 .form-grid-cols-2 {
@@ -276,24 +272,38 @@ body {
     color: #374151;
 }
 .participant-field-full {
-    grid-column: span 1 / span 1;
+    grid-column: span 1;
 }
 @media (min-width: 768px) {
     .participant-field-full {
-        grid-column: span 2 / span 2;
+        grid-column: span 2;
     }
-}
-.checkbox-group {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.5rem 0;
 }
 .form-checkbox {
     height: 1.1rem;
     width: 1.1rem;
+    flex-shrink: 0;
     border-radius: 0.25rem;
     border-color: #d1d5db;
+}
+
+/* --- Confirmation Section --- */
+.confirmation-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+}
+.confirmation-group label {
+    cursor: pointer;
+}
+.terms-link {
+    color: var(--brand-blue-primary);
+    text-decoration: underline;
+    font-weight: 500;
+}
+.terms-link:hover {
+    color: var(--brand-blue-dark);
 }
 
 /* --- Buttons --- */
@@ -303,18 +313,32 @@ body {
     border-radius: 0.5rem;
     cursor: pointer;
     border: none;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
     width: 100%;
     font-size: 1.125rem;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .btn-primary {
     background-color: var(--brand-orange);
     color: white;
 }
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
     background-color: var(--brand-orange-dark);
 }
+
+.btn-secondary {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+.btn-secondary:hover:not(:disabled) {
+    background-color: #d1d5db;
+}
+
 
 .btn-add {
     font-size: 0.875rem;
@@ -326,9 +350,10 @@ body {
     width: auto;
     margin-top: 1rem;
 }
-.btn-add:hover {
+.btn-add:hover:not(:disabled) {
     background-color: #1565C0;
 }
+
 .btn-add:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -347,7 +372,7 @@ body {
     text-decoration: underline;
 }
 
-/* --- Modal --- */
+/* --- Submission Modal --- */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -434,9 +459,92 @@ body {
     white-space: pre-wrap;
     word-break: break-all;
 }
+
+/* --- Terms & Conditions Modal Styles --- */
+.terms-modal-overlay {
+  position: fixed; inset: 0; background-color: rgba(17, 19, 24, 0.7);
+  backdrop-filter: blur(4px); display: flex; align-items: center;
+  justify-content: center; padding: 1rem; z-index: 100;
+}
+.terms-modal-content {
+  background-color: white; border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 48rem; width: 100%; max-height: 90vh;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.terms-modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1rem 1.5rem; border-bottom: 1px solid #e5e7eb; flex-shrink: 0;
+}
+.terms-modal-title {
+  font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0;
+}
+.terms-modal-close-btn {
+  background: none; border: none; font-size: 2rem; line-height: 1;
+  color: #9ca3af; cursor: pointer; transition: color 0.2s;
+}
+.terms-modal-close-btn:hover { color: #111827; }
+.terms-modal-body {
+  padding: 0.5rem 1.5rem; overflow-y: auto;
+  color: var(--text-secondary); line-height: 1.7;
+}
+.terms-modal-body h4 {
+  font-weight: 600; color: var(--text-primary); margin-top: 1.5rem;
+  margin-bottom: 0.5rem; font-size: 1rem;
+}
+.terms-modal-body p, .terms-modal-body ul { margin: 0.5rem 0; }
+.terms-modal-body ul { padding-left: 1.5rem; }
+.terms-modal-footer {
+  display: flex; justify-content: flex-end; gap: 1rem;
+  padding: 1rem 1.5rem; border-top: 1px solid #e5e7eb;
+  background-color: #f9fafb; flex-shrink: 0;
+}
+.terms-modal-footer .btn {
+  width: auto; min-width: 120px; font-size: 0.95rem;
+}
 `;
 
-// Participant Input Component
+// --- Terms & Conditions Modal Component ---
+const TermsModal = ({ onAccept, onDecline, onClose }) => (
+    <div className="terms-modal-overlay">
+      <div className="terms-modal-content">
+        <div className="terms-modal-header">
+          <h3 className="terms-modal-title">Conference Terms & Conditions</h3>
+          <button onClick={onClose} className="terms-modal-close-btn">&times;</button>
+        </div>
+        <div className="terms-modal-body">
+          <h4>1. Registration Confirmation</h4>
+          <p>Registration will be confirmed only after full payment of the applicable conference fees.</p>
+          <h4>2. Payment Methods</h4>
+          <p>Payments can be made via bank transfer, online payment gateway, or as specified on the conference website.</p>
+          <h4>3. Cancellation and Refunds</h4>
+          <p>Cancellation requests must be submitted in writing via email to the conference secretariat. Refunds, if applicable, will be processed as follows:</p>
+          <ul>
+            <li>Cancellation before <strong>January 31st, 2026</strong>: 75% refund of the registration fee.</li>
+            <li>Cancellation before <strong>February 20th, 2026</strong>: 50% refund of the registration fee.</li>
+            <li>No refunds will be made after <strong>February 20th, 2026</strong>.</li>
+          </ul>
+          <p>Bank charges and transaction fees, if any, will not be refunded.</p>
+          <h4>4. Substitution</h4>
+          <p>Registrants unable to attend may transfer their registration to another person by informing the conference secretariat in writing prior to the event.</p>
+          <h4>5. Certificate of Participation</h4>
+          <p>Certificates will be issued only to participants who have registered and attended the conference.</p>
+          <h4>6. Conference Program Changes</h4>
+          <p>The organizers reserve the right to modify the conference program, venue, speakers, and dates without prior notice.</p>
+          <h4>7. Intellectual Property</h4>
+          <p>All presentations and materials shared during the conference are for personal use only and should not be reproduced or distributed without permission.</p>
+          <h4>8. Liability & Force Majeure</h4>
+          <p>The organizers are not responsible for any loss, injury, or damage incurred during the conference. In case of unforeseen circumstances such as natural disasters or other force majeure events, the conference may be postponed or canceled.</p>
+        </div>
+        <div className="terms-modal-footer">
+          <button onClick={onDecline} className="btn btn-secondary">Decline</button>
+          <button onClick={onAccept} className="btn btn-primary">Accept</button>
+        </div>
+      </div>
+    </div>
+);
+
+// --- Participant Input Component ---
 const ParticipantInput = ({ index, participant, handleParticipantChange, removeParticipant }) => (
     <div className="participant-block">
         <div className="participant-header">
@@ -450,25 +558,11 @@ const ParticipantInput = ({ index, participant, handleParticipantChange, removeP
         <div className="form-grid-cols-2">
             <div>
                 <label className="form-label form-label-sm">Full Name</label>
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="John Doe"
-                    value={participant.name}
-                    onChange={(e) => handleParticipantChange(index, e)}
-                    className="form-input-sm"
-                    required
-                />
+                <input type="text" name="name" placeholder="John Doe" value={participant.name} onChange={(e) => handleParticipantChange(index, e)} className="form-input-sm" required />
             </div>
             <div>
                 <label className="form-label form-label-sm">Designation</label>
-                <select
-                    name="designation"
-                    value={participant.designation}
-                    onChange={(e) => handleParticipantChange(index, e)}
-                    className="form-input-sm form-select"
-                    required
-                >
+                <select name="designation" value={participant.designation} onChange={(e) => handleParticipantChange(index, e)} className="form-input-sm form-select" required>
                     <option value="" disabled>Select a designation...</option>
                     <option value="Student (with ID)">Student (with ID)</option>
                     <option value="Academic/Researcher">Academic/Researcher</option>
@@ -478,59 +572,24 @@ const ParticipantInput = ({ index, participant, handleParticipantChange, removeP
             </div>
             <div className="participant-field-full">
                 <label className="form-label form-label-sm">Organisation</label>
-                <input
-                    type="text"
-                    name="organisation"
-                    placeholder="University or Company Name"
-                    value={participant.organisation}
-                    onChange={(e) => handleParticipantChange(index, e)}
-                    className="form-input-sm"
-                    required
-                />
+                <input type="text" name="organisation" placeholder="University or Company Name" value={participant.organisation} onChange={(e) => handleParticipantChange(index, e)} className="form-input-sm" required />
             </div>
             <div>
                 <label className="form-label form-label-sm">Email Address</label>
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="john.doe@example.com"
-                    value={participant.email}
-                    onChange={(e) => handleParticipantChange(index, e)}
-                    className="form-input-sm"
-                    required
-                />
+                <input type="email" name="email" placeholder="john.doe@example.com" value={participant.email} onChange={(e) => handleParticipantChange(index, e)} className="form-input-sm" required />
             </div>
             <div>
                 <label className="form-label form-label-sm">Phone Number</label>
-                <input
-                    type="tel"
-                    name="phone"
-                    placeholder="+91 98765 43210"
-                    value={participant.phone}
-                    onChange={(e) => handleParticipantChange(index, e)}
-                    className="form-input-sm"
-                    required
-                />
+                <input type="tel" name="phone" placeholder="+91 98765 43210" value={participant.phone} onChange={(e) => handleParticipantChange(index, e)} className="form-input-sm" required />
             </div>
-            {/* <div className="participant-field-full checkbox-group">
-                <input
-                    type="checkbox"
-                    id={`isHostMember_${index}`}
-                    name="isHostMember"
-                    checked={participant.isHostMember}
-                    onChange={(e) => handleParticipantChange(index, e)}
-                    className="form-checkbox"
-                />
-                <label htmlFor={`isHostMember_${index}`} className="form-label-sm">Affiliated with Host Organization</label>
-            </div> */}
         </div>
     </div>
 );
 
-// Main Registration Form Component
+// --- Main Registration Form Component ---
 const RegistrationForm = () => {
     const [participants, setParticipants] = useState([
-        { name: '', designation: '', organisation: '', email: '', phone: '', isHostMember: false }
+        { name: '', designation: '', organisation: '', email: '', phone: '' }
     ]);
     const [formData, setFormData] = useState({
         address: '',
@@ -546,19 +605,18 @@ const RegistrationForm = () => {
     const [submittedData, setSubmittedData] = useState(null);
     const [genuineSubmission, setGenuineSubmission] = useState(false);
     const [termsAccepted, setTermsAccepted] = useState(false);
-const [isTermsModalOpen, setIsTermsModalOpen] = useState(false); // since you're also calling setIsTermsModalOpen
-
+    const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
 
     const handleParticipantChange = (index, event) => {
-        const { name, value, type, checked } = event.target;
+        const { name, value } = event.target;
         const newParticipants = [...participants];
-        newParticipants[index][name] = type === 'checkbox' ? checked : value;
+        newParticipants[index][name] = value;
         setParticipants(newParticipants);
     };
 
     const addParticipant = () => {
         if (participants.length < 4) {
-            setParticipants([...participants, { name: '', designation: '', organisation: '', email: '', phone: '', isHostMember: false }]);
+            setParticipants([...participants, { name: '', designation: '', organisation: '', email: '', phone: '' }]);
         }
     };
 
@@ -585,21 +643,27 @@ const [isTermsModalOpen, setIsTermsModalOpen] = useState(false); // since you're
             return;
         }
         const finalData = {
-             participants,
-            ...formData
-            };
-            setSubmittedData(finalData);
-            setIsModalOpen(true);
-         };
-
-    const handleSubmits = (event) => {
-        event.preventDefault();
-        const finalData = {
             participants,
             ...formData
         };
         setSubmittedData(finalData);
         setIsModalOpen(true);
+    };
+
+    const handleAcceptTerms = () => {
+        setTermsAccepted(true);
+        setIsTermsModalOpen(false);
+    };
+
+    const handleDeclineTerms = () => {
+        setTermsAccepted(false);
+        setIsTermsModalOpen(false);
+    };
+
+    // This new handler will be used for the checkbox click
+    const handleTermsClick = (e) => {
+        e.preventDefault(); // This stops the checkbox from toggling on its own
+        setIsTermsModalOpen(true); // Always open the modal on click
     };
 
     return (
@@ -631,18 +695,12 @@ const [isTermsModalOpen, setIsTermsModalOpen] = useState(false); // since you're
                         <h2 className="form-title">Conference Registration Form</h2>
                     </div>
 
-                    <form onSubmit={handleSubmits} className="form-body">
+                    <form onSubmit={handleSubmit} className="form-body">
                         <fieldset className="form-fieldset">
                             <legend className="fieldset-legend">Participant Details (1-4)</legend>
                             <div className="participant-list">
                                 {participants.map((p, index) => (
-                                    <ParticipantInput
-                                        key={index}
-                                        index={index}
-                                        participant={p}
-                                        handleParticipantChange={handleParticipantChange}
-                                        removeParticipant={removeParticipant}
-                                    />
+                                    <ParticipantInput key={index} index={index} participant={p} handleParticipantChange={handleParticipantChange} removeParticipant={removeParticipant}/>
                                 ))}
                             </div>
                             <button type="button" onClick={addParticipant} className="btn-add" disabled={participants.length >= 4}>
@@ -702,49 +760,45 @@ const [isTermsModalOpen, setIsTermsModalOpen] = useState(false); // since you're
                         </fieldset>
 
                         <fieldset className="form-fieldset">
-                                <legend className="fieldset-legend">Final Confirmation</legend>
-                                <div className="confirmation-group">
-                                    <input
-                                        type="checkbox"
-                                        id="genuineSubmission"
-                                        checked={genuineSubmission}
-                                        onChange={(e) => setGenuineSubmission(e.target.checked)}
-                                        className="form-checkbox"
-                                    />
-                                    <label htmlFor="genuineSubmission" className="form-label-sm">
-                                        I hereby declare that the information and documents submitted are genuine and accurate to the best of my knowledge.
+                            <legend className="fieldset-legend">Final Confirmation</legend>
+                            <div className="confirmation-group">
+                                <input type="checkbox" id="genuineSubmission" checked={genuineSubmission} onChange={(e) => setGenuineSubmission(e.target.checked)} className="form-checkbox"/>
+                                <label htmlFor="genuineSubmission" className="form-label-sm">
+                                    I hereby declare that the information and documents submitted are genuine and accurate to the best of my knowledge.
+                                </label>
+                            </div>
+                            <div className="confirmation-group">
+                                    <label htmlFor="termsAccepted" className="form-label-sm" style={{ display: 'flex', alignItems: 'flex-start', cursor: 'pointer' }}>
+                                        <input 
+                                            type="checkbox" 
+                                            id="termsAccepted" 
+                                            checked={termsAccepted} 
+                                            // MODIFIED: Use onClick to intercept the click and open the modal
+                                            onClick={handleTermsClick}
+                                            // Add a readOnly here just to make sure the state is only controlled by the modal
+                                            readOnly 
+                                            className="form-checkbox"
+                                            style={{ marginTop: '3px' }}
+                                        />
+                                        <span style={{ marginLeft: '0.75rem' }}>
+                                            I have read and agree to the{' '}
+                                            <span className="terms-link">
+                                                Terms and Conditions
+                                            </span>.
+                                        </span>
                                     </label>
                                 </div>
-                                <div className="confirmation-group">
-  <input
-    type="checkbox"
-    id="termsAccepted"
-    checked={termsAccepted}
-    readOnly   // Prevents direct user checking
-    className="form-checkbox"
-  />
-  <label htmlFor="termsAccepted" className="form-label-sm">
-    I have read and agree to the{" "}
-    <span
-      onClick={() => setIsTermsModalOpen(true)}
-      className="terms-link"
-      style={{ color: "blue", cursor: "pointer", textDecoration: "underline" }}
-    >
-      Terms and Conditions
-    </span>.
-  </label>
-</div>
-
-                            </fieldset>
+                        </fieldset>
                         
                         <div>
                             <button type="submit" className="btn btn-primary" disabled={!genuineSubmission || !termsAccepted}>
-  Submit Registration
-</button>
-
+                                Submit Registration
+                            </button>
                         </div>
                     </form>
                 </div>
+                
+                {/* --- Modals --- */}
                 {isModalOpen && (
                     <div className="modal-overlay">
                         <div className="modal-content">
@@ -762,45 +816,12 @@ const [isTermsModalOpen, setIsTermsModalOpen] = useState(false); // since you're
                 )}
 
                 {isTermsModalOpen && (
-  <div className="modal-overlay">
-    <div className="modal-content">
-      <button onClick={() => setIsTermsModalOpen(false)} className="modal-close-btn">&times;</button>
-      <h3 className="modal-title">Terms & Conditions</h3>
-      <div className="modal-data-preview">
-        {/* Replace with your actual terms */}
-        <p>
-          1. All information provided must be accurate.<br/>
-          2. Abstracts must follow the given word limit.<br/>
-          3. Registrations are non-transferable.<br/>
-          4. The organizers reserve the right to modify rules.<br/>
-          5. By accepting, you agree to abide by all conditions.
-        </p>
-      </div>
-      <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
-        <button
-          className="btn btn-primary"
-          onClick={() => {
-            setTermsAccepted(true);
-            setIsTermsModalOpen(false);
-          }}
-        >
-          Accept
-        </button>
-        <button
-          className="btn"
-          style={{ backgroundColor: "#e5e7eb", color: "#111" }}
-          onClick={() => {
-            setTermsAccepted(false);
-            setIsTermsModalOpen(false);
-          }}
-        >
-          Decline
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
+                    <TermsModal 
+                        onAccept={handleAcceptTerms} 
+                        onDecline={handleDeclineTerms}
+                        onClose={handleDeclineTerms}
+                    />
+                )}
             </div>
         </React.Fragment>
     );

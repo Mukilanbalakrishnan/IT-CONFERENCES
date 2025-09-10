@@ -86,6 +86,7 @@ const Navbar = () => {
 
             <li><NavLink to="/venue" className={navLinkClass}>Venue</NavLink></li>
             <li><NavLink to="/journal" className={navLinkClass}>Journal</NavLink></li>
+            <li><NavLink to="/feestructure" className={navLinkClass}>Fee Details</NavLink></li>
             <li><NavLink to="/contact" className={navLinkClass}>Contact</NavLink></li>
           </ul>
 
@@ -125,6 +126,7 @@ const Navbar = () => {
           <li><NavLink to="/conferencetrack" className={navLinkClass} onClick={() => setSideMenu(false)}>Tracks</NavLink></li>
           <li><NavLink to="/venue" className={navLinkClass} onClick={() => setSideMenu(false)}>Venue</NavLink></li>
           <li><NavLink to="/journal" className={navLinkClass} onClick={() => setSideMenu(false)}>Journal</NavLink></li>
+          <li><NavLink to="/feestructure" className={navLinkClass} onClick={() => setSideMenu(false)}>Fee Details</NavLink></li>
           <li><NavLink to="/contact" className={navLinkClass} onClick={() => setSideMenu(false)}>Contact</NavLink></li>
         </ul>
       </div>
