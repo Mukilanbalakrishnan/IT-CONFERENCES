@@ -1,0 +1,306 @@
+/* --- Root Variables (for consistency) --- */
+:root {
+    --brand-blue-primary: #007bff;
+    --brand-blue-dark: #0056b3;
+    --brand-blue-light: #e6f2ff;
+    --brand-orange: #ff9800;
+    --brand-orange-dark: #f57c00;
+    --white: #ffffff;
+    --surface-light: #f8f9fa;
+    --surface-dark: #e9ecef;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.08);
+    --radius: 12px;
+
+    /* New variables for glassmorphism */
+    --glass-background: rgba(255, 255, 255, 0.4); /* Semi-transparent white */
+    --glass-border: rgba(255, 255, 255, 0.2);     /* Lighter border for frosted effect */
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* --- Base Body Styling (Optional, for demo) --- */
+body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    /* Using a gradient background to make glassmorphism more apparent */
+    background: linear-gradient(135deg, #e8f1ff 0%, #c2e9fb 100%);
+    color: var(--text-primary);
+    min-height: 100vh; /* Ensure body takes full height for background */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* --- Animation Keyframes --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Main Section Styling --- */
+.fees-page-section {
+    padding: 5rem 0;
+    /* Removed background-color here to let body gradient show through */
+}
+
+/* --- Header Styling --- */
+.fees-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.fees-header h2 {
+    font-size: 2.5rem;
+    color: var(--brand-blue-dark);
+    margin: 0 0 0.5rem;
+}
+
+.fees-header p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* --- New Grid Layout for 3-2 structure --- */
+.fees-grid-layout {
+    display: flex;
+    flex-direction: column; /* Stack rows vertically by default */
+    gap: 2rem; /* Gap between rows */
+}
+
+.fees-row {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr); /* Single column on mobile */
+    gap: 2rem;
+    justify-items: center; /* Center items in the grid */
+}
+
+/* Tablet view: 2 columns */
+@media (min-width: 768px) {
+    .fees-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .fees-row-top { /* For 3 cards, if 2 cols, it will wrap */
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Desktop view: Specific adjustments for 3-2 layout */
+@media (min-width: 1200px) {
+    .fees-row-top {
+        grid-template-columns: repeat(3, 1fr); /* 3 cards in the top row */
+    }
+    .fees-row-bottom {
+        grid-template-columns: repeat(2, 1fr); /* 2 cards in the bottom row */
+        max-width: calc(2 * (350px + 2rem)); /* Approx width for 2 cards + gap */
+        margin: 0 auto; /* Center the bottom row */
+    }
+}
+
+/* --- Pricing Card - Glassmorphism Applied --- */
+.fee-card {
+    /* Glassmorphism properties */
+    background: var(--glass-background); /* Semi-transparent background */
+    backdrop-filter: blur(10px);        /* Frosted glass effect */
+    -webkit-backdrop-filter: blur(10px); /* For Safari support */
+    border: 1px solid var(--glass-border); /* Lighter border */
+    box-shadow: var(--glass-shadow);   /* Subtle shadow */
+
+    border-radius: var(--radius, 12px);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.5s ease-out forwards;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 350px;
+}
+
+.fee-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow on hover */
+}
+
+/* --- Featured Card Styling --- */
+.fee-card.featured {
+    border-color: var(--brand-orange); /* Keep original border for featured */
+    transform: scale(1.05);
+    z-index: 1;
+    /* Adjust featured card's background if you want it to stand out more */
+    background: rgba(255, 255, 255, 0.6); /* Slightly less transparent */
+}
+.fee-card.featured:hover {
+    transform: scale(1.05) translateY(-10px);
+}
+
+.featured-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--brand-orange);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-bottom-left-radius: var(--radius, 12px);
+}
+
+/* --- Card Content --- */
+.fee-card-icon {
+    font-size: 3rem;
+    color: var(--brand-orange);
+    margin-bottom: 1rem;
+}
+
+.fee-card-category {
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    margin: 0 0 1.5rem;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- Price List --- */
+.price-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem;
+    border-top: 1px solid var(--surface-dark); /* Keep separator for clarity */
+}
+
+.price-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--surface-dark);
+    font-size: 1rem;
+}
+
+.price-label {
+    color: var(--text-secondary);
+}
+
+.price-value {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.price-item.early-bird {
+    background-color: rgba(0, 123, 255, 0.1); /* Lighter, subtle background for early bird */
+    margin: 0 -2rem;
+    padding: 1rem 2rem;
+    border-radius: var(--radius); /* Add some radius to early bird row */
+}
+
+.price-item.early-bird .price-label,
+.price-item.early-bird .price-value {
+    color: var(--brand-blue-dark);
+    font-weight: 700;
+}
+
+/* --- Register Button --- */
+.btn-register {
+    width: 100%;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--white);
+    background-color: var(--brand-blue-primary);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-register:hover {
+    background-color: var(--brand-blue-dark);
+    transform: translateY(-2px);
+}
+
+.fee-card.featured .btn-register {
+    background-color: var(--brand-orange);
+}
+
+.fee-card.featured .btn-register:hover {
+    background-color: var(--brand-orange-dark);
+}
+
+
+/* --- Important Notes Section --- */
+.fees-notes-section {
+    margin-top: 5rem;
+    padding: 2.5rem;
+    /* Apply glassmorphism here too */
+    background: var(--glass-background);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+
+    border-radius: var(--radius);
+    animation: fadeInUp 0.5s 0.6s ease-out backwards;
+}
+
+.notes-title {
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--brand-blue-dark);
+    margin-top: 0;
+    margin-bottom: 2rem;
+}
+
+.notes-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .notes-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.note-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    /* For notes, make background slightly more subtle or fully transparent */
+    background-color: rgba(255, 255, 255, 0.2); /* Very light, almost transparent */
+    border-radius: 8px;
+}
+
+.note-icon {
+    font-size: 1.5rem;
+    color: var(--brand-blue-primary);
+    flex-shrink: 0;
+}
+
+.note-text {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.note-text strong {
+    color: var(--text-primary); /* Ensures bolded text is prominent */
+    display: inline; /* Keep strong tags inline for dates */
+    font-weight: 700; /* Explicitly bold */
+}

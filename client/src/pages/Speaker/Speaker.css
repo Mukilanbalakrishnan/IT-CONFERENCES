@@ -1,9 +1,11 @@
+
+
 /* --- Animation Keyframes --- */
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
+ from {
+ opacity: 0;
+ transform: translateY(20px);
+ }
     to {
         opacity: 1;
         transform: translateY(0);
@@ -17,7 +19,6 @@
     background-color: #8ec5fd;
     animation: fadeInUp 0.5s ease-out;
     margin-top: -100px;
-    
 }
 
 .event-page-header h1 {
@@ -40,13 +41,20 @@
 
 .event-speakers-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* default 3 cards per row */
-    gap: 6rem 3rem;
+    /* MODIFIED: Changed from 3 to 4 columns */
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 6rem 2rem; /* Adjusted column gap for better spacing */
     margin-top: 80px;
-    justify-items: center; /* center align */
+    justify-items: center; 
 }
 
 /* --- Responsive grid --- */
+@media (max-width: 1200px) { /* Added a new breakpoint for larger tablets */
+    .event-speakers-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 @media (max-width: 1024px) {
     .event-speakers-grid {
         grid-template-columns: repeat(2, 1fr); /* 2 cards on tablet */
@@ -66,7 +74,8 @@
     padding: 2rem;
     padding-top: 100px;
     width: 100%;
-    max-width: 360px; /* cap size but allow shrinking */
+    /* MODIFIED: Reduced max-width to better fit 4 cards */
+    max-width: 300px; 
     min-height: 420px;
     box-shadow: var(--shadow-soft);
     text-align: center;

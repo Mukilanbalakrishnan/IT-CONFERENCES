@@ -1,6 +1,7 @@
 /* --- Global Variables (assumed from your project) --- */
 :root {
     --brand-orange: #F57C00;
+    --brand-orange-dark: #E65100; /* For hover */
     --brand-blue-dark: #0D47A1;
     --brand-blue-primary: #1976D2;
     --brand-blue-light: #E3F2FD;
@@ -180,3 +181,65 @@
 .venue-modal-body h3 { font-size: 2rem; color: var(--brand-blue-dark); margin: 0 0 0.5rem; }
 .venue-modal-meta { color: var(--text-secondary); margin-bottom: 1.5rem; }
 .venue-modal-map { margin-top: 1.5rem; border-radius: var(--radius); overflow: hidden; }
+
+
+/* --- NEW STYLES FOR ACCOMMODATION --- */
+.accommodation-info {
+    text-align: center;
+}
+
+.accommodation-info p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto 2.5rem auto;
+}
+
+.hotel-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap; /* Allows buttons to stack on smaller screens */
+    margin-bottom: 2.5rem;
+}
+
+.btn-link {
+    background-color: var(--brand-orange);
+    color: var(--white);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+}
+
+.btn-link:hover {
+    background-color: var(--brand-orange-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+}
+
+.accommodation-note {
+    background-color: var(--brand-blue-light);
+    border-left: 4px solid var(--brand-blue-primary);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    text-align: left;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.accommodation-note .note-icon {
+    font-size: 1.5rem;
+    color: var(--brand-blue-primary);
+    margin-top: 0.2rem;
+}
+
+.accommodation-note strong {
+    color: var(--brand-blue-dark);
+    font-weight: 700;
+}
