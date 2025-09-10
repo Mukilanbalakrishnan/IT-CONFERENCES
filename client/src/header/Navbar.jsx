@@ -44,6 +44,20 @@ const Navbar = () => {
     };
   }, [sidemenu]);
 
+  // **NEW** EFFECT TO ADD A CLASS TO BODY ON HOME PAGE
+  useEffect(() => {
+    if (location.pathname === '/') {
+        document.body.classList.add('is-home-page');
+    } else {
+        document.body.classList.remove('is-home-page');
+    }
+    // Cleanup to ensure the class is removed if the component unmounts
+    return () => {
+        document.body.classList.remove('is-home-page');
+    };
+  }, [location.pathname]);
+
+
   const navLinkClass = ({ isActive }) => (isActive ? "active" : "");
   const headerClass = `header ${!isTransparent ? "scrolled" : ""}`;
 
@@ -68,27 +82,13 @@ const Navbar = () => {
 
             <li><NavLink to="/speaker" className={navLinkClass}>Speaker</NavLink></li>
 
-            {/* <li className="nav-item-dropdown">
-              <p className="dropdown-trigger">Events <IoIosArrowDown /></p>
-              <div className="nav-item-dropdown-content">
-                <div className="dropdown-links">
-                  {["track1", "track2", "track3", "track4"].map((t) => (
-                    <p key={t} onClick={() => navigate(`/tracks/${t}`)}>
-                      {t.replace("track", "Track ")}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            </li> */}
-
             <li><NavLink to="/conferencetrack" className={navLinkClass} onClick={() => setSideMenu(false)}>Tracks</NavLink></li>
 
             <li><NavLink to="/venue" className={navLinkClass}>Venue</NavLink></li>
-            <li><NavLink to="/sponsors" className={navLinkClass}>Sponsors</NavLink></li>
+            <li><NavLink to="/journal" className={navLinkClass}>Journal</NavLink></li>
             <li><NavLink to="/contact" className={navLinkClass}>Contact</NavLink></li>
           </ul>
 
-          {/* 3. Right Item (Actions) */}
           <div className="header-actions">
             <Link to="/login" className="login-btn">SUBMIT A PAPER</Link>
             <HiOutlineMenuAlt3
@@ -122,21 +122,9 @@ const Navbar = () => {
               </div>
             </details>
           </li>
-          {/* <li className="mobile-dropdown">
-            <details>
-              <summary>Events <IoIosArrowDown /></summary>
-              <div className="mobile-dropdown-content">
-                {["track1", "track2", "track3", "track4"].map((t) => (
-                  <p key={t} onClick={() => { navigate(`/tracks/${t}`); setSideMenu(false); }}>
-                    {t.replace("track", "Track ")}
-                  </p>
-                ))}
-              </div>
-            </details>
-          </li> */}
           <li><NavLink to="/conferencetrack" className={navLinkClass} onClick={() => setSideMenu(false)}>Tracks</NavLink></li>
           <li><NavLink to="/venue" className={navLinkClass} onClick={() => setSideMenu(false)}>Venue</NavLink></li>
-          <li><NavLink to="/sponsors" className={navLinkClass} onClick={() => setSideMenu(false)}>Sponsors</NavLink></li>
+          <li><NavLink to="/journal" className={navLinkClass} onClick={() => setSideMenu(false)}>Journal</NavLink></li>
           <li><NavLink to="/contact" className={navLinkClass} onClick={() => setSideMenu(false)}>Contact</NavLink></li>
         </ul>
       </div>
