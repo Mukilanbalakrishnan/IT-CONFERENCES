@@ -33,7 +33,7 @@ const chairsData = [
   organization:'KSR College of Engineering',
   Area:"India",
   imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1757314953/jtjvt8ytoflnqhku8ntq.jpg', // Placeholder image
-  blobColor: '#388E3C',
+  blobColor: '#0d47a1',
   type: 'convenor',
 },
 

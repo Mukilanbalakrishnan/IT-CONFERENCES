@@ -227,11 +227,13 @@ const About = () => {
             </p>
             <div className="objectives-section">
                 <h3>Objectives</h3>
-                <div className="objectives-grid">
+                <div className="objectives-list">
                     {objectives.map((objective, index) => (
-                        <div className="objective-card" key={index}>
-                            <div className="objective-card-icon">{index + 1}</div>
-                            <p>{objective.text}</p>
+                        <div className="objective-item" key={index}>
+                            <span className="objective-item__number">
+                                {String(index + 1).padStart(2, '0')}
+                            </span>
+                            <p className="objective-item__text">{objective.text}</p>
                         </div>
                     ))}
                 </div>

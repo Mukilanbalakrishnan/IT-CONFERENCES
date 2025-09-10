@@ -1,9 +1,8 @@
 import React from 'react';
-import './Chiefpatron.css'; // Import the stylesheet
+import './ChiefPatron.css';
 
-// --- Data for the Patrons ---
-const patrons = [
-    {
+const chiefPatronsData = [
+  {
         id: 1,
         name: 'Mr. R. Srinivasan, B.B.M.',
         role: 'CHAIRMAN',
@@ -29,42 +28,43 @@ const patrons = [
     },
 ];
 
-// --- Main Component ---
-const ChiefPatron = () => {
-    return (
-        <section className="patrons-section">
-            <div className="patrons-container">
-                <div className="patrons-header">
-                    <h2 className="patrons-title">Chief Patrons</h2>
-                </div>
-
-                <div className="patrons-grid">
-                    {patrons.map((patron, index) => (
-                        <div className="patrons-card__wrapper" key={patron.id}>
-                            <div className={`patrons-card patrons-card--tilt-${index + 1}`}>
-                                {/* The empty header can be used for the role/tagline if you want them inside the card later */}
-                                <div className="patrons-card__header"></div>
-                                <div className="patrons-card__image-container">
-                                    <img
-                                        src={patron.imageUrl}
-                                        alt={`Portrait of ${patron.name}`}
-                                        className="patrons-card__image"
-                                    />
-                                </div>
-                            </div>
-                            {/* This div groups the text for correct spacing */}
-                            <div className="patrons-card__info">
-                                <h3 className="patrons-card__name">{patron.name}</h3>
-                                <p className="patrons-card__role">{patron.role}</p>
-                                <p className="patrons-card__tagline">{patron.tagline}</p>
-                                {patron.tagline1 && <p className="patrons-card__tagline patrons-card__tagline--country">{patron.tagline1}</p>}
-                            </div>
-                        </div>
-                    ))}
-                </div>
+const ChiefPatronCard = ({ name, role, tagline, country, imageUrl, tiltClass }) => (
+    <div className="chief-patrons-card__wrapper">
+        <div className={`chief-patrons-card ${tiltClass}`}>
+            <div className="chief-patrons-card__image-container">
+                <img src={imageUrl} alt={`Portrait of ${name}`} className="chief-patrons-card__image" loading="lazy" />
             </div>
-        </section>
-    );
+        </div>
+        <div className="chief-patrons-card__info">
+            <h3 className="chief-patrons-card__name">{name}</h3>
+            <p className="chief-patrons-card__role">{role}</p>
+            <p className="chief-patrons-card__tagline">{tagline}</p>
+            <p className="chief-patrons-card__tagline chief-patrons-card__tagline--country">{country}</p>
+        </div>
+    </div>
+);
+
+
+const ChiefPatron = () => {
+  return (
+    <section className="chief-patrons-section">
+      <div className="chief-patrons-container">
+        <header className="chief-patrons-header">
+          <h2 className="chief-patrons-title">Chief Patrons</h2>
+           <p className="chief-patrons-subtitle">Guided by visionary leaders who inspire our mission.</p>
+        </header>
+        <div className="chief-patrons-grid">
+          {chiefPatronsData.map((patron, index) => (
+            <ChiefPatronCard 
+                key={patron.id} 
+                {...patron} 
+                tiltClass={`chief-patrons-card--tilt-${(index % 3) + 1}`} 
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default ChiefPatron;
