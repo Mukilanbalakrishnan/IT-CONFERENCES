@@ -12,6 +12,7 @@ import SignInForm from '/src/pages/Login/Signin';
 import RegistrationForm from '/src/pages/Login/LoginForm';
 import UpcomingDeadlines from './ImportentDates';
 import Convenor from './Convenor';
+import { useNavigate } from 'react-router-dom';
 
 // --- Countdown Timer Component ---
 const Countdown = () => {
@@ -67,9 +68,15 @@ const Countdown = () => {
   );
 };
 
+
 // --- Hero Component ---
 const Hero = ({ onOpenLogin }) => {
     const title = "Joint International Conference on";
+    const navigate = useNavigate();
+
+  const goToTracks = () => {
+    navigate("/conferencetrack");
+  };
     return (
         <section className="hero">
             <video autoPlay loop muted className="hero-video-bg">
@@ -104,7 +111,7 @@ const Hero = ({ onOpenLogin }) => {
                 </p>
                 <div className="hero-buttons">
                     <button onClick={onOpenLogin} className="btn btn-primary">Submit a Paper</button>
-                    <button onClick={onOpenLogin} className="btn btn-secondary">View Tracks</button>
+                    <button onClick={goToTracks} className="btn btn-secondary">View Tracks</button>
                 </div>
             </div>
             <Countdown />
@@ -141,7 +148,11 @@ const Collaboration = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className={`collaboration-section ${isVisible ? 'is-visible' : ''}`}>
+    <section
+  ref={sectionRef}
+  className={`collaboration-section ${isVisible ? 'is-visible' : ''}`}
+>
+
       <div className="container">
         <div className="collaboration-title-wrapper">
             <h3 className="collaboration-title">In Collaboration With</h3>
@@ -204,15 +215,19 @@ const About = () => {
   ];
 
   return (
-    <section ref={sectionRef} className={`about-section ${isVisible ? 'is-visible' : ''}`}>
+    <section
+  ref={sectionRef}
+  className={`about-section ${isVisible ? 'is-visible' : ''}`}
+>
+
       <div className="container">
         <div className="about-grid">
           <div className="about-images">
             <div className="image-grid">
-              <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80" alt="Students collaborating" className="about-image img-1" />
-              <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80" alt="Speaker at a lecture" className="about-image img-2" />
-              <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80" alt="Team working on a project" className="about-image img-3" />
-              <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80" alt="Networking at an event" className="about-image img-4" />
+              <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413799/rldanbaxcfkpgfqz8t0d.jpg" alt="Students collaborating" className="about-image img-1" />
+              <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413791/xq5l2vmvi980kejehaxz.jpg" alt="Speaker at a lecture" className="about-image img-2" />
+              <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413789/iinsohsua3h1a2mudgds.jpg" alt="Team working on a project" className="about-image img-3" />
+              <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413793/uwy08s5eegretmihqld7.jpg" alt="Networking at an event" className="about-image img-4" />
             </div>
             <button className="promo-video-btn">
               <div className="play-icon"></div>
@@ -227,11 +242,13 @@ const About = () => {
             </p>
             <div className="objectives-section">
                 <h3>Objectives</h3>
-                <div className="objectives-grid">
+                <div className="objectives-list">
                     {objectives.map((objective, index) => (
-                        <div className="objective-card" key={index}>
-                            <div className="objective-card-icon">{index + 1}</div>
-                            <p>{objective.text}</p>
+                        <div className="objective-item" key={index}>
+                            <span className="objective-item__number">
+                                {String(index + 1).padStart(2, '0')}
+                            </span>
+                            <p className="objective-item__text">{objective.text}</p>
                         </div>
                     ))}
                 </div>
@@ -288,4 +305,3 @@ const Home = () => {
 }
 
 export default Home;
-

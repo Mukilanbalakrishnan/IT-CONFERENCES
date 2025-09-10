@@ -14,6 +14,7 @@ import RegistrationForm from '../pages/Register/RegisterForm';
 import SubmissionStatusTracker from '../pages/statustracker/SubmissionStatusTracker';
 import ConferenceTracksPage from '../pages/ConferenceTrack/ConferenceTracksPage';
 import Journal from '../pages/Journal/journal'
+import FeeStructure from '../pages/FeeStructure/FeeStructure';
 
 const AppRoutes = () => {
   return (
@@ -32,6 +33,7 @@ const AppRoutes = () => {
         <Route path='/status-tracker' element={<SubmissionStatusTracker/>}/>
         <Route path='/conferencetrack' element={<ConferenceTracksPage/>}/>
         <Route path='/journal' element={<Journal/>}/>
+        <Route path='/feestructure' element={<FeeStructure/>}/>
         
        </Routes>
 

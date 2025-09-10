@@ -66,7 +66,7 @@ const Navbar = () => {
       <header className={headerClass}>
         <div className="header-container">
           <ul className="desktop-nav">
-            <li><NavLink to="/" className={navLinkClass}>Home</NavLink></li>
+            <li><NavLink to="/" className={navLinkClass} onClick={()=>screenTop(0,0)}>Home</NavLink></li>
               <li className="nav-item-dropdown">
               <p className="dropdown-trigger">Committees <IoIosArrowDown /></p>
               <div className="nav-item-dropdown-content">
@@ -78,7 +78,7 @@ const Navbar = () => {
               </div>
             </li>
 
-            <li><NavLink to="/agenda" className={navLinkClass}>Agenda</NavLink></li>
+            <li><NavLink to="/agenda" onClick={()=>screenTop(0,0)} className={navLinkClass}>Agenda</NavLink></li>
 
             <li><NavLink to="/speaker" className={navLinkClass}>Speaker</NavLink></li>
 
@@ -86,6 +86,7 @@ const Navbar = () => {
 
             <li><NavLink to="/venue" className={navLinkClass}>Venue</NavLink></li>
             <li><NavLink to="/journal" className={navLinkClass}>Journal</NavLink></li>
+            <li><NavLink to="/feestructure" className={navLinkClass}>Fee Details</NavLink></li>
             <li><NavLink to="/contact" className={navLinkClass}>Contact</NavLink></li>
           </ul>
 
@@ -125,6 +126,7 @@ const Navbar = () => {
           <li><NavLink to="/conferencetrack" className={navLinkClass} onClick={() => setSideMenu(false)}>Tracks</NavLink></li>
           <li><NavLink to="/venue" className={navLinkClass} onClick={() => setSideMenu(false)}>Venue</NavLink></li>
           <li><NavLink to="/journal" className={navLinkClass} onClick={() => setSideMenu(false)}>Journal</NavLink></li>
+          <li><NavLink to="/feestructure" className={navLinkClass} onClick={() => setSideMenu(false)}>Fee Details</NavLink></li>
           <li><NavLink to="/contact" className={navLinkClass} onClick={() => setSideMenu(false)}>Contact</NavLink></li>
         </ul>
       </div>
