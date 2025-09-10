@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 // This component now includes its own styles, refactored to be fully responsive.
 const componentStyles = `
@@ -435,8 +436,6 @@ body {
     word-break: break-all;
 }
 `;
-
-// Participant Input Component
 const ParticipantInput = ({ index, participant, handleParticipantChange, removeParticipant }) => (
     <div className="participant-block">
         <div className="participant-header">
@@ -512,42 +511,26 @@ const ParticipantInput = ({ index, participant, handleParticipantChange, removeP
                     required
                 />
             </div>
-            {/* <div className="participant-field-full checkbox-group">
-                <input
-                    type="checkbox"
-                    id={`isHostMember_${index}`}
-                    name="isHostMember"
-                    checked={participant.isHostMember}
-                    onChange={(e) => handleParticipantChange(index, e)}
-                    className="form-checkbox"
-                />
-                <label htmlFor={`isHostMember_${index}`} className="form-label-sm">Affiliated with Host Organization</label>
-            </div> */}
         </div>
     </div>
 );
 
+
 // Main Registration Form Component
 const RegistrationForm = () => {
-    const [participants, setParticipants] = useState([
-        { name: '', designation: '', organisation: '', email: '', phone: '', isHostMember: false }
-    ]);
+    const [participants, setParticipants] = useState([{ name: '', designation: '', organisation: '', email: '', phone: '', isHostMember: false }]);
     const [formData, setFormData] = useState({
-        address: '',
-        country: '',
-        pincode: '',
-        track: '',
-        abstractTitle: '',
-        abstractContent: '',
-        abstractExpression: ''
+        address: '', country: '', pincode: '', track: '', abstractTitle: '', abstractContent: '', abstractExpression: ''
     });
     const [wordCount, setWordCount] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [submittedData, setSubmittedData] = useState(null);
     const [genuineSubmission, setGenuineSubmission] = useState(false);
     const [termsAccepted, setTermsAccepted] = useState(false);
-const [isTermsModalOpen, setIsTermsModalOpen] = useState(false); // since you're also calling setIsTermsModalOpen
+    const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
 
+    // --- Get token globally ---
+    const token = localStorage.getItem("token"); // <-- your global token
 
     const handleParticipantChange = (index, event) => {
         const { name, value, type, checked } = event.target;
@@ -578,28 +561,43 @@ const [isTermsModalOpen, setIsTermsModalOpen] = useState(false); // since you're
         setWordCount(words);
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         if (!genuineSubmission || !termsAccepted) {
             alert("Please confirm the submission details and accept the terms and conditions.");
             return;
         }
-        const finalData = {
-             participants,
-            ...formData
-            };
-            setSubmittedData(finalData);
-            setIsModalOpen(true);
-         };
+        if (wordCount > 300) {
+            alert("Abstract exceeds 300 words limit!");
+            return;
+        }
 
-    const handleSubmits = (event) => {
-        event.preventDefault();
-        const finalData = {
-            participants,
-            ...formData
-        };
-        setSubmittedData(finalData);
-        setIsModalOpen(true);
+        const finalData = { participants, ...formData };
+
+        try {
+            const response = await axios.post(
+                "http://localhost:5000/api/register",
+                finalData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // <-- FIX: include token
+                    },
+                }
+            );
+            setSubmittedData(response.data);
+            setIsModalOpen(true);
+
+            // Reset form
+            setParticipants([{ name: '', designation: '', organisation: '', email: '', phone: '', isHostMember: false }]);
+            setFormData({ address: '', country: '', pincode: '', track: '', abstractTitle: '', abstractContent: '', abstractExpression: '' });
+            setWordCount(0);
+            setGenuineSubmission(false);
+            setTermsAccepted(false);
+
+        } catch (error) {
+            console.error(error);
+            alert("Registration failed. Please try again later.");
+        }
     };
 
     return (
@@ -631,7 +629,8 @@ const [isTermsModalOpen, setIsTermsModalOpen] = useState(false); // since you're
                         <h2 className="form-title">Conference Registration Form</h2>
                     </div>
 
-                    <form onSubmit={handleSubmits} className="form-body">
+                    <form onSubmit={handleSubmit} className="form-body">
+                        {/* Participant Details */}
                         <fieldset className="form-fieldset">
                             <legend className="fieldset-legend">Participant Details (1-4)</legend>
                             <div className="participant-list">
@@ -650,6 +649,7 @@ const [isTermsModalOpen, setIsTermsModalOpen] = useState(false); // since you're
                             </button>
                         </fieldset>
 
+                        {/* Contact Information */}
                         <fieldset className="form-fieldset">
                             <legend className="fieldset-legend">Contact Information</legend>
                             <div className="form-section-spacing">
@@ -670,6 +670,7 @@ const [isTermsModalOpen, setIsTermsModalOpen] = useState(false); // since you're
                             </div>
                         </fieldset>
 
+                        {/* Abstract Submission */}
                         <fieldset className="form-fieldset">
                             <legend className="fieldset-legend">Abstract Submission</legend>
                             <div className="form-section-spacing">
@@ -678,10 +679,10 @@ const [isTermsModalOpen, setIsTermsModalOpen] = useState(false); // since you're
                                         <label htmlFor="track" className="form-label">Conference Track</label>
                                         <select id="track" name="track" value={formData.track} onChange={handleFormChange} className="form-select" required>
                                             <option value="" disabled>Select a Conference Track...</option>
-                                            <option value="Track 1: Innovative and Sustainable Smart Technologies in Electrical Engineering">Track 1: Electrical Engineering</option>
-                                            <option value="Track 2: Innovative and Sustainable Smart Technologies in Communication Engineering">Track 2: Communication Engineering</option>
-                                            <option value="Track 3: Innovative and Sustainable Smart Technologies in Biomedical Engineering">Track 3: Biomedical Engineering</option>
-                                            <option value="Track 4: Innovative and Sustainable Smart Technologies in Computer Science and Multidisciplinary Applications">Track 4: Computer Science & Multidisciplinary</option>
+                                            <option value="Track 1">Track 1: Electrical Engineering</option>
+                                            <option value="Track 2">Track 2: Communication Engineering</option>
+                                            <option value="Track 3">Track 3: Biomedical Engineering</option>
+                                            <option value="Track 4">Track 4: Computer Science & Multidisciplinary</option>
                                         </select>
                                     </div>
                                     <div>
@@ -701,50 +702,49 @@ const [isTermsModalOpen, setIsTermsModalOpen] = useState(false); // since you're
                             </div>
                         </fieldset>
 
+                        {/* Confirmation */}
                         <fieldset className="form-fieldset">
-                                <legend className="fieldset-legend">Final Confirmation</legend>
-                                <div className="confirmation-group">
-                                    <input
-                                        type="checkbox"
-                                        id="genuineSubmission"
-                                        checked={genuineSubmission}
-                                        onChange={(e) => setGenuineSubmission(e.target.checked)}
-                                        className="form-checkbox"
-                                    />
-                                    <label htmlFor="genuineSubmission" className="form-label-sm">
-                                        I hereby declare that the information and documents submitted are genuine and accurate to the best of my knowledge.
-                                    </label>
-                                </div>
-                                <div className="confirmation-group">
-  <input
-    type="checkbox"
-    id="termsAccepted"
-    checked={termsAccepted}
-    readOnly   // Prevents direct user checking
-    className="form-checkbox"
-  />
-  <label htmlFor="termsAccepted" className="form-label-sm">
-    I have read and agree to the{" "}
-    <span
-      onClick={() => setIsTermsModalOpen(true)}
-      className="terms-link"
-      style={{ color: "blue", cursor: "pointer", textDecoration: "underline" }}
-    >
-      Terms and Conditions
-    </span>.
-  </label>
-</div>
+                            <legend className="fieldset-legend">Final Confirmation</legend>
+                            <div className="confirmation-group">
+                                <input
+                                    type="checkbox"
+                                    id="genuineSubmission"
+                                    checked={genuineSubmission}
+                                    onChange={(e) => setGenuineSubmission(e.target.checked)}
+                                    className="form-checkbox"
+                                />
+                                <label htmlFor="genuineSubmission" className="form-label-sm">
+                                    I declare that the information submitted is genuine.
+                                </label>
+                            </div>
+                            <div className="confirmation-group">
+                                <input
+                                    type="checkbox"
+                                    id="termsAccepted"
+                                    checked={termsAccepted}
+                                    readOnly
+                                    className="form-checkbox"
+                                />
+                                <label htmlFor="termsAccepted" className="form-label-sm">
+                                    I agree to the{" "}
+                                    <span
+                                        onClick={() => setIsTermsModalOpen(true)}
+                                        className="terms-link"
+                                        style={{ color: "blue", cursor: "pointer", textDecoration: "underline" }}
+                                    >
+                                        Terms and Conditions
+                                    </span>.
+                                </label>
+                            </div>
+                        </fieldset>
 
-                            </fieldset>
-                        
-                        <div>
-                            <button type="submit" className="btn btn-primary" disabled={!genuineSubmission || !termsAccepted}>
-  Submit Registration
-</button>
-
-                        </div>
+                        <button type="submit" className="btn btn-primary" disabled={!genuineSubmission || !termsAccepted}>
+                            Submit Registration
+                        </button>
                     </form>
                 </div>
+
+                {/* Submission Modal */}
                 {isModalOpen && (
                     <div className="modal-overlay">
                         <div className="modal-content">
@@ -755,52 +755,38 @@ const [isTermsModalOpen, setIsTermsModalOpen] = useState(false); // since you're
                                 </svg>
                             </div>
                             <h3 className="modal-title">Registration Submitted!</h3>
-                            <p className="modal-description">Thank you for registering. Please review the data we received:</p>
+                            <p className="modal-description">Thank you for registering. Review the submitted data:</p>
                             <pre className="modal-data-preview">{JSON.stringify(submittedData, null, 2)}</pre>
                         </div>
                     </div>
                 )}
 
+                {/* Terms Modal */}
                 {isTermsModalOpen && (
-  <div className="modal-overlay">
-    <div className="modal-content">
-      <button onClick={() => setIsTermsModalOpen(false)} className="modal-close-btn">&times;</button>
-      <h3 className="modal-title">Terms & Conditions</h3>
-      <div className="modal-data-preview">
-        {/* Replace with your actual terms */}
-        <p>
-          1. All information provided must be accurate.<br/>
-          2. Abstracts must follow the given word limit.<br/>
-          3. Registrations are non-transferable.<br/>
-          4. The organizers reserve the right to modify rules.<br/>
-          5. By accepting, you agree to abide by all conditions.
-        </p>
-      </div>
-      <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
-        <button
-          className="btn btn-primary"
-          onClick={() => {
-            setTermsAccepted(true);
-            setIsTermsModalOpen(false);
-          }}
-        >
-          Accept
-        </button>
-        <button
-          className="btn"
-          style={{ backgroundColor: "#e5e7eb", color: "#111" }}
-          onClick={() => {
-            setTermsAccepted(false);
-            setIsTermsModalOpen(false);
-          }}
-        >
-          Decline
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <button onClick={() => setIsTermsModalOpen(false)} className="modal-close-btn">&times;</button>
+                            <h3 className="modal-title">Terms & Conditions</h3>
+                            <div className="modal-data-preview">
+                                <p>
+                                  1. All information must be accurate.<br/>
+                                  2. Abstracts must follow the 300-word limit.<br/>
+                                  3. Registrations are non-transferable.<br/>
+                                  4. Organizers may modify rules.<br/>
+                                  5. By accepting, you agree to all conditions.
+                                </p>
+                            </div>
+                            <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
+                                <button className="btn btn-primary" onClick={() => { setTermsAccepted(true); setIsTermsModalOpen(false); }}>
+                                    Accept
+                                </button>
+                                <button className="btn" style={{ backgroundColor: "#e5e7eb", color: "#111" }} onClick={() => { setTermsAccepted(false); setIsTermsModalOpen(false); }}>
+                                    Decline
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </React.Fragment>
     );
