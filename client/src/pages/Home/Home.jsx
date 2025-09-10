@@ -12,7 +12,6 @@ import SignInForm from '/src/pages/Login/Signin';
 import RegistrationForm from '/src/pages/Login/LoginForm';
 import UpcomingDeadlines from './ImportentDates';
 import Convenor from './Convenor';
-import { useNavigate } from 'react-router-dom';
 
 // --- Countdown Timer Component ---
 const Countdown = () => {
@@ -68,15 +67,9 @@ const Countdown = () => {
   );
 };
 
-
 // --- Hero Component ---
 const Hero = ({ onOpenLogin }) => {
     const title = "Joint International Conference on";
-    const navigate = useNavigate();
-
-  const goToTracks = () => {
-    navigate("/conferencetrack");
-  };
     return (
         <section className="hero">
             <video autoPlay loop muted className="hero-video-bg">
@@ -111,7 +104,7 @@ const Hero = ({ onOpenLogin }) => {
                 </p>
                 <div className="hero-buttons">
                     <button onClick={onOpenLogin} className="btn btn-primary">Submit a Paper</button>
-                    <button onClick={goToTracks} className="btn btn-secondary">View Tracks</button>
+                    <button onClick={onOpenLogin} className="btn btn-secondary">View Tracks</button>
                 </div>
             </div>
             <Countdown />
@@ -148,11 +141,7 @@ const Collaboration = () => {
   }, []);
 
   return (
-    <section
-  ref={sectionRef}
-  className={`collaboration-section ${isVisible ? 'is-visible' : ''}`}
->
-
+    <section ref={sectionRef} className={`collaboration-section ${isVisible ? 'is-visible' : ''}`}>
       <div className="container">
         <div className="collaboration-title-wrapper">
             <h3 className="collaboration-title">In Collaboration With</h3>
@@ -215,11 +204,7 @@ const About = () => {
   ];
 
   return (
-    <section
-  ref={sectionRef}
-  className={`about-section ${isVisible ? 'is-visible' : ''}`}
->
-
+    <section ref={sectionRef} className={`about-section ${isVisible ? 'is-visible' : ''}`}>
       <div className="container">
         <div className="about-grid">
           <div className="about-images">
@@ -305,3 +290,4 @@ const Home = () => {
 }
 
 export default Home;
+

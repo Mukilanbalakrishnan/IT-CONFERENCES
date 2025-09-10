@@ -14,7 +14,7 @@
 
 /* --- Base Section Styling --- */
 .tracks-section {
-    padding: 3rem 1rem;
+    padding: clamp(3rem, 8vw, 6rem) 1rem; /* Fluid padding */
     background: var(--surface-light);
 }
 .container {
@@ -24,7 +24,7 @@
 }
 .tracks-header {
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: clamp(2.5rem, 6vw, 4rem); /* Fluid margin */
 }
 .tracks-header .kicker {
     font-size: 0.9rem;
@@ -33,7 +33,7 @@
     font-weight: 700;
 }
 .tracks-header h2 {
-    font-size: 2rem;
+    font-size: clamp(2rem, 5vw, 2.75rem); /* Fluid font size */
     color: var(--brand-blue-dark);
     margin: 0.5rem 0 0 0;
 }
@@ -87,7 +87,7 @@
 }
 .event-card h3 {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 2.5vw, 1.1rem); /* Fluid font size */
     color: var(--text-primary);
     line-height: 1.4;
     text-align: left;
@@ -115,19 +115,19 @@
     opacity: 0;
     overflow: hidden;
     transition: all 0.4s ease-out;
-    font-size: 0.95rem;
+    font-size: clamp(0.9rem, 2vw, 0.95rem); /* Fluid font size */
     color: var(--text-secondary);
     line-height: 1.6;
     text-align: left;
+    padding: 0 1.25rem 1.25rem; /* Apply padding to the container */
 }
 .event-description p {
     margin: 0;
-    padding: 0 1.25rem 1.25rem;
+    padding-top: 1.25rem; /* Only add top padding */
     border-top: 1px solid var(--surface-dark);
-    padding-top: 1.25rem;
 }
 .event-card.open .event-description {
-    max-height: 200px; /* Increased height to fit button */
+    max-height: 250px; /* Increased height to fit button */
     opacity: 1;
 }
 .view-more-btn {
@@ -148,14 +148,8 @@
     background-color: var(--brand-blue-dark);
 }
 
-/* --- DESKTOP VIEW (Media Query) --- */
+/* --- TABLET & DESKTOP VIEW (Media Query) --- */
 @media (min-width: 768px) {
-    .tracks-section {
-        padding: 6rem 1.5rem;
-    }
-    .tracks-header h2 {
-        font-size: 2.5rem;
-    }
     .tracks-layout {
         max-width: 1024px;
         margin: 0 auto;
@@ -221,12 +215,26 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between; /* Push button to bottom */
+        padding: 0; /* Remove mobile padding */
     }
     .event-description p { padding: 0; border: none; }
     .expand-button { display: none; }
 
     .view-more-btn {
         align-self: flex-start;
+    }
+}
+
+/* Added a new breakpoint for small laptops to prevent content from squishing */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .tracks-layout {
+        padding: 1.5rem;
+    }
+    .day-schedule-group {
+        gap: 1.5rem;
+    }
+    .event-card h3 {
+        font-size: 1.2rem;
     }
 }
 
