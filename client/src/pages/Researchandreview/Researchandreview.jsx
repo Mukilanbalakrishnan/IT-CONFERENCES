@@ -1,5 +1,6 @@
 import React from 'react';
-import './Researchandreview.css';
+import './Researchandreview.model.css';
+
 
 
 // --- Main Component ---
