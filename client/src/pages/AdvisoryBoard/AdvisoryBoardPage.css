@@ -61,6 +61,7 @@
     line-height: 1.6;
     padding: 2rem 0;
     min-height: 100vh;
+    margin-top: -100px;
 }
 
 /* --- Global Container --- */
