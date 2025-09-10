@@ -44,8 +44,8 @@ const Map = () => {
       <div className="container">
         <div className="venue-grid">
           <div className="venue-info">
+            <p className="kicker">// REACH US</p>
             <div className="section-header">
-              <p className="kicker">// REACH US</p>
               <h2>Get Directions to the Event Hall</h2>
             </div>
             <div className="venue-tabs">
