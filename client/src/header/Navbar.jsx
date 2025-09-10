@@ -52,7 +52,7 @@ const Navbar = () => {
       <header className={headerClass}>
         <div className="header-container">
           <ul className="desktop-nav">
-            <li><NavLink to="/" className={navLinkClass}>Home</NavLink></li>
+            <li><NavLink to="/" className={navLinkClass} onClick={()=>screenTop(0,0)}>Home</NavLink></li>
               <li className="nav-item-dropdown">
               <p className="dropdown-trigger">Committees <IoIosArrowDown /></p>
               <div className="nav-item-dropdown-content">
@@ -64,7 +64,7 @@ const Navbar = () => {
               </div>
             </li>
 
-            <li><NavLink to="/agenda" className={navLinkClass}>Agenda</NavLink></li>
+            <li><NavLink to="/agenda" onClick={()=>screenTop(0,0)} className={navLinkClass}>Agenda</NavLink></li>
 
             <li><NavLink to="/speaker" className={navLinkClass}>Speaker</NavLink></li>
 
