@@ -1,5 +1,5 @@
 import React from 'react';
-import './ChiefPatron.css';
+import './Chiefpatron.css';
 
 const chiefPatronsData = [
   {
