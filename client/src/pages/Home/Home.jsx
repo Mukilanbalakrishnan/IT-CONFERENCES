@@ -209,10 +209,10 @@ const About = () => {
         <div className="about-grid">
           <div className="about-images">
             <div className="image-grid">
-              <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80" alt="Students collaborating" className="about-image img-1" />
-              <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80" alt="Speaker at a lecture" className="about-image img-2" />
-              <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80" alt="Team working on a project" className="about-image img-3" />
-              <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80" alt="Networking at an event" className="about-image img-4" />
+              <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413799/rldanbaxcfkpgfqz8t0d.jpg" alt="Students collaborating" className="about-image img-1" />
+              <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413791/xq5l2vmvi980kejehaxz.jpg" alt="Speaker at a lecture" className="about-image img-2" />
+              <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413789/iinsohsua3h1a2mudgds.jpg" alt="Team working on a project" className="about-image img-3" />
+              <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413793/uwy08s5eegretmihqld7.jpg" alt="Networking at an event" className="about-image img-4" />
             </div>
             <button className="promo-video-btn">
               <div className="play-icon"></div>
