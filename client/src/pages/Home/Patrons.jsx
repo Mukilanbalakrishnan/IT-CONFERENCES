@@ -8,7 +8,7 @@ const patronsData = [
  name: 'Dr. M. Venkatesan',
  role: 'Dean',
  organization:'KSR College of Engineering',
- Area:"",
+ Area:"India",
  imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755926462/n0qgaug4gqeqerhworus.webp', 
  blobColor: '#0d47a1',
  type: 'Patron',
@@ -18,6 +18,7 @@ const patronsData = [
  name: 'Dr. P. Meenachi Devi',
  role: 'Principal',
  organization:'KSR College of Engineering',
+ Area:"India",
  imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755926530/s89gz5dlc9evl67gw28l.webp', 
  blobColor: '#F57C00',
  type: 'Patron',
@@ -27,6 +28,7 @@ const patronsData = [
  name: 'Dr. Asokan Vasudevan',
  role: 'Director, ICCCBS',
  organization:'INTI International University',
+ Area:"Malaysia",
  imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755926638/kn5ymfczpw5kefugb19e.jpg', 
  blobColor: '#0d47a1',
  type: 'Co-Patron',
@@ -36,6 +38,7 @@ const patronsData = [
  name: 'Dr. Veena',
  role: 'Director – IQAC',
  organization:'KSR College of Engineering',
+ Area:"India",
  imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755927599/d04cng0plsplt36g1dzl.webp',
  blobColor: '#F57C00',
  type: 'Co-Patron',
@@ -43,7 +46,7 @@ const patronsData = [
 ];
 
 // Reusable card component for displaying each person
-const PatronCard = ({ name, role, imageUrl, blobColor, organization }) => (
+const PatronCard = ({ name, role, imageUrl, blobColor, organization,Area }) => (
  <div className="patron-card">
  <div className="patron-card__image-wrapper">
  <div className="patron-card__blob" style={{ backgroundColor: blobColor }}></div>
@@ -58,6 +61,7 @@ const PatronCard = ({ name, role, imageUrl, blobColor, organization }) => (
  <h3 className="patron-card__name">{name}</h3>
  <p className="patron-card__role">{role}</p>
  <p className="patron-card__orgenization">{organization}</p>
+ {Area && <p className="patrons-card__tagline patrons-card__tagline--country">{Area}</p>}
  <p></p>
  </div>
 </div>

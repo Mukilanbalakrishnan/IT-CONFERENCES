@@ -159,7 +159,7 @@
 .chair-card__organization {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--brand-orange);
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin: 0;

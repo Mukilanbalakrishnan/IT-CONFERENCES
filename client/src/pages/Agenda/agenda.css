@@ -28,6 +28,7 @@
 /* --- Page-Specific Styles for Agenda --- */
 .agenda-page {
     background-color: var(--surface-light);
+    margin-top: -100px;
 }
 
 .agenda-container {
@@ -62,27 +63,54 @@
 .agenda-countdown-container {
     display: flex;
     justify-content: center;
-    gap: 2rem;
+    align-items: center;
+    gap: 1.5rem;
     animation: fadeInUp 0.5s 0.4s ease-out backwards;
 }
+
 .agenda-countdown-item {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* For Safari */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     border-radius: var(--radius);
-    min-width: 100px;
+    padding: 1.25rem;
+    min-width: 110px;
+    text-align: center;
+    transition: transform 0.3s ease;
 }
+
+.agenda-countdown-item:hover {
+    transform: translateY(-5px);
+}
+
 .agenda-countdown-number {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
     font-weight: 700;
+    line-height: 1;
+    color: var(--white);
+    text-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
+
 .agenda-countdown-label {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 500;
     text-transform: uppercase;
-    opacity: 0.8;
+    opacity: 0.9;
+    letter-spacing: 1px;
+    margin-top: 0.5rem;
+    display: block;
 }
+
 .agenda-conference-live {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 700;
+    padding: 1rem 2rem;
+    background: var(--brand-orange);
+    color: var(--white);
+    border-radius: var(--radius);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 /* --- Schedule Container --- */
@@ -174,10 +202,18 @@
     gap: 0.5rem;
     margin-bottom: 0.5rem;
 }
+
+.agenda-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
 .agenda-event-title {
     font-size: 1.2rem;
     font-weight: 700;
     color: var(--text-primary);
+    margin: 0;
 }
 .agenda-event-venue {
     font-weight: 500;
@@ -186,6 +222,16 @@
     align-items: center;
     gap: 0.5rem;
     margin-top: 0.5rem;
+}
+
+.agenda-event-status {
+    background-color: var(--brand-blue-primary);
+    color: var(--white);
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
 }
 
 /* --- Status Styling --- */
@@ -217,8 +263,57 @@
     color: var(--white);
 }
 .agenda-timeline-item.completed .agenda-timeline-card {
-    opacity: 0.7;
+    opacity: 0.8;
+    background-color: var(--surface-dark);
 }
+
 .agenda-timeline-item.completed .agenda-event-title {
-    text-decoration: line-through;
+    color: var(--text-secondary);
+}
+
+
+/* --- Responsive Styles (NEWLY ADDED) --- */
+@media (max-width: 600px) {
+    /* Hero Section Adjustments */
+    .agenda-hero-title {
+        font-size: 2.2rem;
+    }
+    .agenda-hero-subtitle {
+        font-size: 1rem;
+    }
+
+    /* Countdown Timer Adjustments */
+    .agenda-countdown-container {
+        gap: 0.75rem; /* Reduce space between items */
+    }
+    .agenda-countdown-item {
+        padding: 0.75rem;
+        min-width: 75px; /* Allow items to be smaller */
+    }
+    .agenda-countdown-number {
+        font-size: 2.25rem; /* Smaller numbers */
+    }
+    .agenda-countdown-label {
+        font-size: 0.7rem; /* Smaller labels */
+    }
+    .agenda-conference-live {
+        font-size: 1.5rem;
+        padding: 0.75rem 1.5rem;
+    }
+
+    /* Schedule & Timeline Adjustments */
+    .agenda-schedule-container {
+        padding: 1.5rem;
+    }
+    .agenda-timeline {
+        padding-left: 35px;
+    }
+    .agenda-timeline-icon {
+        width: 28px;
+        height: 28px;
+        left: -35px; /* Adjust icon position */
+    }
+    .agenda-event-title {
+        font-size: 1.1rem;
+    }
 }
