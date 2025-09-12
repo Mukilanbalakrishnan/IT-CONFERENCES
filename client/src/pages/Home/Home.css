@@ -27,7 +27,6 @@
 
 /* --- Global Responsive Typography --- */
 h1, .hero .animated-title {
-  /* Slightly reduced the max size and viewport scaling for better balance */
   font-size: clamp(2.2rem, 1.5rem + 4vw, 4rem);
   font-weight: 800;
   line-height: 1.2;
@@ -51,14 +50,13 @@ p, li {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Use min-height for flexibility */
+  min-height: 100vh;
   background-color: #111318;
   color: var(--white);
   text-align: center;
-  /* This is the fix: pull the hero section up behind the navbar */
   margin-top: calc(-1 * var(--nav-height-desktop, 88px)); 
-  padding-top: var(--nav-height-desktop, 88px); /* Push content back down */
-  padding-bottom: 4rem; /* Added generous bottom padding */
+  padding-top: var(--nav-height-desktop, 88px);
+  padding-bottom: 4rem;
   padding-left: clamp(1rem, 5vw, 3rem);
   padding-right: clamp(1rem, 5vw, 3rem);
   box-sizing: border-box;
@@ -99,7 +97,7 @@ p, li {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem 0; /* Removed horizontal padding */
+  padding: 2rem 0;
 }
 
 .hero .animated-title {
@@ -242,7 +240,6 @@ p, li {
   flex-grow: 1;
 }
 .countdown-number {
-  /* Reduced viewport scaling to prevent overflow on mid-size screens */
   font-size: clamp(1.6rem, 4.5vw, 3rem);
   font-weight: 800;
   color: var(--white);
@@ -300,7 +297,7 @@ p, li {
 .collaboration-content-wrapper {
   display: flex;
   justify-content: center;
-  align-items: stretch; /* Make items equal height */
+  align-items: stretch;
   gap: clamp(2rem, 8vw, 4rem);
   flex-wrap: wrap;
   position: relative;
@@ -483,16 +480,16 @@ p, li {
 }
 .objective-item {
     display: flex;
-    align-items: center; /* Center items vertically */
+    align-items: center;
     gap: 1rem;
 }
 .objective-item__number {
-    font-size: 1.75rem; /* Adjusted for balance */
+    font-size: 1.75rem;
     font-weight: 700;
     color: var(--brand-orange);
     flex-shrink: 0;
-    width: 2.5rem; /* Give it a fixed width */
-    text-align: left; /* Align to the left */
+    width: 2.5rem;
+    text-align: left;
     opacity: 0.5;
 }
 .objective-item__text {
@@ -534,7 +531,7 @@ p, li {
     min-height: auto;
     margin-top: calc(-1 * var(--nav-height-mobile, 68px));
     padding-top: var(--nav-height-mobile, 68px);
-    padding-bottom: 8rem; /* Increased space at the bottom */
+    padding-bottom: 8rem;
   }
   .countdown-container {
     position: relative;
@@ -599,4 +596,44 @@ p, li {
 /* Very Small Mobile */
 @media (max-width: 380px) {
   /* No longer hiding the countdown info */
+}
+
+
+/* --- ADDED: Keyframes for Modal Animation --- */
+@keyframes modalFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- ADDED: Modal / Popup Styles --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(17, 19, 24, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.modal-content {
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  overflow: hidden; /* This is the key fix */
+  width: auto;
+  max-width: 100%;
+  max-height: 90vh;
+  /* CORRECTED: The animation needed its starting state (opacity 0) defined in the keyframes, not here */
+  animation: modalFadeInUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }

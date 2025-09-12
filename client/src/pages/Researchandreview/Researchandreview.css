@@ -1,50 +1,10 @@
-/* --- Animation Keyframes --- */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(245, 124, 0, 0.7);
-    }
-    70% {
-        box-shadow: 0 0 0 15px rgba(245, 124, 0, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(245, 124, 0, 0);
-    }
-}
-
-@keyframes colorShift {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-
+/* --- Base Page Styles --- */
 .researchandreview {
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
-    color: #111318;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    padding: 2rem 0;
-    min-height: 100vh;
+    background-color: var(--surface-light);
+    font-family: 'Poppins', sans-serif;
+    padding: 2rem 0 4rem 0;
 }
 
-/* --- Global Container --- */
 .researchandreview .container {
     width: 100%;
     max-width: var(--page-max-width);
@@ -55,375 +15,99 @@
 /* --- Page Header --- */
 .researchandreview .page-header {
     text-align: center;
-    margin: 4rem 0 3.5rem;
-    position: relative;
-    padding: 2.5rem 1rem;
-    background: linear-gradient(135deg, var(--brand-blue-primary) 0%, var(--brand-blue-dark) 50%, var(--brand-orange) 100%);
-    background-size: 200% 200%;
-    animation: colorShift 8s ease infinite;
-    border-radius: var(--border-radius);
-    box-shadow: var(--card-shadow);
-    overflow: hidden;
-    margin-top: -35px;
-}
-
-.researchandreview .page-header::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    transform: rotate(30deg);
+    padding: 3rem 1rem 3rem 1rem;
+    margin-bottom: 4rem;
 }
 
 .researchandreview .page-header h1 {
-    font-size: 2.8rem;
-    color: white;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
+    font-size: clamp(2.2rem, 5vw, 3rem);
+    color: var(--brand-blue-dark);
+    margin: 0;
     position: relative;
     display: inline-block;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    animation: fadeInUp 0.8s ease-out;
+    padding-bottom: 0.75rem;
 }
 
 .researchandreview .page-header h1::after {
     content: '';
     position: absolute;
-    bottom: -12px;
+    bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 100px;
-    height: 5px;
-    background: white;
-    border-radius: 3px;
+    width: 80px;
+    height: 4px;
+    background-color: var(--brand-orange);
+    border-radius: 2px;
 }
 
-.researchandreview .page-header .container {
-    position: relative;
-    z-index: 2;
-}
-
-/* --- Grid for Advisory Board Members --- */
+/* --- Grid for Board Members --- */
 .researchandreview .board-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 2.5rem;
-    margin-bottom: 6rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
 }
 
 /* --- Individual Member Card Styling --- */
 .researchandreview .board-member-card {
-    background: white;
-    border-radius: var(--border-radius);
-    padding: 2.2rem;
-    box-shadow: var(--card-shadow);
-    transition: var(--transition);
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow-soft);
+    border-top: 4px solid var(--brand-blue-primary);
+    transition: transform 0.4s ease, box-shadow 0.4s ease, opacity 0.6s ease, transform 0.6s ease;
+    text-align: left;
     opacity: 0;
-    animation: fadeInUp 0.7s ease-out forwards;
-    position: relative;
-    overflow: hidden;
-    border-top: 5px solid var(--brand-orange);
-    transform-origin: center;
+    transform: translateY(20px);
+}
+
+.researchandreview .board-member-card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .researchandreview .board-member-card:hover {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow: var(--card-shadow-hover);
-    border-top: 5px solid var(--brand-blue-primary);
-    z-index: 10;
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
 }
 
-.researchandreview .board-member-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5px;
-    background: linear-gradient(90deg, var(--brand-blue-primary), var(--brand-orange));
-    opacity: 0;
-    transition: var(--transition);
+/* Alternating card color */
+.researchandreview .board-member-card:nth-child(even) {
+    border-top-color: var(--brand-orange);
 }
 
-.researchandreview .board-member-card:hover::before {
-    opacity: 1;
-}
-
-.researchandreview .board-member-card .member-name {
-    color: var(--brand-blue-dark);
-    font-size: 1.5rem;
-    font-weight: 800;
-    margin: 0 0 0.75rem 0;
-    display: block;
-    position: relative;
-    transition: var(--transition);
-    letter-spacing: -0.5px;
-}
-
-.researchandreview .board-member-card:hover .member-name {
-    color: var(--brand-orange-dark);
-    transform: translateX(5px);
-}
-
-.researchandreview .board-member-card .member-role {
-    color: white;
-    font-size: 0.95rem;
+.researchandreview .member-name {
+    font-size: 1.4rem;
     font-weight: 700;
-    margin: 0 0 1.25rem 0;
-    padding: 0.5rem 1.2rem;
-    background: var(--brand-orange);
-    display: inline-block;
-    border-radius: 25px;
-    box-shadow: 0 5px 15px rgba(245, 124, 0, 0.3);
-    transition: var(--transition);
-    letter-spacing: 0.5px;
-}
-
-.researchandreview .board-member-card:hover .member-role {
-    background: linear-gradient(135deg, var(--brand-blue-primary) 0%, var(--brand-blue-light) 100%);
-    transform: scale(1.05) translateY(-3px);
-    box-shadow: 0 8px 20px rgba(25, 118, 210, 0.4);
-    animation: pulse 2s infinite;
-}
-
-/* --- Institution Lines with Bullets --- */
-.researchandreview .member-institution {
-    margin-top: 1rem;
-    border-top: 1px solid #e2e8f0;
-    padding-top: 1rem;
-}
-
-.researchandreview .institution-line {
-    display: flex;
-    align-items: flex-start;
-    margin: 10px 0;
-    line-height: 1.6;
-    transition: var(--transition);
-}
-
-.researchandreview .board-member-card:hover .institution-line {
-    transform: translateX(8px);
-}
-
-.researchandreview .institution-line .bullet {
-    color: var(--brand-orange);
-    margin-right: 12px;
-    font-size: 1.2rem;
-    flex-shrink: 0;
-    line-height: 1.6;
-    transition: var(--transition);
-    font-weight: bold;
-}
-
-.researchandreview .board-member-card:hover .institution-line .bullet {
-    color: var(--brand-blue-primary);
-    transform: scale(1.4) rotate(15deg);
-}
-
-.researchandreview .institution-line .institution-text {
-    color: var(--text-secondary);
-    font-size: 1.05rem;
-    font-weight: 500;
-    transition: var(--transition);
-}
-
-.researchandreview .board-member-card:hover .institution-line .institution-text {
     color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+}
+
+.researchandreview .member-role {
+    font-size: 0.9rem;
     font-weight: 600;
+    color: var(--text-secondary);
+    margin: 0 0 1rem 0;
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: var(--surface-dark);
+    border-radius: 50px;
 }
 
-.researchandreview .institution-line .institution-department {
-    font-weight: 800;
-    color: var(--brand-blue-dark);
-    font-size: 1.15rem;
-    transition: var(--transition);
+.researchandreview .member-institution {
+    border-top: 1px solid var(--surface-dark);
+    padding-top: 1rem;
+    margin-top: 1rem;
 }
 
-.researchandreview .board-member-card:hover .institution-line .institution-department {
-    color: var(--brand-orange);
-    text-shadow: 0px 0px 1px rgba(245, 124, 0, 0.3);
+.researchandreview .institution-department,
+.researchandreview .institution-line {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin: 0;
 }
 
-/* Decorative elements */
-.researchandreview .board-member-card::after {
-    content: '';
-    position: absolute;
-    bottom: -30px;
-    right: -30px;
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, var(--brand-orange-light) 0%, transparent 70%);
-    opacity: 0.1;
-    border-radius: 50%;
-    transition: var(--transition);
+.researchandreview .institution-department {
+    font-weight: 600;
+    color: var(--text-primary);
 }
 
-.researchandreview .board-member-card:hover::after {
-    width: 120px;
-    height: 120px;
-    opacity: 0.2;
-    bottom: -40px;
-    right: -40px;
-    background: linear-gradient(135deg, var(--brand-blue-light) 0%, transparent 70%);
-}
-
-/* Section divider */
-.researchandreview .page-header:not(:first-of-type) {
-    margin-top: 6rem;
-}
-
-/* Animation delays for staggered effect */
-.researchandreview .board-member-card:nth-child(1) { animation-delay: 0.1s; }
-.researchandreview .board-member-card:nth-child(2) { animation-delay: 0.2s; }
-.researchandreview .board-member-card:nth-child(3) { animation-delay: 0.3s; }
-.researchandreview .board-member-card:nth-child(4) { animation-delay: 0.4s; }
-.researchandreview .board-member-card:nth-child(5) { animation-delay: 0.5s; }
-.researchandreview .board-member-card:nth-child(6) { animation-delay: 0.6s; }
-.researchandreview .board-member-card:nth-child(7) { animation-delay: 0.7s; }
-.researchandreview .board-member-card:nth-child(8) { animation-delay: 0.8s; }
-.researchandreview .board-member-card:nth-child(9) { animation-delay: 0.9s; }
-.researchandreview .board-member-card:nth-child(10) { animation-delay: 1.0s; }
-
-/* --- Responsive adjustments --- */
-
-/* Tablets and smaller screens */
-@media (max-width: 1024px) {
-    .researchandreview .board-grid {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2.2rem;
-    }
-    
-    .researchandreview .page-header h1 {
-        font-size: 2.4rem;
-    }
-    
-    .researchandreview .board-member-card {
-        padding: 2rem;
-    }
-}
-
-/* Medium tablets */
-@media (max-width: 768px) {
-    .researchandreview .board-grid {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 2rem;
-    }
-    
-    .researchandreview .page-header {
-        margin: 3.5rem 0 3rem;
-        padding: 2rem 0;
-    }
-    
-    .researchandreview .page-header h1 {
-        font-size: 2.1rem;
-    }
-    
-    .researchandreview .board-member-card {
-        padding: 1.8rem;
-    }
-    
-    .researchandreview .board-member-card .member-name {
-        font-size: 1.4rem;
-    }
-}
-
-/* Mobile devices */
-@media (max-width: 640px) {
-    .researchandreview .board-grid {
-        grid-template-columns: 1fr;
-        gap: 1.8rem;
-    }
-    
-    .researchandreview .page-header {
-        margin: 3rem 0 2.5rem;
-        padding: 1.8rem 0;
-        border-radius: 12px;
-    }
-    
-    .researchandreview .page-header h1 {
-        font-size: 1.9rem;
-    }
-    
-    .researchandreview .page-header h1::after {
-        width: 80px;
-        height: 4px;
-        bottom: -10px;
-    }
-    
-    .researchandreview .board-member-card {
-        padding: 1.6rem;
-        border-radius: 14px;
-    }
-    
-    .researchandreview .board-member-card .member-name {
-        font-size: 1.35rem;
-    }
-    
-    .researchandreview .institution-line .institution-department {
-        font-size: 1.1rem;
-    }
-    
-    .researchandreview .container {
-        padding: 0 1.2rem;
-    }
-}
-
-/* Small mobile devices */
-@media (max-width: 480px) {
-    .researchandreview .page-header h1 {
-        font-size: 1.7rem;
-    }
-    
-    .researchandreview .board-member-card {
-        padding: 1.4rem;
-        border-radius: 12px;
-    }
-    
-    .researchandreview .board-member-card .member-name {
-        font-size: 1.3rem;
-    }
-    
-    .researchandreview .board-member-card .member-role {
-        font-size: 0.9rem;
-        padding: 0.45rem 1rem;
-    }
-    
-    .researchandreview .institution-line {
-        margin: 8px 0;
-    }
-    
-    .researchandreview .institution-line .institution-text {
-        font-size: 1rem;
-    }
-    
-    .researchandreview {
-        padding: 1.5rem 0;
-    }
-}
-
-/* Smooth scrolling for the entire page */
-.researchandreview {
-    scroll-behavior: smooth;
-}
-
-/* Custom scrollbar */
-.researchandreview::-webkit-scrollbar {
-    width: 10px;
-}
-
-.researchandreview::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-.researchandreview::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, var(--brand-orange), var(--brand-blue-primary));
-    border-radius: 10px;
-}
-
-.researchandreview::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(to bottom, var(--brand-orange-dark), var(--brand-blue-dark));
-}

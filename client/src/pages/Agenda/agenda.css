@@ -30,7 +30,6 @@
 /* --- Base Page & Hero Styles --- */
 .agenda-page {
     background-color: var(--surface-light);
-    /* A large negative margin can be tricky. Ensure your navbar setup accommodates this. */
     margin-top: -200px; 
 }
 .agenda-container { width: 100%; max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--gutter); }
@@ -113,43 +112,26 @@
 
 /* --- Responsive (Mobile) --- */
 @media (max-width: 768px) {
-    .agenda-schedule-container { padding: 1.5rem; }
+    .agenda-page{margin-top: -125px;}
+    .agenda-schedule-container { padding: 1.5rem;}
     .agenda-grid { grid-template-columns: 1fr; gap: 0; }
     .agenda-time-slot { display: none; }
     .agenda-card { width: 100%; margin-bottom: 1rem; }
-    .agenda-event-duration { display: block; }
-    .agenda-card-header { flex-wrap: wrap; }
-
-    /* FIXED: Added styles for mobile */
-    .agenda-hero {
-        padding: 5rem 0; /* Reduced padding on hero */
-    }
-    .agenda-countdown-container {
-        gap: 0.5rem; /* Reduced gap for countdown */
-        flex-wrap: wrap; /* Allow items to wrap */
-    }
-    .agenda-countdown-item {
-        flex: 1; /* Allow items to grow and fill space */
-        min-width: 80px; /* Set a smaller minimum width */
-        padding: 0.75rem;
-    }
-    .agenda-countdown-number {
-        font-size: 2.5rem;
-    }
-    .agenda-tabs {
-        flex-direction: column; /* Stack tabs vertically */
+    
+    /* FIXED: This rule ensures the clock icon and time are on the same line */
+    .agenda-event-duration {
+        display: flex;
+        align-items: center;
         gap: 0.5rem;
     }
-    .agenda-tab-btn {
-        padding: 1rem;
-        border-bottom: 2px solid var(--surface-dark);
-    }
-    .agenda-tab-btn.active::after {
-        /* Hide the bottom bar on mobile, active state is clear enough */
-        display: none;
-    }
-    .agenda-tab-btn.active {
-        background-color: var(--surface-dark);
-        border-radius: var(--radius);
-    }
+    
+    .agenda-card-header { flex-wrap: wrap; }
+    .agenda-hero { padding: 5rem 0; }
+    .agenda-countdown-container { gap: 0.5rem; flex-wrap: wrap; }
+    .agenda-countdown-item { flex: 1; min-width: 80px; padding: 0.75rem; }
+    .agenda-countdown-number { font-size: 2.5rem; }
+    .agenda-tabs { flex-direction: column; gap: 0.5rem; }
+    .agenda-tab-btn { padding: 1rem; border-bottom: 2px solid var(--surface-dark); }
+    .agenda-tab-btn.active::after { display: none; }
+    .agenda-tab-btn.active { background-color: var(--surface-dark); border-radius: var(--radius); }
 }
