@@ -1,4 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom"; 
+import axios from "axios";
 
 // --- SVG Icons for Social Buttons ---
 const GoogleIcon = () => (
@@ -38,7 +42,7 @@ const styles = {
     position: "relative",
   },
   title: {
-    fontSize: "1.75rem", // matches RegistrationForm
+    fontSize: "1.75rem",
     fontWeight: 700,
     color: "var(--brand-blue-dark)",
     margin: "6px 0 22px",
@@ -112,13 +116,46 @@ const styles = {
     cursor: "pointer",
   },
 };
-
 function SignInForm({ onSwitch, onClose }) {
-  const [showPwd, setShowPwd] = React.useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const [showPwd, setShowPwd] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const { data } = await axios.post(
+        "https://it-con-backend.onrender.com/api/users/signin",
+        { login: email, password },
+        { withCredentials: true } // allows CORS cookies if backend supports it
+      );
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data));
+
+      toast.success("Signed in successfully 🎉");
+      setTimeout(() => {
+        onClose?.();
+        navigate("/register");
+      }, 1500);
+
+    } catch (err) {
+      const msg = err.response?.data?.message || "Sign in failed";
+      setError(msg);
+      toast.error(msg + " ❌");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div style={styles.card}>
-      {/* Close button */}
       <button
         onClick={onClose}
         style={{
@@ -139,65 +176,73 @@ function SignInForm({ onSwitch, onClose }) {
 
       <h2 style={styles.title}>Sign In</h2>
 
-      {/* Email */}
-      <div style={styles.inputGroup}>
-        <label style={styles.inputLabel} htmlFor="email">Email address</label>
-        <input id="email" type="email" placeholder="Email address" style={styles.input} required />
-      </div>
-
-      {/* Password */}
-      <div style={styles.inputGroup}>
-        <label style={styles.inputLabel} htmlFor="password">Password</label>
-        <div style={styles.passwordWrapper}>
+      <form onSubmit={handleSubmit}>
+        <div style={styles.inputGroup}>
+          <label style={styles.inputLabel} htmlFor="email">Email address</label>
           <input
-            id="password"
-            type={showPwd ? "text" : "password"}
-            placeholder="Password"
-            style={{ ...styles.input, paddingRight: "55px" }}
+            id="email"
+            type="email"
+            placeholder="Email address"
+            style={styles.input}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <button
-            type="button"
-            aria-label="Toggle password visibility"
-            style={styles.toggleBtn}
-            onClick={() => setShowPwd((s) => !s)}
-          >
-            {showPwd ? "Hide" : "Show"}
-          </button>
         </div>
-      </div>
 
-      {/* Submit */}
-      <button type="submit" style={styles.primaryBtn}>
-        Sign In
-      </button>
+        <div style={styles.inputGroup}>
+          <label style={styles.inputLabel} htmlFor="password">Password</label>
+          <div style={styles.passwordWrapper}>
+            <input
+              id="password"
+              type={showPwd ? "text" : "password"}
+              placeholder="Password"
+              style={{ ...styles.input, paddingRight: "55px" }}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              style={styles.toggleBtn}
+              onClick={() => setShowPwd((s) => !s)}
+            >
+              {showPwd ? "Hide" : "Show"}
+            </button>
+          </div>
+        </div>
 
-      {/* Or divider */}
+        {error && <p style={{ color: "red", fontSize: "0.9rem", marginTop: "6px" }}>{error}</p>}
+
+        <button type="submit" style={styles.primaryBtn} disabled={loading}>
+          {loading ? "Signing In..." : "Sign In"}
+        </button>
+      </form>
+
       <div style={styles.orRow}>
         <span style={styles.orLine} />
         <span style={{ margin: "0 12px" }}>or sign in with</span>
         <span style={styles.orLine} />
       </div>
 
-      {/* Social buttons */}
       <div style={styles.socialRow}>
         <button style={styles.socialBtn} aria-label="Sign in with Google"><GoogleIcon /></button>
         <button style={styles.socialBtn} aria-label="Sign in with Apple"><AppleIcon /></button>
         <button style={styles.socialBtn} aria-label="Sign in with Microsoft"><MicrosoftIcon /></button>
       </div>
 
-      {/* Switch to sign up */}
       <p style={{ textAlign: "center", marginTop: "16px", color: "var(--text-secondary)", fontSize: "0.9rem" }}>
         Don’t have an account?{" "}
-        <button
-          onClick={onSwitch}
-          style={{ ...styles.link, background: "none", border: "none", padding: 0 }}
-        >
+        <button onClick={onSwitch} style={{ ...styles.link, background: "none", border: "none", padding: 0 }}>
           Create one
         </button>
       </p>
+
+      <ToastContainer position="top-right" autoClose={2000} hideProgressBar />
     </div>
   );
 }
 
-export default SignInForm;
+export default function SignIn({ onSwitch, onClose }) {
+  return <SignInForm onSwitch={onSwitch} onClose={onClose} />;
+}

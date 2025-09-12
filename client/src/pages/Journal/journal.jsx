@@ -1,10 +1,5 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import './journal.css';
-
-// The CSS styles are now embedded within this component to resolve the import error.
-
-
-
 
 // --- Icon Components ---
 const PublicationIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>);
@@ -31,8 +26,8 @@ const JournalItem = ({ number, title, eISSN, publisher }) => (
   </div>
 );
 
-const Section = ({ title, icon, children }) => (
-  <section className="section">
+const Section = ({ title, icon, children, ...props }) => (
+  <section className="section" {...props}>
     <div className="section-header">
       <IconWrapper>{icon}</IconWrapper>
       <h2 className="section-title">{title}</h2>
@@ -44,7 +39,7 @@ const Section = ({ title, icon, children }) => (
 );
 
 // --- Main Component ---
-function JournalComponent() {
+function Journal() {
   const journals = [
     { title: 'Title of the Book Chapter: “Integrated Sustainable Engineering Solutions: An Intelligent Multidisciplinary Approach”', eISSN: 'ISSN to be announced' },
     { title: 'Journal of Data Science', eISSN: '2805-5160', publisher: '(iPublishing Network, INTI International University)' },
@@ -53,8 +48,33 @@ function JournalComponent() {
     { title: 'INTI Journal', eISSN: '2600-7320', publisher: '(iPublishing Network, INTI International University)' },
   ];
 
+  const pageRef = useRef(null);
+
+  useEffect(() => {
+    const elementsToAnimate = pageRef.current.querySelectorAll('.journal-header, .section, .support-section-container');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    elementsToAnimate.forEach((el, index) => {
+        el.style.transitionDelay = `${index * 0.1}s`;
+        observer.observe(el);
+    });
+
+    return () => {
+        elementsToAnimate.forEach(el => observer.unobserve(el));
+    };
+}, []);
+
+
   return (
-    <div className="journal-page">
+    <div className="journal-page" ref={pageRef}>
       <div className="journal-container">
         <div className="journal-content">
           <header className="journal-header">
@@ -107,11 +127,5 @@ function JournalComponent() {
   );
 }
 
-export default function App() {
-  return (
-    <React.Fragment>
-      <JournalComponent />
-    </React.Fragment>
-  );
-}
+export default Journal;
 

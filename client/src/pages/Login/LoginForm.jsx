@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // --- SVG Icons for Social Buttons ---
 const GoogleIcon = () => (
@@ -38,7 +41,7 @@ const styles = {
     position: "relative",
   },
   title: {
-    fontSize: "1.75rem", // matches h2 scale
+    fontSize: "1.75rem",
     fontWeight: 700,
     color: "var(--brand-blue-dark)",
     margin: "6px 0 22px",
@@ -105,13 +108,6 @@ const styles = {
     cursor: "pointer",
     background: "var(--white)",
   },
-  disclaimer: {
-    marginTop: "16px",
-    fontSize: "0.8rem",
-    color: "var(--text-secondary)",
-    textAlign: "center",
-    lineHeight: 1.5,
-  },
   link: {
     color: "var(--brand-orange)",
     textDecoration: "none",
@@ -122,94 +118,108 @@ const styles = {
 
 function RegistrationForm({ onSwitch, onClose }) {
   const [showPwd, setShowPwd] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const { data } = await axios.post(
+        "https://it-con-backend.onrender.com/api/users/signup",
+        { name, email, password }, // ✅ name matches backend
+        { withCredentials: true }
+      );
+
+      localStorage.setItem("user", JSON.stringify(data));
+      toast.success("Account created successfully 🎉");
+      setTimeout(() => onClose?.(), 1500);
+
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Registration failed ⚠");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div style={styles.card}>
-      {/* Close button */}
-      <button
-        onClick={onClose}
-        style={{
-          position: "absolute",
-          top: "12px",
-          right: "16px",
-          background: "none",
-          border: "none",
-          fontSize: "28px",
-          fontWeight: "bold",
-          color: "var(--text-secondary)",
-          cursor: "pointer",
-          lineHeight: "1",
-        }}
-      >
-        &times;
-      </button>
-
+      <button onClick={onClose} style={{ position: "absolute", top: "12px", right: "16px", background: "none", border: "none", fontSize: "28px", fontWeight: "bold", cursor: "pointer" }}>&times;</button>
       <h2 style={styles.title}>Create Account</h2>
 
-      {/* Full Name */}
-      <div style={styles.inputGroup}>
-        <label style={styles.inputLabel} htmlFor="name">Full name</label>
-        <input id="name" type="text" placeholder="Full name" style={styles.input} required />
-      </div>
-
-      {/* Email */}
-      <div style={styles.inputGroup}>
-        <label style={styles.inputLabel} htmlFor="email">Email address</label>
-        <input id="email" type="email" placeholder="Email address" style={styles.input} required />
-      </div>
-
-      {/* Password */}
-      <div style={styles.inputGroup}>
-        <label style={styles.inputLabel} htmlFor="password">Password</label>
-        <div style={styles.passwordWrapper}>
+      <form onSubmit={handleSubmit}>
+        <div style={styles.inputGroup}>
+          <label style={styles.inputLabel} htmlFor="name">Full name</label>
           <input
-            id="password"
-            type={showPwd ? "text" : "password"}
-            placeholder="Password"
-            style={{ ...styles.input, paddingRight: "55px" }}
+            id="name"
+            type="text"
+            placeholder="Full name"
+            style={styles.input}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             required
           />
-          <button
-            type="button"
-            aria-label="Toggle password visibility"
-            style={styles.toggleBtn}
-            onClick={() => setShowPwd((s) => !s)}
-          >
-            {showPwd ? "Hide" : "Show"}
-          </button>
         </div>
-      </div>
 
-      {/* Submit */}
-      <button type="submit" style={styles.primaryBtn}>
-        Create Account
-      </button>
+        <div style={styles.inputGroup}>
+          <label style={styles.inputLabel} htmlFor="email">Email address</label>
+          <input
+            id="email"
+            type="email"
+            placeholder="Email address"
+            style={styles.input}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
 
-      {/* Or divider */}
+        <div style={styles.inputGroup}>
+          <label style={styles.inputLabel} htmlFor="password">Password</label>
+          <div style={styles.passwordWrapper}>
+            <input
+              id="password"
+              type={showPwd ? "text" : "password"}
+              placeholder="Password"
+              style={{ ...styles.input, paddingRight: "55px" }}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button type="button" style={styles.toggleBtn} onClick={() => setShowPwd((s) => !s)}>
+              {showPwd ? "Hide" : "Show"}
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" style={styles.primaryBtn} disabled={loading}>
+          {loading ? "Creating..." : "Create Account"}
+        </button>
+      </form>
+
       <div style={styles.orRow}>
         <span style={styles.orLine} />
         <span style={{ margin: "0 12px" }}>or sign up with</span>
         <span style={styles.orLine} />
       </div>
 
-      {/* Social buttons */}
       <div style={styles.socialRow}>
-        <button style={styles.socialBtn} aria-label="Sign up with Google"><GoogleIcon /></button>
-        <button style={styles.socialBtn} aria-label="Sign up with Apple"><AppleIcon /></button>
-        <button style={styles.socialBtn} aria-label="Sign up with Microsoft"><MicrosoftIcon /></button>
+        <button style={styles.socialBtn}><GoogleIcon /></button>
+        <button style={styles.socialBtn}><AppleIcon /></button>
+        <button style={styles.socialBtn}><MicrosoftIcon /></button>
       </div>
 
-
-      {/* Switch to login */}
       <p style={{ textAlign: "center", marginTop: "6px", color: "var(--text-secondary)", fontSize: "0.9rem" }}>
         Have an account?{" "}
-        <button
-          onClick={onSwitch}
-          style={{ ...styles.link, background: "none", border: "none", padding: 0 }}
-        >
+        <button onClick={onSwitch} style={{ ...styles.link, background: "none", border: "none", padding: 0 }}>
           Log in
         </button>
       </p>
+
+      <ToastContainer position="top-right" autoClose={2000} hideProgressBar />
     </div>
   );
 }

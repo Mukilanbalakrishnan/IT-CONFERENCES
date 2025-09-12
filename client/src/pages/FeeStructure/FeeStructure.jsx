@@ -1,6 +1,6 @@
 import React from 'react';
 import './FeeStructure.css';
-import { FaUserGraduate, FaChalkboardTeacher, FaBuilding, FaUserFriends, FaToolbox, FaRegCalendarAlt, FaClock } from 'react-icons/fa';
+import { FaUserGraduate, FaChalkboardTeacher, FaBuilding, FaUserFriends, FaToolbox, FaRegCalendarAlt, FaClock, FaInfoCircle } from 'react-icons/fa';
 
 // --- Data for Fee Structure ---
 const feeData = [
@@ -84,12 +84,34 @@ const FeeStructure = () => {
                     <p>All prices are in Indian Rupees (INR). Choose the plan that suits you best and register early to save!</p>
                 </div>
 
+                <div className="fees-notes-section">
+                       <h3 className="notes-title">Important Dates</h3>
+                       <div className="notes-grid">
+                            {importantNotes.map((note, index) => (
+                                <div className="note-item" key={index}>
+                                    <div className="note-icon">{note.icon}</div>
+                                    <div className="note-text">
+                                        <strong>{note.title}:</strong> {note.text}
+                                    </div>
+                                </div>
+                            ))}
+                       </div>
+                </div>
+
+                <div className="fees-disclaimer">
+                    <div className="disclaimer-icon"><FaInfoCircle /></div>
+                    <div className="disclaimer-text">
+                        <strong>Please Note:</strong> The conference fee is based on the team lead's registration category. For teams led by a student, the on-site fee is ₹12,000. For teams led by an academic/researcher, the on-site fee is ₹14,000. Payment will only be collected <strong>after</strong> abstract approval.
+                    </div>
+                </div>
+
+
                 <div className="fees-grid-layout">
                     {/* Top Row: First 3 cards */}
                     <div className="fees-row fees-row-top">
                         {feeData.slice(0, 3).map((fee, index) => (
                             <div className={`fee-card ${fee.featured ? 'featured' : ''}`} key={index}>
-                               {fee.featured && <div className="featured-badge">Most Popular</div>}
+                                {fee.featured && <div className="featured-badge">Most Popular</div>}
                                 <div className="fee-card-icon">
                                     {fee.icon}
                                 </div>
@@ -119,7 +141,7 @@ const FeeStructure = () => {
                     <div className="fees-row fees-row-bottom">
                         {feeData.slice(3).map((fee, index) => (
                             <div className={`fee-card ${fee.featured ? 'featured' : ''}`} key={index}>
-                               {fee.featured && <div className="featured-badge">Most Popular</div>}
+                                {fee.featured && <div className="featured-badge">Most Popular</div>}
                                 <div className="fee-card-icon">
                                     {fee.icon}
                                 </div>
@@ -145,25 +167,10 @@ const FeeStructure = () => {
                         ))}
                     </div>
                 </div>
-
-                <div className="fees-notes-section">
-                     <h3 className="notes-title">Important Dates</h3>
-                     <div className="notes-grid">
-                        {importantNotes.map((note, index) => (
-                            <div className="note-item" key={index}>
-                                <div className="note-icon">{note.icon}</div>
-                                <div className="note-text">
-                                    {/* Bolding the dynamic text directly */}
-                                    <strong>{note.title}:</strong> <strong>{note.text}</strong>
-                                </div>
-                            </div>
-                        ))}
-                     </div>
-                </div>
-
             </div>
         </section>
     );
 };
 
 export default FeeStructure;
+

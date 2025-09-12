@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-// This component now includes its own styles, refactored to be fully responsive.
+// This component now includes its own styles.
 const componentStyles = `
 /* --- Global Styles & Variables --- */
 :root {
@@ -23,68 +23,48 @@ body {
 .main-container {
     width: 100%;
     max-width: 72rem; /* 1152px */
-    margin: 4rem auto 1rem; /* Increased top margin for mobile */
+    margin: 2rem auto;
     display: grid;
     grid-template-columns: 1fr;
     border-radius: 1.5rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     overflow: hidden;
 }
 
-/* Tablet and larger screens */
 @media (min-width: 1024px) {
     .main-container {
-        margin: 6rem auto 2rem; /* Increased top margin */
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
 /* --- Left Panel --- */
 .left-panel {
-    background-image: linear-gradient(rgba(13, 71, 161, 0.85), rgba(13, 71, 161, 0.95)), url('https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80');
+    background-image: linear-gradient(rgba(13, 71, 161, 0.8), rgba(13, 71, 161, 0.9)), url('https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80');
     background-size: cover;
     background-position: center;
     color: white;
-    padding: 2rem;
+    padding: 2rem 3rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-@media (min-width: 768px) {
-    .left-panel {
-        padding: 2rem 3rem;
-    }
-}
-
 .left-panel-title {
-    font-size: 1.5rem; /* Adjusted for mobile */
+    font-size: 1.875rem;
     font-weight: 800;
     margin-bottom: 0.5rem;
 }
-@media (min-width: 768px) {
-    .left-panel-title {
-        font-size: 1.875rem;
-    }
-}
-
 
 .left-panel-subtitle {
-    font-size: 1rem; /* Adjusted for mobile */
+    font-size: 1.125rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
     color: #bfdbfe; /* blue-200 */
-}
-@media (min-width: 768px) {
-    .left-panel-subtitle {
-       font-size: 1.125rem;
-    }
 }
 
 .left-panel-description {
     color: #dbeafe; /* blue-100 */
     line-height: 1.6;
-    font-size: 0.9rem;
 }
 
 .left-panel-info {
@@ -111,6 +91,7 @@ body {
 
 /* --- Right Panel (Form) --- */
 .right-panel {
+    grid-column: span 1 / span 1;
     background-color: white;
 }
 @media (min-width: 1024px) {
@@ -120,33 +101,22 @@ body {
 }
 
 .form-header {
-    background-color: var(--brand-orange);
+    background-color: var(--brand-blue-dark);
     color: white;
     text-align: center;
-    padding: 1.5rem;
+    padding: 1.5rem 2rem;
 }
 
 .form-title {
-    font-size: 1.25rem; /* Adjusted for mobile */
-    color: white;
+    font-size: 1.5rem;
     font-weight: 700;
-}
-@media (min-width: 768px) {
-    .form-title {
-        font-size: 1.5rem;
-    }
 }
 
 .form-body {
-    padding: 1.5rem; /* Adjusted for mobile */
+    padding: 2rem 2.5rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
-}
-@media (min-width: 768px) {
-    .form-body {
-        padding: 2rem 2.5rem;
-    }
 }
 
 /* --- Form Elements --- */
@@ -157,27 +127,18 @@ body {
 }
 
 .fieldset-legend {
-    font-size: 1.125rem; /* Adjusted for mobile */
+    font-size: 1.25rem;
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #e5e7eb;
 }
-@media (min-width: 768px) {
-    .fieldset-legend {
-        font-size: 1.25rem;
-    }
-}
 
-.form-section-spacing {
-    display: flex;
-    flex-direction: column;
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 1.5rem;
-}
-
-.form-group-spacing {
-    margin-top: 1.5rem;
 }
 
 .form-grid-cols-2 {
@@ -196,12 +157,14 @@ body {
     margin-bottom: 0.5rem;
     font-weight: 500;
     color: var(--text-primary);
-    font-size: 0.9rem;
 }
 .form-label-sm {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
     font-size: 0.875rem;
 }
-
 
 .form-input, .form-select, .form-textarea, .form-input-sm {
     width: 100%;
@@ -209,7 +172,6 @@ body {
     border-radius: 0.5rem;
     transition: all 0.2s ease;
     box-sizing: border-box;
-    background-color: white;
 }
 
 .form-input, .form-select, .form-textarea {
@@ -217,7 +179,7 @@ body {
 }
 
 .form-input-sm {
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem;
     border-radius: 0.375rem;
 }
 
@@ -254,7 +216,7 @@ body {
 }
 
 /* --- Participants --- */
-.participant-list {
+#participantsContainer {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -282,18 +244,6 @@ body {
     .participant-field-full {
         grid-column: span 2 / span 2;
     }
-}
-.checkbox-group {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.5rem 0;
-}
-.form-checkbox {
-    height: 1.1rem;
-    width: 1.1rem;
-    border-radius: 0.25rem;
-    border-color: #d1d5db;
 }
 
 /* --- Buttons --- */
@@ -324,7 +274,6 @@ body {
     padding: 0.5rem 1rem;
     border-radius: 0.375rem;
     width: auto;
-    margin-top: 1rem;
 }
 .btn-add:hover {
     background-color: #1565C0;
@@ -341,7 +290,6 @@ body {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.25rem;
 }
 .btn-remove:hover {
     text-decoration: underline;
@@ -363,18 +311,12 @@ body {
     background-color: white;
     border-radius: 1.5rem;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    max-width: 32rem;
+    max-width: 32rem; /* 512px */
     width: 100%;
-    padding: 1.5rem;
+    padding: 2rem;
     text-align: center;
     position: relative;
 }
-@media (min-width: 768px) {
-    .modal-content {
-        padding: 2rem;
-    }
-}
-
 
 .modal-close-btn {
     position: absolute;
@@ -386,6 +328,9 @@ body {
     font-size: 1.875rem;
     line-height: 1;
     cursor: pointer;
+}
+.modal-close-btn:hover {
+    color: #374151;
 }
 
 .modal-icon-wrapper {
@@ -407,14 +352,9 @@ body {
 }
 
 .modal-title {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: #111827;
-}
-@media (min-width: 768px) {
-    .modal-title {
-        font-size: 1.5rem;
-    }
 }
 
 .modal-description {
@@ -449,7 +389,7 @@ const ParticipantInput = ({ index, participant, handleParticipantChange, removeP
         </div>
         <div className="form-grid-cols-2">
             <div>
-                <label className="form-label form-label-sm">Full Name</label>
+                <label className="form-label-sm">Full Name</label>
                 <input
                     type="text"
                     name="name"
@@ -461,23 +401,19 @@ const ParticipantInput = ({ index, participant, handleParticipantChange, removeP
                 />
             </div>
             <div>
-                <label className="form-label form-label-sm">Designation</label>
-                <select
+                <label className="form-label-sm">Designation</label>
+                <input
+                    type="text"
                     name="designation"
+                    placeholder="e.g., Professor, Student"
                     value={participant.designation}
                     onChange={(e) => handleParticipantChange(index, e)}
-                    className="form-input-sm form-select"
+                    className="form-input-sm"
                     required
-                >
-                    <option value="" disabled>Select a designation...</option>
-                    <option value="Student (with ID)">Student (with ID)</option>
-                    <option value="Academic/Researcher">Academic/Researcher</option>
-                    <option value="Industry/Corporate">Industry/Corporate</option>
-                    <option value="Accompanying Person">Accompanying Person</option>
-                </select>
+                />
             </div>
             <div className="participant-field-full">
-                <label className="form-label form-label-sm">Organisation</label>
+                <label className="form-label-sm">Organisation</label>
                 <input
                     type="text"
                     name="organisation"
@@ -489,7 +425,7 @@ const ParticipantInput = ({ index, participant, handleParticipantChange, removeP
                 />
             </div>
             <div>
-                <label className="form-label form-label-sm">Email Address</label>
+                <label className="form-label-sm">Email Address</label>
                 <input
                     type="email"
                     name="email"
@@ -501,7 +437,7 @@ const ParticipantInput = ({ index, participant, handleParticipantChange, removeP
                 />
             </div>
             <div>
-                <label className="form-label form-label-sm">Phone Number</label>
+                <label className="form-label-sm">Phone Number</label>
                 <input
                     type="tel"
                     name="phone"
@@ -512,25 +448,14 @@ const ParticipantInput = ({ index, participant, handleParticipantChange, removeP
                     required
                 />
             </div>
-            {/* <div className="participant-field-full checkbox-group">
-                <input
-                    type="checkbox"
-                    id={`isHostMember_${index}`}
-                    name="isHostMember"
-                    checked={participant.isHostMember}
-                    onChange={(e) => handleParticipantChange(index, e)}
-                    className="form-checkbox"
-                />
-                <label htmlFor={`isHostMember_${index}`} className="form-label-sm">Affiliated with Host Organization</label>
-            </div> */}
         </div>
     </div>
 );
 
 // Main Registration Form Component
-const RegistrationForm = () => {
+const Register = () => {
     const [participants, setParticipants] = useState([
-        { name: '', designation: '', organisation: '', email: '', phone: '', isHostMember: false }
+        { name: '', designation: '', organisation: '', email: '', phone: '' }
     ]);
     const [formData, setFormData] = useState({
         address: '',
@@ -546,15 +471,14 @@ const RegistrationForm = () => {
     const [submittedData, setSubmittedData] = useState(null);
 
     const handleParticipantChange = (index, event) => {
-        const { name, value, type, checked } = event.target;
         const newParticipants = [...participants];
-        newParticipants[index][name] = type === 'checkbox' ? checked : value;
+        newParticipants[index][event.target.name] = event.target.value;
         setParticipants(newParticipants);
     };
 
     const addParticipant = () => {
         if (participants.length < 4) {
-            setParticipants([...participants, { name: '', designation: '', organisation: '', email: '', phone: '', isHostMember: false }]);
+            setParticipants([...participants, { name: '', designation: '', organisation: '', email: '', phone: '' }]);
         }
     };
 
@@ -616,7 +540,7 @@ const RegistrationForm = () => {
                     <form onSubmit={handleSubmit} className="form-body">
                         <fieldset className="form-fieldset">
                             <legend className="fieldset-legend">Participant Details (1-4)</legend>
-                            <div className="participant-list">
+                            <div id="participantsContainer">
                                 {participants.map((p, index) => (
                                     <ParticipantInput
                                         key={index}
@@ -627,14 +551,14 @@ const RegistrationForm = () => {
                                     />
                                 ))}
                             </div>
-                            <button type="button" onClick={addParticipant} className="btn-add" disabled={participants.length >= 4}>
+                            <button type="button" onClick={addParticipant} className="btn btn-add" disabled={participants.length >= 4}>
                                 + Add Another Participant
                             </button>
                         </fieldset>
 
                         <fieldset className="form-fieldset">
                             <legend className="fieldset-legend">Contact Information</legend>
-                            <div className="form-section-spacing">
+                            <div className="form-grid">
                                 <div>
                                     <label htmlFor="address" className="form-label">Mailing Address</label>
                                     <textarea id="address" name="address" value={formData.address} onChange={handleFormChange} placeholder="Enter your full mailing address" className="form-textarea" required></textarea>
@@ -654,22 +578,20 @@ const RegistrationForm = () => {
 
                         <fieldset className="form-fieldset">
                             <legend className="fieldset-legend">Abstract Submission</legend>
-                            <div className="form-section-spacing">
-                                <div className="form-grid-cols-2">
-                                    <div>
-                                        <label htmlFor="track" className="form-label">Conference Track</label>
-                                        <select id="track" name="track" value={formData.track} onChange={handleFormChange} className="form-select" required>
-                                            <option value="" disabled>Select a Conference Track...</option>
-                                            <option value="Track 1: Innovative and Sustainable Smart Technologies in Electrical Engineering">Track 1: Electrical Engineering</option>
-                                            <option value="Track 2: Innovative and Sustainable Smart Technologies in Communication Engineering">Track 2: Communication Engineering</option>
-                                            <option value="Track 3: Innovative and Sustainable Smart Technologies in Biomedical Engineering">Track 3: Biomedical Engineering</option>
-                                            <option value="Track 4: Innovative and Sustainable Smart Technologies in Computer Science and Multidisciplinary Applications">Track 4: Computer Science & Multidisciplinary</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label htmlFor="abstractTitle" className="form-label">Abstract Title</label>
-                                        <input type="text" id="abstractTitle" name="abstractTitle" value={formData.abstractTitle} onChange={handleFormChange} placeholder="Enter the title of your abstract" className="form-input" required />
-                                    </div>
+                            <div className="form-grid">
+                                <div>
+                                    <label htmlFor="track" className="form-label">Conference Track</label>
+                                    <select id="track" name="track" value={formData.track} onChange={handleFormChange} className="form-select" required>
+                                        <option value="" disabled>Select a Conference Track...</option>
+                                        <option value="Track 1: Innovative and Sustainable Smart Technologies in Electrical Engineering">Track 1: Electrical Engineering</option>
+                                        <option value="Track 2: Innovative and Sustainable Smart Technologies in Communication Engineering">Track 2: Communication Engineering</option>
+                                        <option value="Track 3: Innovative and Sustainable Smart Technologies in Biomedical Engineering">Track 3: Biomedical Engineering</option>
+                                        <option value="Track 4: Innovative and Sustainable Smart Technologies in Computer Science and Multidisciplinary Applications">Track 4: Computer Science & Multidisciplinary</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label htmlFor="abstractTitle" className="form-label">Abstract Title</label>
+                                    <input type="text" id="abstractTitle" name="abstractTitle" value={formData.abstractTitle} onChange={handleFormChange} placeholder="Enter the title of your abstract" className="form-input" required />
                                 </div>
                                 <div>
                                     <label htmlFor="abstractContent" className="form-label">Abstract Content</label>
@@ -710,5 +632,4 @@ const RegistrationForm = () => {
     );
 };
 
-export default RegistrationForm;
-
+export default Register;
