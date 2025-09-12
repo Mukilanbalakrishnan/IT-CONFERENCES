@@ -1,6 +1,7 @@
 /* --- Global Variables (assumed from your project) --- */
 :root {
     --brand-orange: #F57C00;
+    --brand-orange-dark: #E65100; /* For hover */
     --brand-blue-dark: #0D47A1;
     --brand-blue-primary: #1976D2;
     --brand-blue-light: #E3F2FD;
@@ -19,10 +20,25 @@
     background-color: var(--surface-light);
     padding: 2rem 1rem;
 }
+
+/* --- Scroll Animation Styles --- */
 .content-section {
     max-width: 1200px;
     margin: 0 auto 3rem auto;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
+
+.content-section.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.content-section:nth-of-type(2) { transition-delay: 0.1s; }
+.content-section:nth-of-type(3) { transition-delay: 0.2s; }
+
+
 .content-section h2 {
     font-size: 2rem;
     font-weight: 700;
@@ -31,7 +47,7 @@
     text-align: center;
 }
 
-/* --- MOBILE-FIRST CARD DESIGN (UNCHANGED) --- */
+/* --- MOBILE-FIRST CARD DESIGN --- */
 .info-table {
     border: none;
     width: 100%;
@@ -64,7 +80,6 @@
     font-weight: 600;
     color: var(--text-primary);
 }
-/* Hide the content box on mobile, as the rows are the cards */
 .content-box {
     border: none;
     padding: 0;
@@ -92,13 +107,12 @@
     transform: scale(1.05);
 }
 
-/* --- DESKTOP TABLE VIEW (CORRECTED) --- */
+/* --- DESKTOP TABLE VIEW --- */
 @media (min-width: 768px) {
     .venue-page {
         padding: 4rem 1.5rem;
     }
     
-    /* This is the main card container for the table */
     .content-box {
         background-color: var(--white);
         border: 1px solid var(--surface-dark);
@@ -155,7 +169,7 @@
     }
 }
 
-/* --- Modal Styles (prefixed to avoid conflicts) --- */
+/* --- Modal Styles --- */
 .venue-modal-overlay {
     position: fixed; top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(17, 19, 24, 0.7); backdrop-filter: blur(4px);
@@ -180,3 +194,66 @@
 .venue-modal-body h3 { font-size: 2rem; color: var(--brand-blue-dark); margin: 0 0 0.5rem; }
 .venue-modal-meta { color: var(--text-secondary); margin-bottom: 1.5rem; }
 .venue-modal-map { margin-top: 1.5rem; border-radius: var(--radius); overflow: hidden; }
+
+
+/* --- Accommodation Section Styles --- */
+.accommodation-info {
+    text-align: center;
+}
+
+.accommodation-info p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto 2.5rem auto;
+}
+
+.hotel-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap; /* Allows buttons to stack on smaller screens */
+    margin-bottom: 2.5rem;
+}
+
+.btn-link {
+    background-color: var(--brand-orange);
+    color: var(--white);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+}
+
+.btn-link:hover {
+    background-color: var(--brand-orange-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+}
+
+.accommodation-note {
+    background-color: var(--brand-blue-light);
+    border-left: 4px solid var(--brand-blue-primary);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    text-align: left;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.accommodation-note .note-icon {
+    font-size: 1.5rem;
+    color: var(--brand-blue-primary);
+    margin-top: 0.2rem;
+}
+
+.accommodation-note strong {
+    color: var(--brand-blue-dark);
+    font-weight: 700;
+}
+

@@ -1,6 +1,6 @@
-
-import React, { useState } from 'react';
-import './Venue.css'; // Import the new stylesheet
+import React, { useState, useEffect, useRef } from 'react';
+import './Venue.css';
+import { FaHotel, FaInfoCircle } from 'react-icons/fa';
 
 const eventData = [
     {
@@ -11,7 +11,7 @@ const eventData = [
         time: '09:30 AM',
         description: 'The official opening of the Global Summit 2025, featuring a welcome address by the Chairman.',
         image: 'https://placehold.co/600x400/0D47A1/FFFFFF?text=KSR+Auditorium',
-        map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d412.3821538239442!2d77.8316064585666!3d11.358322062973798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964017038dfe3%3A0xd5a68d71e9c1aec7!2sK%20S%20R%20College%20of%20Engineering!5e0!3m2!1sen!2sin!4v1754895362135!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
+        map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3911.644171271156!2d77.8489028152769!3d11.39958939192667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964036a282d51%3A0x32ed249929221163!2sK.S.Rangasamy+College+of+Technology!5e0!3m2!1sen!2sin!4v1517838243628" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
     },
     {
         id: 'evt2',
@@ -21,7 +21,7 @@ const eventData = [
         time: '11:00 AM',
         description: 'A thought-provoking keynote address by renowned AI researcher Dr. Maya Singh.',
         image: 'https://placehold.co/600x400/F57C00/FFFFFF?text=Conference+Hall',
-        map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d412.3821538239442!2d77.8316064585666!3d11.358322062973798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964017038dfe3%3A0xd5a68d71e9c1aec7!2sK%20S%20R%20College%20of%20Engineering!5e0!3m2!1sen!2sin!4v1754895362135!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
+        map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3911.644171271156!2d77.8489028152769!3d11.39958939192667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964036a282d51%3A0x32ed249929221163!2sK.S.Rangasamy+College+of+Technology!5e0!3m2!1sen!2sin!4v1517838243628" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
     },
 ];
 
@@ -35,7 +35,7 @@ const hostelData = [
         lunch: '12:30 - 1:30 PM',
         dinner: '7:30 - 8:30 PM',
         image: 'https://placehold.co/600x400/1976D2/FFFFFF?text=Men%27s+Hostel',
-        map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d412.3821538239442!2d77.8316064585666!3d11.358322062973798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964017038dfe3%3A0xd5a68d71e9c1aec7!2sK%20S%20R%20College%20of%20Engineering!5e0!3m2!1sen!2sin!4v1754895362135!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
+        map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3911.644171271156!2d77.8489028152769!3d11.39958939192667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964036a282d51%3A0x32ed249929221163!2sK.S.Rangasamy+College+of+Technology!5e0!3m2!1sen!2sin!4v1517838243628" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
     },
     {
         id: 'hst2',
@@ -46,7 +46,7 @@ const hostelData = [
         lunch: '12:30 - 1:30 PM',
         dinner: '7:30 - 8:30 PM',
         image: 'https://placehold.co/600x400/D32F2F/FFFFFF?text=Women%27s+Hostel',
-        map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d412.3821538239442!2d77.8316064585666!3d11.358322062973798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964017038dfe3%3A0xd5a68d71e9c1aec7!2sK%20S%20R%20College%20of%20Engineering!5e0!3m2!1sen!2sin!4v1754895362135!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
+        map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3911.644171271156!2d77.8489028152769!3d11.39958939192667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964036a282d51%3A0x32ed249929221163!2sK.S.Rangasamy+College+of+Technology!5e0!3m2!1sen!2sin!4v1517838243628" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
     },
 ];
 
@@ -74,6 +74,42 @@ const DetailModal = ({ item, onClose }) => {
     );
 };
 
+// Reusable Section component with scroll animation logic
+const AnimatedSection = ({ id, title, children }) => {
+    const sectionRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.unobserve(entry.target);
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        const currentRef = sectionRef.current;
+        if (currentRef) {
+            observer.observe(currentRef);
+        }
+
+        return () => {
+            if (currentRef) {
+                observer.unobserve(currentRef);
+            }
+        };
+    }, []);
+
+    return (
+        <section id={id} ref={sectionRef} className={`content-section ${isVisible ? 'is-visible' : ''}`}>
+            <h2>{title}</h2>
+            {children}
+        </section>
+    );
+};
+
 
 const Venue = () => {
     const [selectedItem, setSelectedItem] = useState(null);
@@ -81,8 +117,7 @@ const Venue = () => {
     return (
         <>
             <main className="venue-page">
-                <section id="venue" className="content-section">
-                    <h2>Event Schedule</h2>
+                <AnimatedSection id="venue" title="Event Schedule">
                     <div className="content-box">
                         <table className="info-table">
                             <thead>
@@ -109,39 +144,62 @@ const Venue = () => {
                             </tbody>
                         </table>
                     </div>
-                </section>
+                </AnimatedSection>
 
-                <section id="accommodation" className="content-section">
-                    <h2>Hostel & Dining</h2>
-                     <div className="content-box">
-                        <table className="info-table">
-                            <thead>
-                                <tr>
-                                    <th>Hostel Name</th>
-                                    <th>Breakfast</th>
-                                    <th>Lunch</th>
-                                    <th>Dinner</th>
-                                    <th>Details</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {hostelData.map((hostel) => (
-                                    <tr key={hostel.id}>
-                                        <td data-label="Hostel Name">{hostel.name}</td>
-                                        <td data-label="Breakfast">{hostel.breakfast}</td>
-                                        <td data-label="Lunch">{hostel.lunch}</td>
-                                        <td data-label="Dinner">{hostel.dinner}</td>
-                                        <td data-label="Action">
-                                            <button className="btn btn-details" onClick={() => setSelectedItem(hostel)}>
-                                                View Details
-                                            </button>
-                                        </td>
+                <AnimatedSection id="hostel-dining" title="Hostel & Dining">
+                       <div className="content-box">
+                            <table className="info-table">
+                                <thead>
+                                    <tr>
+                                        <th>Hostel Name</th>
+                                        <th>Breakfast</th>
+                                        <th>Lunch</th>
+                                        <th>Dinner</th>
+                                        <th>Details</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {hostelData.map((hostel) => (
+                                        <tr key={hostel.id}>
+                                            <td data-label="Hostel Name">{hostel.name}</td>
+                                            <td data-label="Breakfast">{hostel.breakfast}</td>
+                                            <td data-label="Lunch">{hostel.lunch}</td>
+                                            <td data-label="Dinner">{hostel.dinner}</td>
+                                            <td data-label="Action">
+                                                <button className="btn btn-details" onClick={() => setSelectedItem(hostel)}>
+                                                    View Details
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                </AnimatedSection>
+                
+                <AnimatedSection id="accommodation-details" title="Accommodation Details">
+                    <div className="content-box">
+                        <div className="accommodation-info">
+                            <p>
+                                For participants attending the conference, here are some recommended hotels in Erode and Tiruchengode.
+                            </p>
+                            <div className="hotel-links">
+                                <a href="https://www.makemytrip.com/hotels/erode-hotels.html" target="_blank" rel="noopener noreferrer" className="btn btn-link">
+                                    <FaHotel /> Hotels in Erode
+                                </a>
+                                <a href="https://www.makemytrip.com/hotels/tiruchengode-hotels.html" target="_blank" rel="noopener noreferrer" className="btn btn-link">
+                                    <FaHotel /> Hotels in Tiruchengode
+                                </a>
+                            </div>
+                            <div className="accommodation-note">
+                                <FaInfoCircle className="note-icon" />
+                                <div>
+                                    <strong>Note:</strong> On-campus hostel accommodation is available upon request. For more information, please check the main conference website.
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </section>
+                </AnimatedSection>
             </main>
             <DetailModal item={selectedItem} onClose={() => setSelectedItem(null)} />
         </>
@@ -149,3 +207,4 @@ const Venue = () => {
 };
 
 export default Venue;
+

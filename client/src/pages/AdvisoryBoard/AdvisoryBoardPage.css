@@ -1,4 +1,3 @@
-
 /* --- Animation Keyframes --- */
 @keyframes fadeInUp {
     from {
@@ -11,140 +10,181 @@
     }
 }
 
-/* --- Global Variables --- */
-:root {
-    --brand-orange: #F57C00;
-    --brand-blue-dark: #0D47A1;
-    --brand-blue-primary: #1976D2;
-    --text-primary: #111318;
-    --text-secondary: #6c757d;
-    --page-max-width: 1200px;
-    --gutter: 1.25rem;
+/* --- Base Page Styles --- */
+.advisory-board {
+    background-color: var(--surface-light);
+    padding: clamp(3rem, 8vw, 6rem) 1rem;
+    font-family: 'Poppins', sans-serif;
 }
 
-/* --- General Container (reusable) --- */
-.container {
+.advisory-board .container {
     width: 100%;
     max-width: var(--page-max-width);
     margin: 0 auto;
     padding: 0 var(--gutter);
 }
 
-/* --- Page Section --- */
-.team-section {
-    padding: 5rem 0;
+/* --- Page Header --- */
+.advisory-board .page-header {
     text-align: center;
+    margin-bottom: 4rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.advisory-board .page-header.is-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-.team-header {
-    margin-bottom: 3rem;
-    animation: fadeInUp 0.5s ease-out;
+
+.advisory-board .page-header h1 {
+    font-size: clamp(2.2rem, 5vw, 3rem);
+    color: var(--brand-blue-dark);
+    margin: 0 0 0.75rem 0;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.75rem;
 }
 
-.team-header .subtitle {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin: 0;
-}
-
-.team-header .title {
-    font-size: 2.5rem;
-    color: var(--text-primary);
-    font-weight: 800;
-    margin: 0.5rem 0;
-}
-
-.team-header .title::after {
+.advisory-board .page-header h1::after {
     content: '';
-    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 60px;
-    height: 3px;
+    height: 4px;
     background-color: var(--brand-orange);
-    margin: 1rem auto 0;
+    border-radius: 2px;
 }
 
-.team-grid {
+.advisory-board .page-header:not(:first-of-type) {
+    margin-top: 5rem; /* Space between the two committee sections */
+}
+
+/* --- Grid for Advisory Board Members --- */
+.advisory-board .board-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2.5rem;
 }
 
-/* --- Team Member Profile Card --- */
-.team-member-profile {
+/* --- Individual Member Card Styling --- */
+.advisory-board .board-member-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--surface-dark);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    opacity: 0;
-    animation: fadeInUp 0.7s ease-out forwards;
-}
-
-.image-container {
-    width: 180px;
-    height: 180px;
-    margin-bottom: 1.5rem;
+    text-align: left;
     position: relative;
-    cursor: pointer;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out, box-shadow 0.3s ease;
 }
 
-.hexagon-svg {
-    transition: transform 0.3s ease;
-}
-
-.team-member-profile:hover .hexagon-svg {
-    transform: scale(1.05);
-}
-
-/* --- SVG Hexagon Border Animation --- */
-.hexagon-border {
-    fill: none;
-    stroke-width: 8;
-    stroke-linecap: round;
-    /* Total path length is 565. Half is ~282.5 */
-    /* This creates a pattern of a dash and a gap of equal length */
-    stroke-dasharray: 282.5 282.5; 
-    transition: stroke-dashoffset 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-/* Blue half of the border */
-.border-blue {
-    stroke: var(--brand-blue-primary);
-    stroke-dashoffset: 0;
-}
-
-/* Orange half of the border */
-.border-orange {
-    stroke: var(--brand-orange);
-    /* This offset makes the orange part draw the second half */
-    stroke-dashoffset: -282.5; 
-}
-
-/* On hover, animate both halves */
-.team-member-profile:hover .hexagon-border {
-    stroke-dashoffset: 282.5;
+.advisory-board .board-member-card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 
-.team-member-profile .name {
-    font-size: 1.3rem;
-    font-weight: 700;
+.advisory-board .board-member-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    transition: all 0.3s ease;
+}
+
+
+.advisory-board .board-member-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-strong);
+}
+
+/* --- Alternating Card Colors --- */
+/* Odd Cards: Blue Theme */
+.advisory-board .board-member-card:nth-child(odd)::before {
+    background-color: var(--brand-blue-primary);
+}
+.advisory-board .board-member-card:nth-child(odd):hover::before {
+    background-color: var(--brand-orange);
+    height: 6px;
+}
+.advisory-board .board-member-card:nth-child(odd) .member-role {
+    color: var(--brand-blue-dark);
+    background-color: var(--brand-blue-light);
+}
+
+/* Even Cards: Orange Theme */
+.advisory-board .board-member-card:nth-child(even)::before {
+    background-color: var(--brand-orange);
+}
+.advisory-board .board-member-card:nth-child(even):hover::before {
+    background-color: var(--brand-blue-primary);
+    height: 6px;
+}
+.advisory-board .board-member-card:nth-child(even) .member-role {
+    color: var(--brand-orange-dark);
+    background-color: rgba(245, 124, 0, 0.1);
+}
+
+
+.advisory-board .member-name {
     color: var(--text-primary);
-    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0; /* Increased bottom margin */
+    line-height: 1.3;
 }
 
-.team-member-profile .role {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-    margin: 0.25rem 0 1rem 0;
+.advisory-board .member-role {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin: 0 0 1.25rem 0;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    display: inline-block;
 }
 
-.team-member-profile .bio {
+/* --- Institution Lines --- */
+.advisory-board .member-institution {
+    margin-top: auto; /* Pushes to the bottom */
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--surface-dark);
+}
+
+.advisory-board .institution-line {
+    margin: 0;
     font-size: 0.95rem;
     color: var(--text-secondary);
-    line-height: 1.6;
+    line-height: 1.5;
 }
+
+.advisory-board .institution-line:not(:last-child) {
+    margin-bottom: 0.25rem;
+}
+
+.advisory-board .institution-department {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* --- Responsive adjustments --- */
+@media (max-width: 768px) {
+    .advisory-board .board-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+

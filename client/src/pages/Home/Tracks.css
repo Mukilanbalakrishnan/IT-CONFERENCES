@@ -1,16 +1,3 @@
-/* --- Global Variables (assumed from your project) --- */
-:root {
-    --brand-orange: #F57C00;
-    --brand-blue-dark: #0D47A1;
-    --brand-red: #D32F2F;
-    --brand-blue-primary: #1976D2;
-    --text-primary: #111318;
-    --text-secondary: #6c757d;
-    --white: #FFFFFF;
-    --surface-light: #f8f9fa;
-    --surface-dark: #e9ecef;
-    --radius: 12px;
-}
 
 /* --- Base Section Styling --- */
 .tracks-section {
