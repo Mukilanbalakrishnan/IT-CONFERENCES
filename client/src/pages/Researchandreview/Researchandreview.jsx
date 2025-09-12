@@ -1,5 +1,5 @@
 import React from 'react';
-import './Researchandreview.model.css';
+import './Researchandreview.css';
 
 
 

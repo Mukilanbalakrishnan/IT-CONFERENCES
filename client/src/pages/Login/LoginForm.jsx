@@ -139,7 +139,7 @@ function RegistrationForm({ onSwitch, onClose }) {
       setTimeout(() => onClose?.(), 1500);
 
     } catch (err) {
-      toast.error(err.response?.data?.message || "Registration failed ⚠️");
+      toast.error(err.response?.data?.message || "Registration failed ⚠");
     } finally {
       setLoading(false);
     }
@@ -191,7 +191,7 @@ function RegistrationForm({ onSwitch, onClose }) {
             />
             <button type="button" style={styles.toggleBtn} onClick={() => setShowPwd((s) => !s)}>
               {showPwd ? "Hide" : "Show"}
-            </button>
+            </button> 
           </div>
         </div>
 

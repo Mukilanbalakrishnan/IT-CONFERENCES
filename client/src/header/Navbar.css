@@ -3,13 +3,14 @@ body {
     overflow-x: hidden;
     margin: 0;
     padding: 0;
+    padding-top: 6rem;
 }
 body.body-no-scroll { overflow: hidden; }
 
 /* ===== NAVBAR SIZING (edit these) ===== */
 :root {
-    --nav-height-desktop: 88px; /* header height on desktop */
-    --nav-height-mobile: 68px;  /* header height on mobile */
+     --nav-height-desktop: 88px; /* header height on desktop */
+     --nav-height-mobile: 68px;  /* header height on mobile */
 }
 
 /* --- Header / Navbar --- */
@@ -17,11 +18,12 @@ body.body-no-scroll { overflow: hidden; }
     background: rgba(108,108,109,0.5);
     backdrop-filter: blur(10px);
     position: fixed;
-    inset: 0 0 auto 0;        /* top:0; left:0; right:0 */
+    inset: 0 0 auto 0;          /* top:0; left:0; right:0 */
     width: 100%;
     z-index: 50;
     border-bottom: 1px solid rgba(255,255,255,0.1);
     transition: background-color .4s ease, box-shadow .4s ease, border-bottom .4s ease;
+
     height: var(--nav-height-desktop);
     display: flex;
     align-items: center;
@@ -51,10 +53,10 @@ body.body-no-scroll { overflow: hidden; }
     list-style: none;
     padding: 0;
     margin: 0;
-    gap: 1.8rem; /* MODIFIED: Reduced from 2rem to create more space */
+    gap: 1.5rem; 
     font-weight: 600;
     align-items: center;
-    font-size: 1.1rem;
+    font-size: 1rem;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -76,11 +78,22 @@ body.body-no-scroll { overflow: hidden; }
     text-shadow: none;
 }
 .desktop-nav a:hover,
-.desktop-nav a.active,
-.nav-item-dropdown:hover .dropdown-trigger { color: var(--brand-orange, #F57C00); }
+.desktop-nav a.active {
+    color: var(--brand-orange, #F57C00); 
+}
+
+/* This ensures the active/hover color overrides the scrolled text color */
+.header.scrolled .desktop-nav a:hover,
+.header.scrolled .desktop-nav a.active {
+    color: var(--brand-orange, #F57C00);
+}
+
 
 /* --- Dropdowns --- */
 .nav-item-dropdown { position: relative; cursor: pointer; padding: .5rem 0; }
+.nav-item-dropdown:hover .dropdown-trigger {
+    color: var(--brand-orange, #F57C00);
+}
 .nav-item-dropdown-content {
     opacity: 0; visibility: hidden; position: absolute; top: 120%; left: 50%;
     transform: translateX(-50%) scale(.95); padding: .5rem; min-width: 16rem;
@@ -154,14 +167,3 @@ body.body-no-scroll { overflow: hidden; }
     .mobile-menu-button { display: none; }
 }
 
-/* ===== Push content below fixed header ===== */
-main {
-    padding-top: var(--nav-height-desktop);
-}
-@media (max-width: 1023.98px) {
-    main { padding-top: var(--nav-height-mobile); }
-}
-
-body.is-home-page main {
-    padding-top: 0;
-}

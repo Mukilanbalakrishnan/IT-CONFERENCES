@@ -1,12 +1,12 @@
 /* --- KSR Conference Global CSS --- */
 :root{
   /* Brand Palette (from reference images) */
-  --brand-orange: #F57C00;        /* Vibrant orange for primary actions */
-  --brand-orange-dark: #E65100;   /* Darker orange for hover states */
-  --brand-blue-dark: #0D47A1;     /* Deep navy blue from banners/headings */
+  --brand-orange: #F57C00;      /* Vibrant orange for primary actions */
+  --brand-orange-dark: #E65100;  /* Darker orange for hover states */
+  --brand-blue-dark: #0D47A1;    /* Deep navy blue from banners/headings */
   --brand-blue-primary: #1976D2;  /* A versatile primary blue for info text */
   --brand-blue-light: #E3F2FD;    /* Very light blue for subtle backgrounds */
-  --brand-red: #D32F2F;           /* Secondary action red */
+  --brand-red: #D32F2F;          /* Secondary action red */
 
   /* Neutrals */
   --text-primary: #111318;      /* Dark charcoal for primary text */
@@ -20,11 +20,17 @@
   --gutter: 1.25rem;
   --radius: 12px;
   --shadow-soft: 0 6px 20px rgba(17,19,24,0.06);
+
+  /* Navbar Heights */
+  --nav-height-desktop: 88px;
+  --nav-height-mobile: 68px;
 }
 
 /* Global resets */
-*{box-sizing:border-box}
-html,body{height:100%}
+*{
+  box-sizing:border-box
+}
+
 body{
   margin:0;
   font-family: 'Poppins', "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -33,7 +39,6 @@ body{
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   line-height:1.55;
-  padding:0;
 }
 
 h1, h2, h3 { font-weight: 700; }
@@ -51,53 +56,13 @@ p { color: var(--text-secondary); }
   padding:0 var(--gutter);
 }
 
-/* --- Header / Navbar --- */
-.header{
-  background:var(--white);
-  border-bottom:1px solid var(--surface-dark);
-  position:sticky;
-  top:0;
-  z-index:50;
+/* --- Push content below fixed header --- */
+main {
+    padding-top: calc(var(--nav-height-desktop) + 2rem);
 }
-.header .inner{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:1rem;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+body.is-home-page main {
+    padding-top: 0;
 }
-.brand{
-  display:flex;
-  align-items:center;
-  gap:0.75rem;
-  text-decoration:none;
-  color: var(--brand-orange);
-}
-.brand .brand-text{
-  font-weight:800;
-  font-size:1.25rem;
-  letter-spacing:0.2px;
-}
-.brand .brand-sub{
-  font-weight:500;
-  color: var(--text-secondary);
-  font-size:0.875rem;
-}
-.nav{
-  display:flex;
-  gap:1.5rem;
-  align-items:center;
-}
-.nav a{
-  color: var(--text-primary);
-  text-decoration:none;
-  padding:0.5rem;
-  border-radius:8px;
-  font-weight:600;
-  transition: all 0.2s ease;
-}
-.nav a:hover{ color: var(--brand-orange); }
 
 /* --- Buttons --- */
 .btn{
@@ -154,39 +119,29 @@ p { color: var(--text-secondary); }
   margin: 0;
 }
 .footer .links { display:flex; gap:1rem; flex-wrap:wrap; }
-.footer a { 
+.footer a {
     color: var(--white);
     font-weight: 500;
 }
-.footer a:hover { 
+.footer a:hover {
     color: var(--brand-orange);
     text-decoration: none;
 }
 
 /* --- Responsive Design for Global Elements --- */
 
-/* Tablet */
-@media (max-width: 900px) {
-  .nav {
-    gap: 1rem;
-  }
+@media (max-width: 1023.98px) {
+    main {
+        padding-top: calc(var(--nav-height-mobile) + 1.5rem);
+    }
 }
 
 /* Mobile */
 @media (max-width: 600px) {
-  .header .inner {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .nav {
-    display: none; /* Hide nav links on mobile; requires JS to toggle */
-  }
-  .header-actions {
-    display: none; /* Hide button on mobile */
-  }
   .footer .container {
     flex-direction: column;
     text-align: center;
     gap: 1rem;
   }
 }
+

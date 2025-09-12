@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import './ConferenceTracksPage.css'; // Make sure to link to the updated CSS file
+import './ConferenceTracksPage.css'; 
 
 const ConferenceTracksPage = () => {
     const allTracksData = [
@@ -65,19 +64,24 @@ const ConferenceTracksPage = () => {
     };
 
     return (
-        <div className="page-container">
-            <div className="content-wrapper">
-                <div className="tracks-grid">
+        <div className="ctp-tracks-page-container">
+            <div className="ctp-tracks-content-wrapper">
+                <header className="ctp-tracks-page-header">
+                    <h1>Conference Tracks</h1>
+                    <p>Explore the diverse themes and sessions that form the core of our conference.</p>
+                </header>
+
+                <div className="ctp-tracks-grid">
                     {allTracksData.map((track) => (
-                        <div key={track.id} className={`track-card ${track.styleClass}`}>
-                            <div className="track-content">
-                                <h2 className="track-title">{track.title}</h2>
-                                <p className="track-summary">{track.shortSummary}</p>
-                                <div className="buttons-row">
-                                    <a href={"/register"} className="btn btn-primary">
+                        <div key={track.id} className={`ctp-track-card ${track.styleClass}`}>
+                            <div className="ctp-track-content">
+                                <h2 className="ctp-track-title">{track.title}</h2>
+                                <p className="ctp-track-summary">{track.shortSummary}</p>
+                                <div className="ctp-buttons-row">
+                                    <a href={"/register"} className="ctp-btn ctp-btn-primary">
                                         Register Now
                                     </a>
-                                    <button onClick={() => handleViewDetails(track)} className="btn btn-secondary">
+                                    <button onClick={() => handleViewDetails(track)} className="ctp-btn ctp-btn-secondary">
                                         View Details
                                     </button>
                                 </div>
@@ -88,56 +92,53 @@ const ConferenceTracksPage = () => {
             </div>
 
             {selectedTrack && (
-                <div className="modal-overlay" onClick={handleCloseModal}>
+                <div className="ctp-modal-overlay" onClick={handleCloseModal}>
                     <div
-                        className={`track-detail-card ${selectedTrack.styleClass}`}
+                        className={`ctp-track-detail-card ${selectedTrack.styleClass}`}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="track-header">
-                            <h1 className="track-main-title">{selectedTrack.title}</h1>
-                            <button className="modal-close-btn" onClick={handleCloseModal}>
+                        <div className="ctp-modal-header">
+                            <h1 className="ctp-track-main-title">{selectedTrack.title}</h1>
+                            <button className="ctp-modal-close-btn" onClick={handleCloseModal}>
                                 &times;
                             </button>
                         </div>
 
-                        <div className="modal-scroll-content">
-                            <div className="track-meta-section">
-                                <div className="speaker-info">
+                        <div className="ctp-modal-scroll-content">
+                            <div className="ctp-track-meta-section">
+                                <div className="ctp-speaker-info">
                                     <img
                                         src={selectedTrack.speakerImage}
                                         alt={selectedTrack.speaker}
-                                        className="speaker-image"
+                                        className="ctp-speaker-image"
                                     />
-                                    <div className="speaker-details">
-                                        <h2 className="speaker-name">{selectedTrack.speaker}</h2>
-                                        <p className="speaker-about">{selectedTrack.speakerAbout}</p>
+                                    <div className="ctp-speaker-details">
+                                        <h2 className="ctp-speaker-name">{selectedTrack.speaker}</h2>
+                                        <p className="ctp-speaker-about">{selectedTrack.speakerAbout}</p>
                                     </div>
                                 </div>
                                 <div
-                                    className="session-time"
-                                    style={{
-                                        borderColor: `var(--${selectedTrack.styleClass.split('-')[1]}-border)`,
-                                    }}
+                                    className="ctp-session-time"
                                 >
                                     <p><strong>Date:</strong> {selectedTrack.date}</p>
                                     <p><strong>Time:</strong> {selectedTrack.time}</p>
                                 </div>
                             </div>
 
-                            <div className="track-summary-content">
+                            <div className="ctp-track-summary-content">
                                 <h3>Session Overview</h3>
                                 <p>{selectedTrack.longSummary}</p>
                             </div>
                         </div>
 
-                        <div className="modal-footer">
+                        <div className="ctp-modal-footer">
                             <a
                                 href={`#/register?track=${selectedTrack.id}`}
-                                className="btn btn-primary"
+                                className="ctp-btn ctp-btn-primary"
                             >
                                 Register Now
                             </a>
-                            <button className="btn btn-secondary" onClick={handleCloseModal}>
+                            <button className="ctp-btn ctp-btn-secondary" onClick={handleCloseModal}>
                                 Back
                             </button>
                         </div>
