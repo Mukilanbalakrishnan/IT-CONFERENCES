@@ -334,10 +334,7 @@ const handleOpenPopup = () => {
         </div>
         <ul className="mobile-nav-links">
           <li><NavLink to="/" className={navLinkClass} onClick={() => setSideMenu(false)}>Home</NavLink></li>
-          <li><NavLink to="/agenda" className={navLinkClass} onClick={() => setSideMenu(false)}>Agenda</NavLink></li>
-          <li><NavLink to="/speaker" className={navLinkClass} onClick={() => setSideMenu(false)}>Speaker</NavLink></li>
-          <li className="mobile-dropdown">
-            <details>
+          <details>
               <summary>Committees <IoIosArrowDown /></summary>
               <div className="mobile-dropdown-content">
                 <p onClick={() => { navigate("/committees/advisory-board"); setSideMenu(false); }}>Advisory Board</p>
@@ -345,6 +342,10 @@ const handleOpenPopup = () => {
                 <p onClick={() => { navigate("/committees/research-and-review-committee"); setSideMenu(false); }}>Research and Review Committee</p>
               </div>
             </details>
+          <li><NavLink to="/agenda" className={navLinkClass} onClick={() => setSideMenu(false)}>Agenda</NavLink></li>
+          <li><NavLink to="/speaker" className={navLinkClass} onClick={() => setSideMenu(false)}>Speaker</NavLink></li>
+          <li className="mobile-dropdown">
+            
           </li>
           <li><NavLink to="/conferencetrack" className={navLinkClass} onClick={() => setSideMenu(false)}>Tracks</NavLink></li>
           <li><NavLink to="/venue" className={navLinkClass} onClick={() => setSideMenu(false)}>Venue</NavLink></li>

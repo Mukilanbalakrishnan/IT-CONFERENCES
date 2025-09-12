@@ -1,159 +1,183 @@
 /* --- Animation Keyframes --- */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
+ from {
+  opacity: 0;
+  transform: translateY(30px) scale(0.98);
+ }
+ to {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+ }
+}
+
+/* === NEW: Keyframe for the circle drawing animation === */
+@keyframes draw-circle {
   to {
-    opacity: 1;
-    transform: translateY(0);
+    stroke-dashoffset: 0;
   }
 }
 
 /* --- Page Header --- */
 .event-page-header {
-  text-align: center;
-  padding: 3rem 0;
-  background-color: #8ec5fd;
-  animation: fadeInUp 0.5s ease-out;
-  margin-top: -100px;
+ text-align: center;
+ padding: 2rem;
+ animation: fadeInUp 0.6s ease-out;
+ margin-top: -100px;
 }
-
 .event-page-header h1 {
-  font-size: 2.5rem;
-  color: var(--brand-blue-dark);
-  margin: 0;
+ font-size: clamp(2rem, 4vw, 2.75rem); 
+ font-weight: 800;
+ color: var(--brand-blue-dark);
+ margin: 0 0 0.5rem 0;
+ text-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
-
 .event-page-header p {
-  font-size: 1.1rem;
-  color: var(--brand-blue-primary);
-  max-width: 700px;
-  margin: 0.5rem auto 0;
+ font-size: clamp(0.95rem, 2vw, 1.1rem);
+ color: var(--text-secondary);
+ max-width: 600px;
+ margin: 0.5rem auto 0;
 }
 
 /* --- Event Speakers Section --- */
 .event-speakers-section {
-  padding: 5rem 0;
+ padding: 6rem 0;
+ background-color: #f8fafc;
 }
-
 .event-speakers-grid {
-  display: grid;
-  /* MODIFIED: Changed from 3 to 4 columns */
-  grid-template-columns: repeat(4, 1fr); 
-  gap: 6rem 2rem; /* Adjusted column gap for better spacing */
-  margin-top: 80px;
-  justify-items: center; 
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+ gap: 7rem 2rem;
+ margin-top: 80px;
+ justify-items: center; 
 }
 
-/* --- Responsive grid --- */
-@media (max-width: 1200px) { /* Added a new breakpoint for larger tablets */
-    .event-speakers-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 1024px) {
-  .event-speakers-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 cards on tablet */
-  }
-}
-
-@media (max-width: 768px) {
-  .event-speakers-grid {
-    grid-template-columns: 1fr; /* 1 card per row on mobile */
-  }
-}
-
-/* --- Speaker Card --- */
+/* --- Speaker Card with Scroll Animation --- */
 .event-speaker-profile {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 2rem;
-  padding-top: 100px;
-  width: 100%;
-  /* MODIFIED: Reduced max-width to better fit 4 cards */
-  max-width: 300px; 
-  min-height: 420px;
-  box-shadow: var(--shadow-soft);
-  text-align: center;
-  opacity: 0;
-  animation: fadeInUp 0.7s ease-out forwards;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative;
+ background: var(--white);
+ border-radius: 16px;
+ padding: 1.5rem;
+ padding-top: 90px;
+ width: 100%;
+ max-width: 320px; 
+ box-shadow: 0 10px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -2px rgba(0,0,0,0.05);
+ text-align: left;
+ transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+ position: relative;
+ display: flex;
+ flex-direction: column;
+ border-top: 4px solid var(--brand-blue-primary);
+ 
+ opacity: 0;
+ transform: translateY(30px) scale(0.98);
+ animation: fadeInUp linear forwards;
+ animation-timeline: view();
+ animation-range-start: entry 10%;
+ animation-range-end: entry 50%;
+  
+  /* === NEW: Named timeline for child animations === */
+  view-timeline-name: --speaker-card-timeline;
 }
 
 .event-speaker-profile:hover {
-  transform: translateY(-10px) scale(1.05);
-  box-shadow: var(--shadow-strong);
+ transform: translateY(-12px);
+ box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+ border-top-color: var(--brand-orange);
 }
 
 /* --- Speaker Image --- */
 .event-speaker-image-wrapper {
-  width: 220px;
-  height: 220px;
-  position: absolute;
-  top: -110px;
-  left: 50%;
-  transform: translateX(-50%);
+ width: 160px;
+ height: 160px;
+ position: absolute;
+ top: -80px;
+ left: 50%;
+ transform: translateX(-50%);
+ transition: transform 0.35s ease;
+ filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
 }
-
+.event-speaker-profile:hover .event-speaker-image-wrapper {
+ transform: translateX(-50%) scale(1.05);
+}
 .event-speaker-svg-border path {
-  fill: none;
-  stroke-width: 6;
-  stroke-linecap: round;
-  stroke-dasharray: 236;
-  stroke-dashoffset: 236;
-  transition: stroke-dashoffset 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+ fill: none;
+ stroke-width: 5;
+ stroke-linecap: round;
+ stroke-dasharray: 236;
+ stroke-dashoffset: 236;
+  /* This transition is for the DESKTOP hover effect */
+ transition: stroke-dashoffset 1s cubic-bezier(0.25, 1, 0.5, 1); 
 }
+.event-border-path-1 { stroke: var(--brand-blue-primary); }
+.event-border-path-2 { stroke: var(--brand-orange); }
 
-.event-border-path-1 {
-  stroke: var(--brand-blue-primary);
-}
-.event-border-path-2 {
-  stroke: var(--brand-orange);
-}
-
+/* This is the DESKTOP hover effect */
 .event-speaker-profile:hover .event-speaker-svg-border path {
-  stroke-dashoffset: 0;
+ stroke-dashoffset: 0;
 }
-
 .event-speaker-profile:hover .event-border-path-2 {
-  transition-delay: 0.2s;
+ transition-delay: 0.15s;
 }
 
 /* --- Speaker Info --- */
 .event-speaker-info {
-  margin-top: 1.5rem;
-  gap: 100px;
+ margin-top: 1rem;
+ flex-grow: 1; 
 }
-
 .event-speaker-info .event-name {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 0.5rem 0;
-  text-align: left;
+ font-size: 1.3rem;
+ font-weight: 700;
+ color: var(--text-primary);
+ margin: 0 0 0.25rem 0;
 }
-
-.event-speaker-info .event-title {
-  font-size: 1rem;
-  color: var(--brand-orange);
-  margin: 0 0 1rem 0;
-  font-weight: 600;
-  text-align: left;
+.event-speaker-info .event-title,
+.event-speaker-info .event-title2 {
+ font-size: 0.9rem;
+ color: var(--brand-blue-primary);
+ margin: 0;
+ font-weight: 500;
+ line-height: 1.4;
 }
 .event-speaker-info .event-title2 {
-  font-size: 1rem;
-  color: var(--brand-blue);
-  margin: 0 0 1rem 0;
-  font-weight: 600;
-  text-align: left;
+ color: var(--text-secondary);
+ margin-bottom: 1.25rem;
+}
+.event-speaker-info .event-bio {
+ font-size: 0.95rem;
+ color: var(--text-secondary);
+ line-height: 1.6;
+ margin: 0;
+ padding: 0;
 }
 
-.event-speaker-info .event-bio {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  line-height: 1.8;
-  text-align: left;
+/* --- Responsive adjustments --- */
+@media (max-width: 768px) {
+ .event-speakers-section {
+  padding: 4rem 1rem; /* Added horizontal padding for mobile */
+ }
+ .event-page-header {
+  padding: 4rem 1rem;
+ }
+  
+  /* === NEW: SCROLL-DRIVEN CIRCLE ANIMATION FOR MOBILE === */
+  
+  /* 1. We disable the hover effect on mobile to prevent conflicts on touch */
+  .event-speaker-profile:hover .event-speaker-svg-border path {
+      stroke-dashoffset: 236; /* Keep it at the starting position */
+  }
+
+  /* 2. Apply the drawing animation to the SVG paths */
+  .event-speaker-svg-border path {
+    animation: draw-circle linear forwards;
+    /* 3. Link this animation to the timeline we named on the parent card */
+    animation-timeline: --speaker-card-timeline;
+    /* 4. Define when the animation should run as the card scrolls */
+    animation-range-start: entry 25%;
+    animation-range-end: entry 70%;
+  }
+
+  /* 5. Add a slight delay to the second path to create the two-color effect */
+  .event-speaker-svg-border .event-border-path-2 {
+    animation-range-start: entry 35%;
+    animation-range-end: entry 80%;
+  }
 }
