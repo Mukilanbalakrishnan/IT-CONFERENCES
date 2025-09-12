@@ -191,7 +191,7 @@ function RegistrationForm({ onSwitch, onClose }) {
             />
             <button type="button" style={styles.toggleBtn} onClick={() => setShowPwd((s) => !s)}>
               {showPwd ? "Hide" : "Show"}
-            </button>
+            </button> 
           </div>
         </div>
 
