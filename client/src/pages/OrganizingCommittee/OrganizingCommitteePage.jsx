@@ -6,7 +6,7 @@ const OrganizingCommitteePage = () => {
     const committeeData = [
         { 
             id: 'publication', 
-            name: 'Publication Chair(s) – Coordinate Proceedings, Indexing & Journal Issues', 
+            name: 'Publication Chair(s)', 
             icon: <FaBook />,
             members: [
                 { name: 'Dr. S. Karthikeyan', role: 'Professor, ECE', institution: 'KSR College of Engineering, Tiruchengode, Tamilnadu, India' },
@@ -30,7 +30,7 @@ const OrganizingCommitteePage = () => {
         },
         { 
             id: 'finance', 
-            name: 'Finance / Sponsorship & Fundraising Committee', 
+            name: 'Finance / Sponsorship Committee', 
             icon: <FaMoneyBill />,
             members: [
                 { name: 'Mr. K. Karuppanasamy', role: 'Assistant Professor, ECE', institution: 'KSR College of Engineering, Tiruchengode, Tamilnadu, India' },
@@ -64,42 +64,17 @@ const OrganizingCommitteePage = () => {
         }
     ];
 
-  
-  const [activeCommittee, setActiveCommittee] = useState(null);
+ 
+  const [activeCommittee, setActiveCommittee] = useState(committeeData[0].id);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [hasInteracted, setHasInteracted] = useState(false);
     const detailRefs = useRef({});
 
     useEffect(() => {
-        // Check if there's a hash in the URL on initial load
-        const hash = window.location.hash.substring(1);
-        if (hash && committeeData.some(item => item.id === hash)) {
-            setActiveCommittee(hash);
-            setHasInteracted(true);
-            
-            // Scroll to the section after a short delay to ensure DOM is ready
-            setTimeout(() => {
-                detailRefs.current[hash]?.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-            }, 100);
-        }
-
-        const observer = new IntersectionObserver(  
+        const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        const newCommittee = entry.target.id;
-                        setActiveCommittee(newCommittee);
-                        setHasInteracted(true);
-                        
-                        // Update URL hash without adding to browser history
-                        if (window.history.replaceState) {
-                            window.history.replaceState(null, null, `#${newCommittee}`);
-                        } else {
-                            window.location.hash = `#${newCommittee}`;
-                        }
+                        setActiveCommittee(entry.target.id);
                     }
                 });
             },
@@ -110,63 +85,25 @@ const OrganizingCommitteePage = () => {
             if (ref) observer.observe(ref);
         });
 
-        // Handle browser back/forward button clicks
-        const handlePopState = () => {
-            const hash = window.location.hash.substring(1);
-            if (hash && committeeData.some(item => item.id === hash)) {
-                setActiveCommittee(hash);
-                setHasInteracted(true);
-                detailRefs.current[hash]?.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-            } else {
-                // If no hash or invalid hash, scroll to top
-                setActiveCommittee(null);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        };
-
-        window.addEventListener('popstate', handlePopState);
-
         return () => {
             Object.values(detailRefs.current).forEach(ref => {
                 if (ref) observer.unobserve(ref);
             });
-            window.removeEventListener('popstate', handlePopState);
         };
     }, []);
     
     const handleNavClick = (id) => {
         setIsMobileMenuOpen(false);
         setActiveCommittee(id);
-        setHasInteracted(true);
-        
-        // Update URL hash and add to browser history
-        if (window.history.pushState) {
-            window.history.pushState(null, null, `#${id}`);
-        } else {
-            window.location.hash = `#${id}`;
-        }
-        
         detailRefs.current[id]?.scrollIntoView({
             behavior: 'smooth',
             block: 'center'
         });
     };
-
-    const handleDropdownClick = () => {
-        setIsMobileMenuOpen(!isMobileMenuOpen);
-        // Set hasInteracted to true when dropdown is clicked
-        if (!hasInteracted) {
-            setHasInteracted(true);
-        }
-    };
-
+    
     const getActiveCommitteeName = () => {
-        if (!hasInteracted) return "";
         const active = committeeData.find(item => item.id === activeCommittee);
-        return active ? active.shortName : "";
+        return active ? active.name : "Select a Committee";
     };
 
     return (
@@ -181,11 +118,10 @@ const OrganizingCommitteePage = () => {
                 {/* Mobile Dropdown Navigation */}
                 <div className="mobile-nav-toggle">
                     <button 
-                        className={`mobile-dropdown-trigger ${!hasInteracted && !activeCommittee ? 'placeholder' : ''}`}
-                        onClick={handleDropdownClick}
+                        className="mobile-dropdown-trigger"
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         aria-expanded={isMobileMenuOpen}
                     >
-                        Explore our Committee
                         <span>{getActiveCommitteeName()}</span>
                         <FaChevronDown className={`dropdown-chevron ${isMobileMenuOpen ? 'open' : ''}`} />
                     </button>
@@ -226,18 +162,17 @@ const OrganizingCommitteePage = () => {
 
                 {/* Right Side Content */}
                 <div className="committee-details">
-                    {committeeData.map((item, index) => (
+                    {committeeData.map(item => (
                         <section 
                             id={item.id} 
                             key={item.id}
                             ref={el => detailRefs.current[item.id] = el}
                             className="detail-card"
-                            style={{ animationDelay:` ${index * 0.1}s` }}
                         >
                             <h3 className="detail-title">{item.icon} {item.name}</h3>
-                            <div className="mentor-list">
+                            <div className="member-grid">
                                 {item.members.map((member, i) => (
-                                    <div key={i} className="mentor-item">
+                                    <div key={i} className="member-item">
                                         <strong>{member.name}</strong>
                                         <span className="role">{member.role}</span>
                                         <span className="institution">{member.institution}</span>
@@ -253,3 +188,4 @@ const OrganizingCommitteePage = () => {
 };
 
 export default OrganizingCommitteePage;
+

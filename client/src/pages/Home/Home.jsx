@@ -12,6 +12,8 @@ import SignInForm from '/src/pages/Login/Signin';
 import RegistrationForm from '/src/pages/Login/LoginForm';
 import UpcomingDeadlines from './ImportentDates';
 import Convenor from './Convenor';
+import { useNavigate } from "react-router-dom";
+
 
 // --- Countdown Timer Component ---
 const Countdown = () => {
@@ -44,6 +46,7 @@ const Countdown = () => {
     if (!timeLeft[interval] && timeLeft[interval] !== 0) {
       return null;
     }
+    
     return (
       <div className="countdown-item" key={interval}>
         <span className="countdown-number">
@@ -67,50 +70,79 @@ const Countdown = () => {
   );
 };
 
-// --- Hero Component ---
+
 const Hero = ({ onOpenLogin }) => {
-    const title = "Joint International Conference on";
-    return (
-        <section className="hero">
-            <video autoPlay loop muted className="hero-video-bg">
-                <source src="https://res.cloudinary.com/dllbh1v1m/video/upload/v1754979177/vdo1_g6wq8h.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-            </video>
-            <div className="hero-content">
-                <div className="hero-title-decoration">
-                    <p className="kicker">S3-ECBE' 2026</p>
-                </div>
-                <h1 className="animated-title">
-                    {title.split(' ').map((word, wordIndex) => (
-                        <span key={wordIndex} className="animated-word">
-                            {word.split('').map((char, charIndex) => (
-                                <span
-                                    key={charIndex}
-                                    className="animated-char"
-                                    style={{ animationDelay: `${(wordIndex * 0.1) + (charIndex * 0.03)}s` }}
-                                >
-                                    {char}
-                                </span>
-                            ))}
-                            {'\u00A0'}
-                        </span>
-                    ))}
-                </h1>
-                <p className="hero-subtitle">
-                    Research and Innovation Smart and Sustainable Solutions in Electrical, Communication and Biomedical Engineering
-                </p>
-                 <p className="hero-date">
-                    March 26th Thursday & 27th Friday, 2026
-                </p>
-                <div className="hero-buttons">
-                    <button onClick={onOpenLogin} className="btn btn-primary">Submit a Paper</button>
-                    <button onClick={onOpenLogin} className="btn btn-secondary">View Tracks</button>
-                </div>
-            </div>
-            <Countdown />
-        </section>
-    );
+  const title = "Joint International Conference on";
+  const navigate = useNavigate();
+
+  
+  const handleSubmitPaper = () => {
+    onOpenLogin();
+  };
+
+ 
+  const handleViewTracks = () => {
+    navigate("/conferencetrack");
+  };
+
+  return (
+    <section className="hero">
+      <video autoPlay loop muted className="hero-video-bg">
+        <source
+          src="https://res.cloudinary.com/dllbh1v1m/video/upload/v1754979177/vdo1_g6wq8h.mp4"
+          type="video/mp4"
+        />
+        Your browser does not support the video tag.
+      </video>
+
+      <div className="hero-content">
+        <div className="hero-title-decoration">
+          <p className="kicker">S3-ECBE' 2026</p>
+        </div>
+
+        <h1 className="animated-title">
+          {title.split(" ").map((word, wordIndex) => (
+            <span key={wordIndex} className="animated-word">
+              {word.split("").map((char, charIndex) => (
+                <span
+                  key={charIndex}
+                  className="animated-char"
+                  style={{
+                    animationDelay: `${wordIndex * 0.1 + charIndex * 0.03}s`,
+                  }}
+                >
+                  {char}
+                </span>
+              ))}
+              {"\u00A0"}
+            </span>
+          ))}
+        </h1>
+
+        <p className="hero-subtitle">
+          Research and Innovation Smart and Sustainable Solutions in Electrical,
+          Communication and Biomedical Engineering
+        </p>
+        <p className="hero-date">
+          March 26th Thursday & 27th Friday, 2026
+        </p>
+
+        <div className="hero-buttons">
+          <button onClick={handleSubmitPaper} className="btn btn-primary">
+            Submit a Paper
+          </button>
+          <button onClick={handleViewTracks} className="btn btn-secondary">
+            View Tracks
+          </button>
+        </div>
+      </div>
+
+      <Countdown />
+    </section>
+  );
 };
+
+
 
 // --- Collaboration Section Component ---
 const Collaboration = () => {
