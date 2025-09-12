@@ -3,317 +3,153 @@
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(245, 124, 0, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(245, 124, 0, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(245, 124, 0, 0); }
+@keyframes glow {
+    0% { box-shadow: 0 0 5px rgba(245, 124, 0, 0.4), 0 0 10px rgba(245, 124, 0, 0.3); }
+    50% { box-shadow: 0 0 20px rgba(245, 124, 0, 0.6), 0 0 30px rgba(245, 124, 0, 0.5); }
+    100% { box-shadow: 0 0 5px rgba(245, 124, 0, 0.4), 0 0 10px rgba(245, 124, 0, 0.3); }
 }
 
-/* --- Global Variables (Assumed to be in a global CSS file like index.css) --- */
+/* --- Global Variables --- */
 :root {
     --brand-orange: #F57C00;
+    --brand-orange-light: #fff3e0;
     --brand-blue-dark: #0D47A1;
     --brand-blue-primary: #1976D2;
-    --brand-blue-light: #E3F2FD;
+    --brand-green: #388E3C;
     --text-primary: #111318;
     --text-secondary: #6c757d;
     --white: #FFFFFF;
-    --surface-light: #f8f9fa;
-    --surface-dark: #e9ecef;
-    --page-max-width: 1200px;
-    --gutter: 1.25rem;
+    --surface-light: #f8fafc;
+    --surface-dark: #eef2f7;
+    --border-color: #e2e8f0;
+    --page-max-width: 1100px;
+    --gutter: 1.5rem;
     --radius: 12px;
 }
 
-/* --- Page-Specific Styles for Agenda --- */
+/* --- Base Page & Hero Styles --- */
 .agenda-page {
     background-color: var(--surface-light);
-    margin-top: -100px;
+    /* A large negative margin can be tricky. Ensure your navbar setup accommodates this. */
+    margin-top: -200px; 
 }
+.agenda-container { width: 100%; max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--gutter); }
+.agenda-hero { padding: 7rem 0 6rem; text-align: center; color: var(--white); background-image: radial-gradient(circle at 50% 30%, rgba(13, 71, 161, 0.85) 0%, rgba(13, 71, 161, 0.95) 100%), url('https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2012&auto=format&fit=crop') no-repeat center center/cover; }
+.agenda-hero-title, .agenda-hero-subtitle { animation: fadeInUp 0.6s ease-out; }
+.agenda-hero-subtitle { animation-delay: 0.2s; }
+.agenda-countdown-container { animation: fadeInUp 0.6s 0.4s ease-out backwards; }
+.agenda-hero-title { font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 800; margin: 0 0 0.5rem; }
+.agenda-hero-subtitle { font-size: 1.2rem; max-width: 600px; margin: 0 auto 2.5rem; opacity: 0.9; }
 
-.agenda-container {
-    width: 100%;
-    max-width: var(--page-max-width);
-    margin: 0 auto;
-    padding: 0 var(--gutter);
-}
-
-/* --- Hero Section --- */
-.agenda-hero {
-    padding: 5rem 0;
-    text-align: center;
-    color: var(--white);
-    background: linear-gradient(rgba(13, 71, 161, 0.8), rgba(13, 71, 161, 0.8)), url('https://placehold.co/1920x1080/0D47A1/FFFFFF?text=Conference+Venue') no-repeat center center/cover;
-}
-.agenda-hero-title {
-    font-size: 3rem;
-    font-weight: 800;
-    margin: 0 0 0.5rem;
-    animation: fadeInUp 0.5s ease-out;
-}
-.agenda-hero-subtitle {
-    font-size: 1.2rem;
-    max-width: 600px;
-    margin: 0 auto 2rem;
-    opacity: 0.9;
-    animation: fadeInUp 0.5s 0.2s ease-out backwards;
-}
-
-/* --- Countdown Timer --- */
+/* --- Countdown --- */
 .agenda-countdown-container {
     display: flex;
     justify-content: center;
-    align-items: center;
     gap: 1.5rem;
-    animation: fadeInUp 0.5s 0.4s ease-out backwards;
 }
-
 .agenda-countdown-item {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px); /* For Safari */
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    background: var(--surface-dark);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     border-radius: var(--radius);
     padding: 1.25rem;
     min-width: 110px;
     text-align: center;
-    transition: transform 0.3s ease;
 }
-
-.agenda-countdown-item:hover {
-    transform: translateY(-5px);
-}
-
 .agenda-countdown-number {
-    font-size: 3.5rem;
+    font-size: clamp(2.5rem, 6vw, 3.5rem);
     font-weight: 700;
     line-height: 1;
-    color: var(--white);
-    text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    color: var(--brand-blue-dark);
 }
-
 .agenda-countdown-label {
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 0.8rem;
+    font-weight: 600;
     text-transform: uppercase;
-    opacity: 0.9;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     margin-top: 0.5rem;
     display: block;
-}
-
-.agenda-conference-live {
-    font-size: 2rem;
-    font-weight: 700;
-    padding: 1rem 2rem;
-    background: var(--brand-orange);
-    color: var(--white);
-    border-radius: var(--radius);
-    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
-/* --- Schedule Container --- */
-.agenda-schedule-container {
-    margin-top: -50px;
-    position: relative;
-    background: var(--white);
-    border-radius: var(--radius);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-    padding: 2rem;
-    margin-bottom: 4rem;
-}
-
-/* --- Tabs --- */
-.agenda-tabs {
-    display: flex;
-    justify-content: center;
-    border-bottom: 1px solid var(--surface-dark);
-    margin-bottom: 2rem;
-}
-.agenda-tab-btn {
-    padding: 1rem 1.5rem;
-    border: none;
-    background: none;
-    font-size: 1.1rem;
-    font-weight: 600;
     color: var(--text-secondary);
-    cursor: pointer;
-    position: relative;
 }
-.agenda-tab-btn.active {
-    color: var(--brand-orange);
-}
-.agenda-tab-btn.active::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: var(--brand-orange);
-}
+.agenda-conference-live { font-size: 2rem; padding: 1rem 2rem; background: var(--brand-orange); color: var(--white); border-radius: var(--radius); }
 
-/* --- Tracker Timeline --- */
-.agenda-timeline {
-    position: relative;
-    padding-left: 50px;
-}
-.agenda-timeline::before {
-    content: '';
-    position: absolute;
-    left: 15px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background-color: var(--surface-dark);
-}
-.agenda-timeline-item {
-    display: flex;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-    position: relative;
-}
-.agenda-timeline-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    left: -42px;
-    top: 0;
-    background-color: var(--white);
-    border: 2px solid var(--surface-dark);
-}
-.agenda-timeline-card {
-    width: 100%;
-    background-color: var(--surface-light);
-    padding: 1.25rem;
-    border-radius: var(--radius);
-    border: 1px solid transparent;
-}
-.agenda-event-time {
-    font-weight: 600;
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-}
+/* --- Schedule Container & Tabs --- */
+.agenda-schedule-container { margin-top: -60px; position: relative; background: var(--white); border-radius: var(--radius); box-shadow: 0 10px 30px rgba(17, 19, 24, 0.07); padding: 2.5rem; margin-bottom: 5rem; }
+.agenda-tabs { display: flex; justify-content: center; border-bottom: 2px solid var(--surface-dark); margin-bottom: 3rem; }
+.agenda-tab-btn { padding: 1rem 2rem; border: none; background: none; font-size: 1.1rem; font-weight: 600; color: var(--text-secondary); cursor: pointer; position: relative; transition: color 0.3s ease; }
+.agenda-tab-btn.active { color: var(--brand-blue-primary); }
+.agenda-tab-btn::after { content: ''; position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%); width: 0; height: 3px; background: var(--brand-blue-primary); transition: width 0.3s ease; }
+.agenda-tab-btn.active::after { width: 100%; }
+.agenda-grid-content { transition: opacity 0.3s ease-in-out; }
+.agenda-grid-content.fading { opacity: 0; }
 
-.agenda-title-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
+/* --- GRID LAYOUT --- */
+.agenda-grid { display: grid; grid-template-columns: 120px 1fr; gap: 0 2rem; }
+.agenda-grid-item { display: contents; }
+.agenda-time-slot { position: relative; padding: 1.5rem 0; }
+.agenda-time { font-size: 1.1rem; font-weight: 700; color: var(--brand-blue-primary); text-align: right; padding-right: 2.5rem; }
+.agenda-time-connector { position: absolute; top: 0; right: 0; bottom: 0; width: 2px; background-color: var(--border-color); }
+.agenda-time-connector::after { content: ''; position: absolute; top: calc(1.5rem + 10px); right: -7px; width: 16px; height: 16px; background-color: var(--white); border: 3px solid var(--border-color); border-radius: 50%; transition: border-color 0.3s ease; }
+.agenda-card { border: 1px solid var(--border-color); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; background-color: var(--white); transition: all 0.3s ease; opacity: 0; animation: fadeInUp 0.5s ease-out forwards; }
+.agenda-card-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+.agenda-icon { font-size: 1.5rem; color: var(--brand-blue-primary); margin-top: 3px; }
+.agenda-title-group { flex: 1; }
+.agenda-event-title { font-size: 1.2rem; font-weight: 700; margin: 0 0 0.25rem; color: var(--text-primary); }
+.agenda-event-duration { display: none; font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
+.agenda-event-venue { font-size: 1rem; color: var(--text-secondary); margin: 0; display: flex; align-items: center; gap: 0.5rem; }
 
-.agenda-event-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 0;
-}
-.agenda-event-venue {
-    font-weight: 500;
-    color: var(--brand-blue-primary);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-}
-
-.agenda-event-status {
-    background-color: var(--brand-blue-primary);
-    color: var(--white);
-    padding: 0.2rem 0.6rem;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    line-height: 1;
-}
+/* --- Status Badges --- */
+.agenda-live-badge, .agenda-completed-badge { font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 20px; display: flex; align-items: center; gap: 0.3rem; }
+.agenda-live-badge { background-color: var(--brand-orange-light); color: var(--brand-orange); }
+.agenda-completed-badge { background-color: #e8f5e9; color: var(--brand-green); }
 
 /* --- Status Styling --- */
-.agenda-timeline-item.upcoming .agenda-timeline-icon {
-    border-color: var(--surface-dark);
-    color: var(--text-secondary);
-}
-.agenda-timeline-item.upcoming .agenda-timeline-card {
-    background-color: var(--surface-light);
-}
+.agenda-grid-item.in-progress .agenda-time { color: var(--brand-orange); }
+.agenda-grid-item.in-progress .agenda-time-connector::after { border-color: var(--brand-orange); }
+.agenda-grid-item.in-progress .agenda-card { background-color: var(--brand-orange-light); border-color: var(--brand-orange); animation: glow 3s infinite, fadeInUp 0.5s ease-out forwards; }
+.agenda-grid-item.completed { opacity: 0.6; }
+.agenda-grid-item.completed .agenda-time-connector::after { border-color: var(--brand-green); background-color: var(--brand-green); }
+.agenda-grid-item.completed .agenda-card { background-color: var(--surface-light); }
 
-.agenda-timeline-item.in-progress .agenda-timeline-icon {
-    background-color: var(--brand-orange);
-    border-color: var(--brand-orange);
-    color: var(--white);
-    animation: pulse 2s infinite;
-}
-.agenda-timeline-item.in-progress .agenda-timeline-card {
-    border-color: var(--brand-orange);
-    background-color: #fff3e0;
-}
-.agenda-timeline-item.in-progress .agenda-event-title {
-    color: var(--brand-orange);
-}
+/* --- Responsive (Mobile) --- */
+@media (max-width: 768px) {
+    .agenda-schedule-container { padding: 1.5rem; }
+    .agenda-grid { grid-template-columns: 1fr; gap: 0; }
+    .agenda-time-slot { display: none; }
+    .agenda-card { width: 100%; margin-bottom: 1rem; }
+    .agenda-event-duration { display: block; }
+    .agenda-card-header { flex-wrap: wrap; }
 
-.agenda-timeline-item.completed .agenda-timeline-icon {
-    background-color: var(--brand-blue-primary);
-    border-color: var(--brand-blue-primary);
-    color: var(--white);
-}
-.agenda-timeline-item.completed .agenda-timeline-card {
-    opacity: 0.8;
-    background-color: var(--surface-dark);
-}
-
-.agenda-timeline-item.completed .agenda-event-title {
-    color: var(--text-secondary);
-}
-
-
-/* --- Responsive Styles (NEWLY ADDED) --- */
-@media (max-width: 600px) {
-    /* Hero Section Adjustments */
-    .agenda-hero-title {
-        font-size: 2.2rem;
+    /* FIXED: Added styles for mobile */
+    .agenda-hero {
+        padding: 5rem 0; /* Reduced padding on hero */
     }
-    .agenda-hero-subtitle {
-        font-size: 1rem;
-    }
-
-    /* Countdown Timer Adjustments */
     .agenda-countdown-container {
-        gap: 0.75rem; /* Reduce space between items */
+        gap: 0.5rem; /* Reduced gap for countdown */
+        flex-wrap: wrap; /* Allow items to wrap */
     }
     .agenda-countdown-item {
+        flex: 1; /* Allow items to grow and fill space */
+        min-width: 80px; /* Set a smaller minimum width */
         padding: 0.75rem;
-        min-width: 75px; /* Allow items to be smaller */
     }
     .agenda-countdown-number {
-        font-size: 2.25rem; /* Smaller numbers */
+        font-size: 2.5rem;
     }
-    .agenda-countdown-label {
-        font-size: 0.7rem; /* Smaller labels */
+    .agenda-tabs {
+        flex-direction: column; /* Stack tabs vertically */
+        gap: 0.5rem;
     }
-    .agenda-conference-live {
-        font-size: 1.5rem;
-        padding: 0.75rem 1.5rem;
+    .agenda-tab-btn {
+        padding: 1rem;
+        border-bottom: 2px solid var(--surface-dark);
     }
-
-    /* Schedule & Timeline Adjustments */
-    .agenda-schedule-container {
-        padding: 1.5rem;
+    .agenda-tab-btn.active::after {
+        /* Hide the bottom bar on mobile, active state is clear enough */
+        display: none;
     }
-    .agenda-timeline {
-        padding-left: 35px;
-    }
-    .agenda-timeline-icon {
-        width: 28px;
-        height: 28px;
-        left: -35px; /* Adjust icon position */
-    }
-    .agenda-event-title {
-        font-size: 1.1rem;
+    .agenda-tab-btn.active {
+        background-color: var(--surface-dark);
+        border-radius: var(--radius);
     }
 }

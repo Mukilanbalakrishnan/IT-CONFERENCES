@@ -61,6 +61,7 @@ body.body-no-scroll { overflow: hidden; }
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
+    z-index: 10; /* keep below actions */
 }
 .desktop-nav a, .desktop-nav .dropdown-trigger {
     text-decoration: none;
@@ -70,7 +71,7 @@ body.body-no-scroll { overflow: hidden; }
     align-items: center;
     text-shadow: 0 1px 3px rgba(0,0,0,.2);
     cursor: pointer;
-    white-space: nowrap; /* ADDED: Prevents text from wrapping */
+    white-space: nowrap; /* Prevents text wrapping */
 }
 .header.scrolled .desktop-nav a,
 .header.scrolled .desktop-nav .dropdown-trigger {
@@ -81,11 +82,35 @@ body.body-no-scroll { overflow: hidden; }
 .desktop-nav a.active {
     color: var(--brand-orange, #F57C00); 
 }
-
-/* This ensures the active/hover color overrides the scrolled text color */
 .header.scrolled .desktop-nav a:hover,
 .header.scrolled .desktop-nav a.active {
     color: var(--brand-orange, #F57C00);
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.popup-content {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 
@@ -99,7 +124,7 @@ body.body-no-scroll { overflow: hidden; }
     transform: translateX(-50%) scale(.95); padding: .5rem; min-width: 16rem;
     background-color: var(--white, #fff); box-shadow: 0 10px 25px rgba(0,0,0,.1);
     border-radius: var(--radius, 12px); border: 1px solid var(--surface-dark, #e9ecef);
-    transition: opacity .2s, top .2s, visibility .2s, transform .2s; z-index: 10;
+    transition: opacity .2s, top .2s, visibility .2s, transform .2s; z-index: 20;
 }
 .nav-item-dropdown:hover .nav-item-dropdown-content {
     opacity: 1; visibility: visible; top: 100%; transform: translateX(-50%) scale(1);
@@ -114,13 +139,22 @@ body.body-no-scroll { overflow: hidden; }
 .nav-item-dropdown:hover .dropdown-trigger svg { transform: rotate(180deg); }
 
 /* --- Right actions --- */
-.header-actions { display: flex; gap: 1rem; align-items: center; }
+.header-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    position: relative;
+    z-index: 30; /* ensure above nav */
+}
 .login-btn {
     display: inline-block; border: 1px solid var(--white, #fff); border-radius: .5rem;
     background-color: transparent; color: var(--white, #fff); font-weight: 550;
     text-decoration: none; transition: all .2s ease;
     padding: .55rem 1.1rem;
-    white-space: nowrap; /* ADDED: Ensure button text doesn't wrap on smaller screens */
+    white-space: nowrap;
+    position: relative;
+    z-index: 31; /* always clickable above nav */
+    cursor: pointer;
 }
 .header.scrolled .login-btn { background-color: var(--brand-orange, #F57C00); border-color: var(--brand-orange, #F57C00); }
 .login-btn:hover { background-color: var(--brand-orange-dark, #E65100); border-color: var(--brand-orange-dark, #E65100); transform: translateY(-1px); }
@@ -166,4 +200,3 @@ body.body-no-scroll { overflow: hidden; }
     .desktop-nav { display: flex; }
     .mobile-menu-button { display: none; }
 }
-
