@@ -16,7 +16,7 @@
     min-height: 100vh;
     padding: clamp(1rem, 5vw, 4rem);
     font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    margin-top: -8rem;
+    margin-top: -6rem;
 }
 
 /* --- Main Container --- */

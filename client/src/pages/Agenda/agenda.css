@@ -112,7 +112,7 @@
 
 /* --- Responsive (Mobile) --- */
 @media (max-width: 768px) {
-    .agenda-page{margin-top: -125px;}
+    .agenda-page{margin-top: -14rem;}
     .agenda-schedule-container { padding: 1.5rem;}
     .agenda-grid { grid-template-columns: 1fr; gap: 0; }
     .agenda-time-slot { display: none; }
