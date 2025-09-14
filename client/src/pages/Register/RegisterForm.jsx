@@ -24,7 +24,7 @@ body {
 .main-container {
     width: 100%;
     max-width: 72rem; /* 1152px */
-    margin: 4rem auto 1rem;
+    margin: -2rem auto 1rem;
     display: grid;
     grid-template-columns: 1fr;
     border-radius: 1.5rem;
@@ -34,7 +34,7 @@ body {
 
 @media (min-width: 1024px) {
     .main-container {
-        margin: 6rem auto 2rem;
+        margin: 0rem auto 2rem;
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }

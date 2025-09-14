@@ -17,6 +17,9 @@
   }
 }
 
+.speaker-page-main{
+  margin-top: -10rem;
+}
 
 /* --- Global Container for this page --- */
 .event-container {

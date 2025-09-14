@@ -21,7 +21,7 @@
 .contact-page-root {
     position: relative;
     overflow: hidden;
-    margin-top: -110px;
+    margin-top: -10rem; 
 }
 
 .decorative-circle {

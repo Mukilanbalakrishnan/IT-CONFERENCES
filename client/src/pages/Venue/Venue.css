@@ -19,6 +19,7 @@
 .venue-page {
     background-color: var(--surface-light);
     padding: 2rem 1rem;
+    margin-top: -8rem;
 }
 
 /* --- Scroll Animation Styles --- */

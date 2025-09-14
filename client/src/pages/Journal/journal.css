@@ -16,6 +16,7 @@
     min-height: 100vh;
     padding: clamp(1rem, 5vw, 4rem);
     font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    margin-top: -8rem;
 }
 
 /* --- Main Container --- */
@@ -35,7 +36,6 @@
 
 /* --- Header --- */
 .journal-header {
-    margin-bottom: 3.5rem;
     text-align: center;
 }
 
