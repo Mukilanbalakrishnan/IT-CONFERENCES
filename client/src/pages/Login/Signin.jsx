@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom"; 
 import axios from "axios";
 
-// --- SVG Icons for Social Buttons ---
+// --- SVG Icons ---
 const GoogleIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -116,8 +116,9 @@ const styles = {
     cursor: "pointer",
   },
 };
+
 function SignInForm({ onSwitch, onClose }) {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState(""); // matches backend
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [showPwd, setShowPwd] = useState(false);
@@ -132,8 +133,8 @@ function SignInForm({ onSwitch, onClose }) {
     try {
       const { data } = await axios.post(
         "https://it-con-backend.onrender.com/api/users/signin",
-        { login: email, password },
-        { withCredentials: true } // allows CORS cookies if backend supports it
+        { username, password }, // backend expects username
+        { withCredentials: true }
       );
 
       localStorage.setItem("token", data.token);
@@ -178,14 +179,14 @@ function SignInForm({ onSwitch, onClose }) {
 
       <form onSubmit={handleSubmit}>
         <div style={styles.inputGroup}>
-          <label style={styles.inputLabel} htmlFor="email">Email address</label>
+          <label style={styles.inputLabel} htmlFor="username">Email or Mobile number</label>
           <input
-            id="email"
-            type="email"
-            placeholder="Email address"
+            id="username"
+            type="text"
+            placeholder="Email or Mobile number"
             style={styles.input}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
         </div>
@@ -231,18 +232,16 @@ function SignInForm({ onSwitch, onClose }) {
         <button style={styles.socialBtn} aria-label="Sign in with Microsoft"><MicrosoftIcon /></button>
       </div>
 
-      <p style={{ textAlign: "center", marginTop: "16px", color: "var(--text-secondary)", fontSize: "0.9rem" }}>
-        Don’t have an account?{" "}
-        <button onClick={onSwitch} style={{ ...styles.link, background: "none", border: "none", padding: 0 }}>
-          Create one
-        </button>
+      <p style={{ marginTop: "22px", textAlign: "center", fontSize: "0.85rem" }}>
+        Don't have an account?{" "}
+        <span style={styles.link} onClick={onSwitch}>
+          Sign Up
+        </span>
       </p>
 
-      <ToastContainer position="top-right" autoClose={2000} hideProgressBar />
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 }
 
-export default function SignIn({ onSwitch, onClose }) {
-  return <SignInForm onSwitch={onSwitch} onClose={onClose} />;
-}
+export default SignInForm;

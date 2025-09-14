@@ -75,12 +75,41 @@ const Hero = ({ onOpenLogin }) => {
   const title = "Joint International Conference on";
   const navigate = useNavigate();
 
-  
-  const handleSubmitPaper = () => {
-    onOpenLogin();
+  // Helper function to check if the token is valid by decoding its payload
+  const isTokenValid = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return false; // No token found
+    }
+    try {
+      // Decode the payload from the JWT
+      const payloadBase64 = token.split('.')[1];
+      const decodedJson = atob(payloadBase64);
+      const decoded = JSON.parse(decodedJson);
+      
+      // The 'exp' claim holds the expiration time in seconds
+      const expirationTime = decoded.exp;
+      const currentTime = Date.now() / 1000; // Current time in seconds
+
+      // Token is valid if the expiration time is in the future
+      return expirationTime > currentTime;
+    } catch (error) {
+      // If decoding fails, the token is invalid
+      console.error("Failed to decode or parse token:", error);
+      return false;
+    }
   };
 
- 
+  const handleSubmitPaper = () => {
+    if (isTokenValid()) {
+      // If the user is logged in, go to the registration page
+      navigate("/register");
+    } else {
+      // If not logged in, open the login modal
+      onOpenLogin();
+    }
+  };
+
   const handleViewTracks = () => {
     navigate("/conferencetrack");
   };
