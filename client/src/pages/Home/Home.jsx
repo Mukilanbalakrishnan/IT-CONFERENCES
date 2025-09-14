@@ -17,45 +17,29 @@ import { useNavigate } from "react-router-dom";
 
 // --- Countdown Timer Component ---
 const Countdown = () => {
-  const calculateTimeLeft = () => {
-    const difference = +new Date('2026-03-26T00:00:00') - +new Date();
-    let timeLeft = {};
+  const [timeLeft, setTimeLeft] = useState({});
 
-    if (difference > 0) {
-      timeLeft = {
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const difference = +new Date('2026-03-26T00:00:00') - +new Date();
+      return difference > 0 ? {
         weeks: Math.floor(difference / (1000 * 60 * 60 * 24 * 7)),
         days: Math.floor((difference / (1000 * 60 * 60 * 24)) % 7),
         hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
         minutes: Math.floor((difference / 1000 / 60) % 60),
         seconds: Math.floor((difference / 1000) % 60),
-      };
-    }
-    return timeLeft;
-  };
+      } : {};
+    };
+    const timer = setInterval(() => setTimeLeft(calculateTimeLeft()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-    return () => clearTimeout(timer);
-  });
-
-  const timerComponents = Object.keys(timeLeft).map((interval) => {
-    if (!timeLeft[interval] && timeLeft[interval] !== 0) {
-      return null;
-    }
-    
-    return (
-      <div className="countdown-item" key={interval}>
-        <span className="countdown-number">
-          {String(timeLeft[interval]).padStart(2, '0')}
-        </span>
-        <span className="countdown-label">{interval}</span>
-      </div>
-    );
-  });
+  const timerComponents = Object.keys(timeLeft).map((interval) => (
+    <div className="countdown-item" key={interval}>
+      <span className="countdown-number">{String(timeLeft[interval]).padStart(2, '0')}</span>
+      <span className="countdown-label">{interval}</span>
+    </div>
+  ));
 
   return (
     <div className="countdown-container">
@@ -70,36 +54,32 @@ const Countdown = () => {
   );
 };
 
-
-const Hero = ({ onOpenLogin }) => {
+// --- Hero Component ---
+const Hero = ({ onLoginRequest }) => {
   const title = "Joint International Conference on";
   const navigate = useNavigate();
 
-  
   const handleSubmitPaper = () => {
-    onOpenLogin();
+    const token = localStorage.getItem("token");
+    if (token) {
+        // A simple check. For production, you'd decode and check expiry.
+        navigate("/register");
+    } else {
+        onLoginRequest();
+    }
   };
 
- 
-  const handleViewTracks = () => {
-    navigate("/conferencetrack");
-  };
+  const handleViewTracks = () => navigate("/conferencetrack");
 
   return (
     <section className="hero">
       <video autoPlay loop muted className="hero-video-bg">
-        <source
-          src="https://res.cloudinary.com/dllbh1v1m/video/upload/v1754979177/vdo1_g6wq8h.mp4"
-          type="video/mp4"
-        />
-        Your browser does not support the video tag.
+        <source src="https://res.cloudinary.com/dllbh1v1m/video/upload/v1754979177/vdo1_g6wq8h.mp4" type="video/mp4" />
       </video>
-
       <div className="hero-content">
         <div className="hero-title-decoration">
           <p className="kicker">S3-ECBE' 2026</p>
         </div>
-
         <h1 className="animated-title">
           {title.split(" ").map((word, wordIndex) => (
             <span key={wordIndex} className="animated-word">
@@ -107,9 +87,7 @@ const Hero = ({ onOpenLogin }) => {
                 <span
                   key={charIndex}
                   className="animated-char"
-                  style={{
-                    animationDelay: `${wordIndex * 0.1 + charIndex * 0.03}s`,
-                  }}
+                  style={{ animationDelay: `${wordIndex * 0.1 + charIndex * 0.03}s` }}
                 >
                   {char}
                 </span>
@@ -118,146 +96,134 @@ const Hero = ({ onOpenLogin }) => {
             </span>
           ))}
         </h1>
-
         <p className="hero-subtitle">
-          Research and Innovation Smart and Sustainable Solutions in Electrical,
-          Communication and Biomedical Engineering
+          Research and Innovation Smart and Sustainable Solutions in Electrical, Communication and Biomedical Engineering
         </p>
-        <p className="hero-date">
-          March 26th Thursday & 27th Friday, 2026
-        </p>
-
+        <p className="hero-date">March 26th Thursday & 27th Friday, 2026</p>
         <div className="hero-buttons">
-          <button onClick={handleSubmitPaper} className="btn btn-primary">
-            Submit a Paper
-          </button>
-          <button onClick={handleViewTracks} className="btn btn-secondary">
-            View Tracks
-          </button>
+          <button onClick={handleSubmitPaper} className="btn btn-primary">Submit a Paper</button>
+          <button onClick={handleViewTracks} className="btn btn-secondary">View Tracks</button>
         </div>
       </div>
-
       <Countdown />
     </section>
   );
 };
 
-
-
 // --- Collaboration Section Component ---
 const Collaboration = () => {
-  const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const currentRef = sectionRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
+    const sectionRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
+  
+    useEffect(() => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            observer.unobserve(entry.target);
+          }
+        },
+        { threshold: 0.1 }
+      );
+  
+      const currentRef = sectionRef.current;
       if (currentRef) {
-        observer.unobserve(currentRef);
+        observer.observe(currentRef);
       }
-    };
-  }, []);
-
-  return (
-    <section ref={sectionRef} className={`collaboration-section ${isVisible ? 'is-visible' : ''}`}>
-      <div className="container">
-        <div className="collaboration-title-wrapper">
-            <h3 className="collaboration-title">In Collaboration With</h3>
+  
+      return () => {
+        if (currentRef) {
+          observer.unobserve(currentRef);
+        }
+      };
+    }, []);
+  
+    return (
+      <section ref={sectionRef} className={`collaboration-section ${isVisible ? 'is-visible' : ''}`}>
+        <div className="container">
+          <div className="collaboration-title-wrapper">
+              <h3 className="collaboration-title">In Collaboration With</h3>
+          </div>
+          <div className="collaboration-content-wrapper">
+              <div className="logo-item">
+                  <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1755753110/pcytcphmgc1irewg4suw.webp " alt="KSR College of Engineering" />
+                   <div className="host-details">
+                      <h4>Host Institution</h4>
+                      <p>Department of Electronics and Communication, Electrical and Electronics & Biomedical Engineering, K.S.R. College of Engineering (Autonomous), Tiruchengode, Namakkal – 637215, Tamilnadu, India</p>
+                  </div>
+              </div>
+              <div className="logo-item">
+                  <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1755753114/uhlv9wulx2dexlv6bnz2.png " alt="INTI International University" />
+                  <div className="host-details">
+                      <h4>Co-Host University</h4>
+                      <p>INTI International University, Persiaran Perdana BBN, Putra Nilai 71800 Nilai, Negeri Sembilan, Malaysia</p>
+                  </div>
+              </div>
+          </div>
         </div>
-        <div className="collaboration-content-wrapper">
-            <div className="logo-item">
-                <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1755753110/pcytcphmgc1irewg4suw.webp " alt="KSR College of Engineering" />
-                 <div className="host-details">
-                    <h4>Host Institution</h4>
-                    <p>Department of Electronics and Communication, Electrical and Electronics & Biomedical Engineering, K.S.R. College of Engineering (Autonomous), Tiruchengode, Namakkal – 637215, Tamilnadu, India</p>
-                </div>
-            </div>
-            <div className="logo-item">
-                <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1755753114/uhlv9wulx2dexlv6bnz2.png " alt="INTI International University" />
-                <div className="host-details">
-                    <h4>Co-Host University</h4>
-                    <p>INTI International University, Persiaran Perdana BBN, Putra Nilai 71800 Nilai, Negeri Sembilan, Malaysia</p>
-                </div>
-            </div>
-        </div>
-      </div>
-    </section>
-  );
+      </section>
+    );
 };
-
+  
 // --- About Section Component ---
 const About = () => {
-  const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
+    const sectionRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
+  
+    useEffect(() => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            observer.unobserve(entry.target);
+          }
+        },
+        {
+          threshold: 0.1, 
         }
-      },
-      {
-        threshold: 0.1, 
-      }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
+      );
+  
       if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+        observer.observe(sectionRef.current);
       }
-    };
-  }, []);
-
-  const objectives = [
-    { text: "Showcase cutting-edge research in electrical, communication, and biomedical engineering." },
-    { text: "Explore smart and sustainable solutions for modern engineering challenges." },
-    { text: "Create opportunities for industry-academia collaboration and technology transfer." },
-    { text: "Provide a platform for young researchers to present their work and gain expert feedback." }
-  ];
-
-  return (
-    <section ref={sectionRef} className={`about-section ${isVisible ? 'is-visible' : ''}`}>
-      <div className="container">
-        <div className="about-grid">
-          <div className="about-images">
-            <div className="image-grid">
-              <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413799/rldanbaxcfkpgfqz8t0d.jpg" alt="Students collaborating" className="about-image img-1" />
-              <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413791/xq5l2vmvi980kejehaxz.jpg" alt="Speaker at a lecture" className="about-image img-2" />
-              <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413789/iinsohsua3h1a2mudgds.jpg" alt="Team working on a project" className="about-image img-3" />
-              <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413793/uwy08s5eegretmihqld7.jpg" alt="Networking at an event" className="about-image img-4" />
+  
+      return () => {
+        if (sectionRef.current) {
+          observer.unobserve(sectionRef.current);
+        }
+      };
+    }, []);
+  
+    const objectives = [
+      { text: "Showcase cutting-edge research in electrical, communication, and biomedical engineering." },
+      { text: "Explore smart and sustainable solutions for modern engineering challenges." },
+      { text: "Create opportunities for industry-academia collaboration and technology transfer." },
+      { text: "Provide a platform for young researchers to present their work and gain expert feedback." }
+    ];
+  
+    return (
+      <section ref={sectionRef} className={`about-section ${isVisible ? 'is-visible' : ''}`}>
+        <div className="container">
+          <div className="about-grid">
+            <div className="about-images">
+              <div className="image-grid">
+                <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413799/rldanbaxcfkpgfqz8t0d.jpg" alt="Students collaborating" className="about-image img-1" />
+                <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413791/xq5l2vmvi980kejehaxz.jpg" alt="Speaker at a lecture" className="about-image img-2" />
+                <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413789/iinsohsua3h1a2mudgds.jpg" alt="Team working on a project" className="about-image img-3" />
+                <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1757413793/uwy08s5eegretmihqld7.jpg" alt="Networking at an event" className="about-image img-4" />
+              </div>
+              <button className="promo-video-btn">
+                <div className="play-icon"></div>
+                Promo Video
+              </button>
             </div>
-            <button className="promo-video-btn">
-              <div className="play-icon"></div>
-              Promo Video
-            </button>
-          </div>
-          <div className="about-content">
-            <p className="kicker">// ABOUT THE CONFERENCE</p>
-            <h2>Conference Overview</h2>
-            <p className="lead-quiet">
-             The International Conference on Research and Innovative on Smart and Sustainable Solutions in Electrical, Communication, and Biomedical Engineering serves as a premier platform for researchers, academicians, industry professionals, and students to exchange ideas and advancements in engineering and technology.
-            </p>
-            <div className="objectives-section">
+            <div className="about-content">
+              <p className="kicker">// ABOUT THE CONFERENCE</p>
+              <h2>Conference Overview</h2>
+              <p className="lead-quiet">
+               The International Conference on Research and Innovative on Smart and Sustainable Solutions in Electrical, Communication, and Biomedical Engineering serves as a premier platform for researchers, academicians, industry professionals, and students to exchange ideas and advancements in engineering and technology.
+              </p>
+              <div className="objectives-section">
                 <h3>Objectives</h3>
                 <div className="objectives-list">
                     {objectives.map((objective, index) => (
@@ -269,34 +235,19 @@ const About = () => {
                         </div>
                     ))}
                 </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  );
+      </section>
+    );
 };
 
-
 // --- Home Page Component ---
-const Home = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [authMode, setAuthMode] = useState("signin"); // "signin" or "signup"
-
-  const handleOpenLogin = (mode = "signin") => {
-    setAuthMode(mode);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
+const Home = ({ onLoginRequest }) => {
   return (
-    <>
-      <Navbar />
-      <main>
-        <Hero onOpenLogin={() => handleOpenLogin("signin")} />
+      <main className="home-main">
+        <Hero onLoginRequest={onLoginRequest} />
         <Collaboration />
         <About />
         <ChiefPatron/>
@@ -307,17 +258,6 @@ const Home = () => {
         <Tracks />
         <Map />
       </main>
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        {authMode === "signin" ? (
-          <SignInForm onSwitch={() => setAuthMode("signup")}
-          onClose={handleCloseModal}  />
-          
-        ) : (
-          <RegistrationForm onSwitch={() => setAuthMode("signin")} 
-          onClose={handleCloseModal} />
-        )}
-      </Modal>
-    </>
   );
 }
 

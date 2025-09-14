@@ -2,6 +2,7 @@
 .organizingCommitteePage {
     background-color: var(--surface-light);
     font-family: 'Poppins', sans-serif;
+    margin-top: -10rem;
 }
 
 .organizingCommitteePage .container {

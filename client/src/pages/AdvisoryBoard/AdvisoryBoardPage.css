@@ -15,6 +15,7 @@
     background-color: var(--surface-light);
     padding: clamp(3rem, 8vw, 6rem) 1rem;
     font-family: 'Poppins', sans-serif;
+    margin-top: -8rem; 
 }
 
 .advisory-board .container {

@@ -3,6 +3,7 @@
     background-color: var(--surface-light);
     font-family: 'Poppins', sans-serif;
     padding: 2rem 0 4rem 0;
+    margin-top: -10rem; 
 }
 
 .researchandreview .container {

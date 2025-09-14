@@ -30,7 +30,7 @@
 /* --- Base Page & Hero Styles --- */
 .agenda-page {
     background-color: var(--surface-light);
-    margin-top: -200px; 
+    margin-top: -18rem; 
 }
 .agenda-container { width: 100%; max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--gutter); }
 .agenda-hero { padding: 7rem 0 6rem; text-align: center; color: var(--white); background-image: radial-gradient(circle at 50% 30%, rgba(13, 71, 161, 0.85) 0%, rgba(13, 71, 161, 0.95) 100%), url('https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2012&auto=format&fit=crop') no-repeat center center/cover; }
@@ -112,7 +112,7 @@
 
 /* --- Responsive (Mobile) --- */
 @media (max-width: 768px) {
-    .agenda-page{margin-top: -125px;}
+    .agenda-page{margin-top: -14rem;}
     .agenda-schedule-container { padding: 1.5rem;}
     .agenda-grid { grid-template-columns: 1fr; gap: 0; }
     .agenda-time-slot { display: none; }

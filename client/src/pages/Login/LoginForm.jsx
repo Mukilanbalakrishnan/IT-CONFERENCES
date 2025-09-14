@@ -3,7 +3,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// --- SVG Icons for Social Buttons ---
+// --- SVG Icons ---
 const GoogleIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -120,6 +120,7 @@ function RegistrationForm({ onSwitch, onClose }) {
   const [showPwd, setShowPwd] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [mobileno, setMobileNo] = useState(""); // ✅ new field
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -130,7 +131,7 @@ function RegistrationForm({ onSwitch, onClose }) {
     try {
       const { data } = await axios.post(
         "https://it-con-backend.onrender.com/api/users/signup",
-        { name, email, password }, // ✅ name matches backend
+        { name, email, mobileno, password }, // ✅ include mobile number
         { withCredentials: true }
       );
 
@@ -178,6 +179,19 @@ function RegistrationForm({ onSwitch, onClose }) {
         </div>
 
         <div style={styles.inputGroup}>
+          <label style={styles.inputLabel} htmlFor="mobileno">Mobile number</label>
+          <input
+            id="mobileno"
+            type="tel"
+            placeholder="Mobile number"
+            style={styles.input}
+            value={mobileno}
+            onChange={(e) => setMobileNo(e.target.value)}
+            required
+          />
+        </div>
+
+        <div style={styles.inputGroup}>
           <label style={styles.inputLabel} htmlFor="password">Password</label>
           <div style={styles.passwordWrapper}>
             <input
@@ -191,7 +205,7 @@ function RegistrationForm({ onSwitch, onClose }) {
             />
             <button type="button" style={styles.toggleBtn} onClick={() => setShowPwd((s) => !s)}>
               {showPwd ? "Hide" : "Show"}
-            </button> 
+            </button>
           </div>
         </div>
 
