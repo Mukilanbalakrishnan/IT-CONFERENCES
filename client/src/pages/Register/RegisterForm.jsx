@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
 
-// This component now includes its own styles, refactored to be fully responsive.
+import React, { useState } from 'react';
+import axios from 'axios';
+
+
 const componentStyles = `
 /* --- Global Styles & Variables --- */
 :root {
@@ -502,9 +504,291 @@ body {
 .terms-modal-footer .btn {
   width: auto; min-width: 120px; font-size: 0.95rem;
 }
+
+.submit-btn {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: none;
+  background: var(--brand-orange);
+  color: var(--white);
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.95rem;
+  margin-top: 20px;
+  box-shadow: 0 6px 18px rgba(245, 124, 0, 0.25);
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+
+
 `;
 
-// --- Terms & Conditions Modal Component ---
+
+const ParticipantInput = ({ index, participant, handleParticipantChange, removeParticipant }) => (
+  <div className="participant-block">
+    <div className="participant-header">
+      <h4 className="participant-title">Participant {index + 1}</h4>
+      {index > 0 && (
+        <button type="button" onClick={() => removeParticipant(index)} className="btn-remove">
+          Remove
+        </button>
+      )}
+    </div>
+
+    {/* Name */}
+    <div>
+      <label className="form-label form-label-sm">Name</label>
+      <input
+        type="text"
+        name="name"
+        value={participant.name}
+        onChange={(e) => handleParticipantChange(index, e)}
+        className="form-input-sm"
+        required
+      />
+    </div>
+
+    {/* Designation */}
+    <div>
+      <label className="form-label form-label-sm">Designation</label>
+      <select
+        name="designation"
+        value={participant.designation}
+        onChange={(e) => handleParticipantChange(index, e)}
+        className="form-input-sm form-select"
+        required
+      >
+        <option value="" disabled>Select a designation...</option>
+        <option value="Student">Student</option>
+        <option value="Academic/Researcher">Academic/Researcher</option>
+        <option value="Industry/Corporate">Industry/Corporate</option>
+        <option value="Accompanying Person">Accompanying Person</option>
+      </select>
+    </div>
+
+    {/* Organisation */}
+    <div>
+      <label className="form-label form-label-sm">Organisation</label>
+      <input
+        type="text"
+        name="organisation"
+        value={participant.organisation}
+        onChange={(e) => handleParticipantChange(index, e)}
+        className="form-input-sm"
+        required
+      />
+    </div>
+
+    {/* Email */}
+    <div>
+      <label className="form-label form-label-sm">Email</label>
+      <input
+        type="email"
+        name="email"
+        value={participant.email}
+        onChange={(e) => handleParticipantChange(index, e)}
+        className="form-input-sm"
+        required
+      />
+    </div>
+
+    {/* Phone */}
+    <div>
+      <label className="form-label form-label-sm">Phone</label>
+      <input
+        type="text"
+        name="phone"
+        value={participant.phone}
+        onChange={(e) => handleParticipantChange(index, e)}
+        className="form-input-sm"
+        required
+      />
+    </div>
+
+    {/* Gender */}
+    <div>
+      <label className="form-label form-label-sm">Gender</label>
+      <select
+        name="gender"
+        value={participant.gender}
+        onChange={(e) => handleParticipantChange(index, e)}
+        className="form-input-sm form-select"
+        required
+      >
+        <option value="" disabled>Select gender...</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    {/* Proof Upload */}
+<div>
+{/* Proof Upload */}
+<div>
+  <label className="form-label form-label-sm">Upload Proof</label>
+  <input
+    type="file"
+    accept="image/*"
+    name="proofUrl"
+    onChange={(e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const previewUrl = URL.createObjectURL(file); // local preview
+        handleParticipantChange(index, {
+          target: { name: "proofUrl", value: previewUrl }
+        });
+        handleParticipantChange(index, {
+          target: { name: "proofFile", value: file } // keep raw file for backend
+        });
+      }
+    }}
+    className="form-input-sm"
+    required
+  />
+
+  {/* Preview uploaded image */}
+  {participant.proofUrl && (
+    <div className="mt-2">
+      <img
+        src={participant.proofUrl}
+        alt="Proof Preview"
+        className="w-32 h-32 object-cover rounded border"
+      />
+    </div>
+  )}
+</div>
+
+</div>
+
+  </div>
+);
+
+const RegistrationForm = () => {
+  const [participants, setParticipants] = useState([
+    { name: '', designation: '', organisation: '', email: '', phone: '', gender: '', proofUrl: '', isHostMember: false }
+  ]);
+  const [formData, setFormData] = useState({
+    address: '', country: '', pincode: '', track: '', presentationMode: '', abstractTitle: '', abstractContent: '', abstractExpression: ''
+  });
+  const [wordCount, setWordCount] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [submittedData, setSubmittedData] = useState(null);
+  const [genuineSubmission, setGenuineSubmission] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+
+
+  const token = localStorage.getItem("token");
+
+  const handleParticipantChange = (index, event) => {
+    const { name, value, type, checked } = event.target;
+    const newParticipants = [...participants];
+    newParticipants[index][name] = type === 'checkbox' ? checked : value;
+    setParticipants(newParticipants);
+  };
+
+  const addParticipant = () => {
+    if (participants.length < 4) {
+      setParticipants([...participants, { name: '', designation: '', organisation: '', email: '', phone: '', gender: '', proofUrl: '', isHostMember: false }]);
+    }
+  };
+
+  const removeParticipant = (index) => {
+    const newParticipants = participants.filter((_, i) => i !== index);
+    setParticipants(newParticipants);
+  };
+
+  const handleFormChange = (event) => {
+    setFormData({ ...formData, [event.target.name]: event.target.value });
+  };
+
+  const handleAbstractChange = (event) => {
+    const content = event.target.value;
+    setFormData({ ...formData, abstractContent: content });
+    const words = content.trim() === '' ? 0 : content.trim().split(/\s+/).length;
+    setWordCount(words);
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    participants.forEach((p, i) => {
+      if (!p.name) errors[`participant${i}-name`] = 'Full Name is required';
+      if (!p.designation) errors[`participant${i}-designation`] = 'Designation is required';
+      if (!p.organisation) errors[`participant${i}-organisation`] = 'Organisation is required';
+      if (!p.email) errors[`participant${i}-email`] = 'Email is required';
+      if (!p.phone) errors[`participant${i}-phone`] = 'Phone number is required';
+      if (!p.gender) errors[`participant${i}-gender`] = 'Gender is required';
+      if (!p.proofUrl) errors[`participant${i}-proofUrl`] = 'Proof URL is required';
+    });
+
+    if (!formData.address) errors.address = 'Address is required';
+    if (!formData.country) errors.country = 'Country is required';
+    if (!formData.pincode) errors.pincode = 'Pincode is required';
+    if (!formData.track) errors.track = 'Conference Track is required';
+    if (!formData.presentationMode) errors.presentationMode = 'Presentation Mode is required';
+    if (!formData.abstractTitle) errors.abstractTitle = 'Abstract Title is required';
+    if (!formData.abstractContent) errors.abstractContent = 'Abstract Content is required';
+    if (wordCount > 300) errors.abstractContent = 'Abstract exceeds 300 words';
+    if (!formData.abstractExpression) errors.abstractExpression = 'Keywords are required';
+    if (!genuineSubmission) errors.genuineSubmission = 'Please confirm the submission is genuine';
+    if (!termsAccepted) errors.termsAccepted = 'Please accept Terms & Conditions';
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!validateForm()) return;
+
+    const finalData = {
+      participants: participants.map(p => ({
+        name: p.name,
+        designation: p.designation,
+        organisation: p.organisation,
+        email: p.email,
+        phone: p.phone,
+        gender: p.gender,
+        proofUrl: p.proofUrl,
+        isHostMember: p.isHostMember || false
+      })),
+      address: formData.address || null,
+      country: formData.country || null,
+      pincode: formData.pincode || null,
+      track: formData.track || null,
+      presentationMode: formData.presentationMode || null,
+      abstractTitle: formData.abstractTitle || null,
+      abstractContent: formData.abstractContent || null,
+      abstractExpression: formData.abstractExpression || null,
+    };
+
+    try {
+      const response = await axios.post(
+        "https://it-con-backend.onrender.com/api/register",
+        finalData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setSubmittedData(response.data);
+      setIsModalOpen(true);
+
+      // Reset form
+      setParticipants([{ name: '', designation: '', organisation: '', email: '', phone: '', gender: '', proofUrl: '', isHostMember: false }]);
+      setFormData({ address: '', country: '', pincode: '', track: '', presentationMode: '', abstractTitle: '', abstractContent: '', abstractExpression: '' });
+      setWordCount(0);
+      setGenuineSubmission(false);
+      setTermsAccepted(false);
+      setFormErrors({});
+    } catch (error) {
+      console.error(error.response?.data || error.message);
+      alert("Registration failed. Check console for details.");
+    }finally {
+    setLoading(false); // stop loading
+  }
+  };
 const TermsModal = ({ onAccept, onDecline, onClose }) => (
     <div className="terms-modal-overlay">
       <div className="terms-modal-content">
@@ -544,112 +828,6 @@ const TermsModal = ({ onAccept, onDecline, onClose }) => (
     </div>
 );
 
-// --- Participant Input Component ---
-const ParticipantInput = ({ index, participant, handleParticipantChange, removeParticipant }) => (
-    <div className="participant-block">
-        <div className="participant-header">
-            <h4 className="participant-title">Participant {index + 1}</h4>
-            {index > 0 && (
-                <button type="button" onClick={() => removeParticipant(index)} className="btn-remove">
-                    &times; Remove
-                </button>
-            )}
-        </div>
-        <div className="form-grid-cols-2">
-            <div>
-                <label className="form-label form-label-sm">Full Name</label>
-                <input type="text" name="name" placeholder="John Doe" value={participant.name} onChange={(e) => handleParticipantChange(index, e)} className="form-input-sm" required />
-            </div>
-            <div>
-                <label className="form-label form-label-sm">Designation</label>
-                <select name="designation" value={participant.designation} onChange={(e) => handleParticipantChange(index, e)} className="form-input-sm form-select" required>
-                    <option value="" disabled>Select a designation...</option>
-                    <option value="Student (with ID)">Student (with ID)</option>
-                    <option value="Academic/Researcher">Academic/Researcher</option>
-                    <option value="Industry/Corporate">Industry/Corporate</option>
-                    <option value="Accompanying Person">Accompanying Person</option>
-                </select>
-            </div>
-            <div className="participant-field-full">
-                <label className="form-label form-label-sm">Organisation</label>
-                <input type="text" name="organisation" placeholder="University or Company Name" value={participant.organisation} onChange={(e) => handleParticipantChange(index, e)} className="form-input-sm" required />
-            </div>
-            <div>
-                <label className="form-label form-label-sm">Email Address</label>
-                <input type="email" name="email" placeholder="john.doe@example.com" value={participant.email} onChange={(e) => handleParticipantChange(index, e)} className="form-input-sm" required />
-            </div>
-            <div>
-                <label className="form-label form-label-sm">Phone Number</label>
-                <input type="tel" name="phone" placeholder="+91 98765 43210" value={participant.phone} onChange={(e) => handleParticipantChange(index, e)} className="form-input-sm" required />
-            </div>
-        </div>
-    </div>
-);
-
-// --- Main Registration Form Component ---
-const RegistrationForm = () => {
-    const [participants, setParticipants] = useState([
-        { name: '', designation: '', organisation: '', email: '', phone: '' }
-    ]);
-    const [formData, setFormData] = useState({
-        address: '',
-        country: '',
-        pincode: '',
-        track: '',
-        abstractTitle: '',
-        abstractContent: '',
-        abstractExpression: ''
-    });
-    const [wordCount, setWordCount] = useState(0);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [submittedData, setSubmittedData] = useState(null);
-    const [genuineSubmission, setGenuineSubmission] = useState(false);
-    const [termsAccepted, setTermsAccepted] = useState(false);
-    const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
-
-    const handleParticipantChange = (index, event) => {
-        const { name, value } = event.target;
-        const newParticipants = [...participants];
-        newParticipants[index][name] = value;
-        setParticipants(newParticipants);
-    };
-
-    const addParticipant = () => {
-        if (participants.length < 4) {
-            setParticipants([...participants, { name: '', designation: '', organisation: '', email: '', phone: '' }]);
-        }
-    };
-
-    const removeParticipant = (index) => {
-        const newParticipants = participants.filter((_, i) => i !== index);
-        setParticipants(newParticipants);
-    };
-
-    const handleFormChange = (event) => {
-        setFormData({ ...formData, [event.target.name]: event.target.value });
-    };
-
-    const handleAbstractChange = (event) => {
-        const content = event.target.value;
-        setFormData({ ...formData, abstractContent: content });
-        const words = content.trim() === '' ? 0 : content.trim().split(/\s+/).length;
-        setWordCount(words);
-    };
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        if (!genuineSubmission || !termsAccepted) {
-            alert("Please confirm the submission details and accept the terms and conditions.");
-            return;
-        }
-        const finalData = {
-            participants,
-            ...formData
-        };
-        setSubmittedData(finalData);
-        setIsModalOpen(true);
-    };
-
     const handleAcceptTerms = () => {
         setTermsAccepted(true);
         setIsTermsModalOpen(false);
@@ -661,11 +839,10 @@ const RegistrationForm = () => {
     };
 
     // This new handler will be used for the checkbox click
-    const handleTermsClick = (e) => {
-        e.preventDefault(); // This stops the checkbox from toggling on its own
-        setIsTermsModalOpen(true); // Always open the modal on click
-    };
-
+    // const handleTermsClick = (e) => {
+    //     e.preventDefault(); // This stops the checkbox from toggling on its own
+    //     setIsTermsModalOpen(true); // Always open the modal on click
+    // };
     return (
         <React.Fragment>
             <style>{componentStyles}</style>
@@ -689,18 +866,24 @@ const RegistrationForm = () => {
                     </div>
                 </div>
 
-                {/* Right Panel (Form) */}
+                {/* Right Panel */}
                 <div className="right-panel">
                     <div className="form-header">
                         <h2 className="form-title">Conference Registration Form</h2>
                     </div>
-
                     <form onSubmit={handleSubmit} className="form-body">
+                        {/* Participant Details */}
                         <fieldset className="form-fieldset">
                             <legend className="fieldset-legend">Participant Details (1-4)</legend>
                             <div className="participant-list">
                                 {participants.map((p, index) => (
-                                    <ParticipantInput key={index} index={index} participant={p} handleParticipantChange={handleParticipantChange} removeParticipant={removeParticipant}/>
+                                    <ParticipantInput
+                                        key={index}
+                                        index={index}
+                                        participant={p}
+                                        handleParticipantChange={handleParticipantChange}
+                                        removeParticipant={removeParticipant}
+                                    />
                                 ))}
                             </div>
                             <button type="button" onClick={addParticipant} className="btn-add" disabled={participants.length >= 4}>
@@ -708,26 +891,32 @@ const RegistrationForm = () => {
                             </button>
                         </fieldset>
 
+                        
+                        {/* Contact Information */}
                         <fieldset className="form-fieldset">
                             <legend className="fieldset-legend">Contact Information</legend>
                             <div className="form-section-spacing">
                                 <div>
                                     <label htmlFor="address" className="form-label">Mailing Address</label>
-                                    <textarea id="address" name="address" value={formData.address} onChange={handleFormChange} placeholder="Enter your full mailing address" className="form-textarea" required></textarea>
+                                    <textarea id="address" name="address" value={formData.address} onChange={handleFormChange} className="form-textarea" required></textarea>
+                                    {formErrors.address && <p style={{ color: 'red' }}>{formErrors.address}</p>}
                                 </div>
                                 <div className="form-grid-cols-2">
                                     <div>
                                         <label htmlFor="country" className="form-label">Country</label>
-                                        <input type="text" id="country" name="country" value={formData.country} onChange={handleFormChange} placeholder="e.g., India" className="form-input" required />
+                                        <input type="text" id="country" name="country" value={formData.country} onChange={handleFormChange} className="form-input" required />
+                                        {formErrors.country && <p style={{ color: 'red' }}>{formErrors.country}</p>}
                                     </div>
                                     <div>
                                         <label htmlFor="pincode" className="form-label">Pincode / Postal Code</label>
-                                        <input type="text" id="pincode" name="pincode" value={formData.pincode} onChange={handleFormChange} placeholder="e.g., 600001" className="form-input" required />
+                                        <input type="text" id="pincode" name="pincode" value={formData.pincode} onChange={handleFormChange} className="form-input" required />
+                                        {formErrors.pincode && <p style={{ color: 'red' }}>{formErrors.pincode}</p>}
                                     </div>
                                 </div>
                             </div>
                         </fieldset>
 
+                        {/* Abstract Submission */}
                         <fieldset className="form-fieldset">
                             <legend className="fieldset-legend">Abstract Submission</legend>
                             <div className="form-section-spacing">
@@ -736,69 +925,90 @@ const RegistrationForm = () => {
                                         <label htmlFor="track" className="form-label">Conference Track</label>
                                         <select id="track" name="track" value={formData.track} onChange={handleFormChange} className="form-select" required>
                                             <option value="" disabled>Select a Conference Track...</option>
-                                            <option value="Track 1: Innovative and Sustainable Smart Technologies in Electrical Engineering">Track 1: Electrical Engineering</option>
-                                            <option value="Track 2: Innovative and Sustainable Smart Technologies in Communication Engineering">Track 2: Communication Engineering</option>
-                                            <option value="Track 3: Innovative and Sustainable Smart Technologies in Biomedical Engineering">Track 3: Biomedical Engineering</option>
-                                            <option value="Track 4: Innovative and Sustainable Smart Technologies in Computer Science and Multidisciplinary Applications">Track 4: Computer Science & Multidisciplinary</option>
+                                            <option value="Track 1">Track 1: Electrical Engineering</option>
+                                            <option value="Track 2">Track 2: Communication Engineering</option>
+                                            <option value="Track 3">Track 3: Biomedical Engineering</option>
+                                            <option value="Track 4">Track 4: Computer Science & Multidisciplinary</option>
                                         </select>
+                                        {formErrors.track && <p style={{ color: 'red' }}>{formErrors.track}</p>}
                                     </div>
                                     <div>
                                         <label htmlFor="abstractTitle" className="form-label">Abstract Title</label>
-                                        <input type="text" id="abstractTitle" name="abstractTitle" value={formData.abstractTitle} onChange={handleFormChange} placeholder="Enter the title of your abstract" className="form-input" required />
+                                        <input type="text" id="abstractTitle" name="abstractTitle" value={formData.abstractTitle} onChange={handleFormChange} className="form-input" required />
+                                        {formErrors.abstractTitle && <p style={{ color: 'red' }}>{formErrors.abstractTitle}</p>}
                                     </div>
                                 </div>
                                 <div>
                                     <label htmlFor="abstractContent" className="form-label">Abstract Content</label>
-                                    <textarea id="abstractContent" name="abstractContent" value={formData.abstractContent} onChange={handleAbstractChange} placeholder="Paste your abstract here..." className="form-textarea" required></textarea>
+                                    <textarea id="abstractContent" name="abstractContent" value={formData.abstractContent} onChange={handleAbstractChange} className="form-textarea" required></textarea>
                                     <p className={`word-counter ${wordCount > 300 ? 'error' : ''}`}>{wordCount} / 300 words</p>
+                                    {formErrors.abstractContent && <p style={{ color: 'red' }}>{formErrors.abstractContent}</p>}
                                 </div>
                                 <div>
                                     <label htmlFor="abstractExpression" className="form-label">Keywords</label>
-                                    <input type="text" id="abstractExpression" name="abstractExpression" value={formData.abstractExpression} onChange={handleFormChange} placeholder="e.g., Smart Grids, AI, Biomedical Sensors" className="form-input" required />
+                                    <input type="text" id="abstractExpression" name="abstractExpression" value={formData.abstractExpression} onChange={handleFormChange} className="form-input" required />
+                                    {formErrors.abstractExpression && <p style={{ color: 'red' }}>{formErrors.abstractExpression}</p>}
+                                </div>
+                                <div>
+                                    <label className="form-label">Presentation Mode</label>
+                                    <select name="presentationMode" value={formData.presentationMode} onChange={handleFormChange} className="form-select" required>
+                                        <option value="" disabled>Select Presentation Mode...</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select>
+                                    {formErrors.presentationMode && <p style={{ color: 'red' }}>{formErrors.presentationMode}</p>}
                                 </div>
                             </div>
                         </fieldset>
 
+                        {/* Confirmation */}
                         <fieldset className="form-fieldset">
                             <legend className="fieldset-legend">Final Confirmation</legend>
                             <div className="confirmation-group">
-                                <input type="checkbox" id="genuineSubmission" checked={genuineSubmission} onChange={(e) => setGenuineSubmission(e.target.checked)} className="form-checkbox"/>
+                                <input
+                                    type="checkbox"
+                                    id="genuineSubmission"
+                                    checked={genuineSubmission}
+                                    onChange={(e) => setGenuineSubmission(e.target.checked)}
+                                    className="form-checkbox"
+                                />
                                 <label htmlFor="genuineSubmission" className="form-label-sm">
-                                    I hereby declare that the information and documents submitted are genuine and accurate to the best of my knowledge.
+                                    I declare that the information submitted is genuine.
                                 </label>
+                                {formErrors.genuineSubmission && <p style={{ color: 'red' }}>{formErrors.genuineSubmission}</p>}
                             </div>
                             <div className="confirmation-group">
-                                    <label htmlFor="termsAccepted" className="form-label-sm" style={{ display: 'flex', alignItems: 'flex-start', cursor: 'pointer' }}>
-                                        <input 
-                                            type="checkbox" 
-                                            id="termsAccepted" 
-                                            checked={termsAccepted} 
-                                            // MODIFIED: Use onClick to intercept the click and open the modal
-                                            onClick={handleTermsClick}
-                                            // Add a readOnly here just to make sure the state is only controlled by the modal
-                                            readOnly 
-                                            className="form-checkbox"
-                                            style={{ marginTop: '3px' }}
-                                        />
-                                        <span style={{ marginLeft: '0.75rem' }}>
-                                            I have read and agree to the{' '}
-                                            <span className="terms-link">
-                                                Terms and Conditions
-                                            </span>.
-                                        </span>
-                                    </label>
-                                </div>
-                        </fieldset>
-                        
-                        <div>
-                            <button type="submit" className="btn btn-primary" disabled={!genuineSubmission || !termsAccepted}>
-                                Submit Registration
-                            </button>
-                        </div>
+                                <input
+                                    type="checkbox"
+                                    id="termsAccepted"
+                                    checked={termsAccepted}
+                                    readOnly
+                                    className="form-checkbox"
+                                />
+                                <label htmlFor="termsAccepted" className="form-label-sm">
+                                    I agree to the{" "}
+                                    <span
+                                        onClick={() => setIsTermsModalOpen(true)}
+                                        style={{ color: "blue", cursor: "pointer", textDecoration: "underline" }}
+                                    >
+                                        Terms and Conditions
+                                    </span>.
+                                </label>
+                                {formErrors.termsAccepted && <p style={{ color: 'red' }}>{formErrors.termsAccepted}</p>}
+                            </div>
+                        </fieldset> 
+                        <button 
+  type="submit" 
+  className="submit-btn" 
+  disabled={loading}
+>
+  {loading ? "Submitting..." : "Submit Registration"}
+</button>
+
+
                     </form>
                 </div>
-                
-                {/* --- Modals --- */}
+        {/* Submission Modal */}
                 {isModalOpen && (
                     <div className="modal-overlay">
                         <div className="modal-content">
@@ -809,12 +1019,13 @@ const RegistrationForm = () => {
                                 </svg>
                             </div>
                             <h3 className="modal-title">Registration Submitted!</h3>
-                            <p className="modal-description">Thank you for registering. Please review the data we received:</p>
+                            <p className="modal-description">Thank you for registering. Review the submitted data:</p>
                             <pre className="modal-data-preview">{JSON.stringify(submittedData, null, 2)}</pre>
                         </div>
                     </div>
                 )}
 
+                {/* Terms Modal */}
                 {isTermsModalOpen && (
                     <TermsModal 
                         onAccept={handleAcceptTerms} 
