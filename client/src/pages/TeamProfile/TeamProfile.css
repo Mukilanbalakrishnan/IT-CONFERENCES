@@ -4,21 +4,58 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes bounce-animation {
+    from { transform: translateY(0); }
+    to { transform: translateY(-12px); }
+}
+
 /* --- Base Styles --- */
 .profile-page-container {
-    background: var(--surface-light); /* Themed background */
+    background: var(--surface-light);
     padding: 2rem var(--gutter) 4rem;
-    font-family: 'Poppins', sans-serif; /* Matched to theme */
+    font-family: 'Poppins', sans-serif;
     min-height: 100vh;
     margin-top: -100px;
 }
-.profile-page-loading, .profile-page-error {
+.profile-page-error {
     text-align: center; padding: 4rem; font-size: 1.2rem;
+    color: var(--brand-red);
+}
+
+/* --- ✅ BOUNCING BALLS LOADER STYLES --- */
+.loader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 1rem;
+    min-height: 60vh;
+}
+.loader-dots {
+    display: flex;
+    gap: 0.75rem;
+}
+.loader-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: var(--brand-orange);
+    animation: bounce-animation 0.6s infinite alternate;
+}
+.loader-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.loader-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+.loader-text {
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 500;
     color: var(--text-secondary);
 }
-.profile-page-error { color: var(--brand-red); }
 
-/* --- ✅ ADDED HEADER STYLES --- */
+/* --- Page Header Styles --- */
 .tp-header {
     text-align: center;
     margin-bottom: 3rem;
@@ -59,11 +96,11 @@
 
 /* --- Themed Card Style --- */
 .card {
-    background: var(--white); /* Themed solid background */
+    background: var(--white);
     border-radius: var(--radius);
     padding: 2rem;
     border: 1px solid var(--surface-dark);
-    box-shadow: var(--shadow-soft); /* Using theme shadow */
+    box-shadow: var(--shadow-soft);
     opacity: 0;
     animation: fadeInUp 0.5s ease-out forwards;
 }
