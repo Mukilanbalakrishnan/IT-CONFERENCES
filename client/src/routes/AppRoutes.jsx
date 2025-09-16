@@ -14,6 +14,7 @@ import SubmissionStatusTracker from '../pages/statustracker/SubmissionStatusTrac
 import ConferenceTracksPage from '../pages/ConferenceTrack/ConferenceTracksPage';
 import Journal from '../pages/Journal/journal';
 import FeeStructure from '../pages/FeeStructure/FeeStructure';
+import TeamProfile from '../pages/TeamProfile/TeamProfile';
 
 
 // Import Layout & Auth Components
@@ -99,6 +100,7 @@ const AppLayout = () => {
                     <Route path="/conferencetrack" element={<ConferenceTracksPage />} />
                     <Route path="/journal" element={<Journal />} />
                     <Route path="/feestructure" element={<FeeStructure />} />
+                    <Route path="/teamprofile" element={<TeamProfile />} />
                 </Routes>
             </main>
             <Footer />

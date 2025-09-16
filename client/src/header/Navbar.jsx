@@ -108,7 +108,7 @@ const Navbar = ({ user, onLogout, onOpenLogin }) => {
                                 <div className={`profile-dropdown-content ${isProfileOpen ? 'open' : ''}`}>
                                     <div className="profile-links">
                                         <div className="dropdown-link" onClick={() => { navigate('/team'); setIsProfileOpen(false); }}>Team</div>
-                                        <div className="dropdown-link" onClick={() => { navigate('/status'); setIsProfileOpen(false); }}>Status</div>
+                                        <div className="dropdown-link" onClick={() => { navigate('/status-tracker'); setIsProfileOpen(false); }}>Status</div>
                                         <div className="dropdown-link" onClick={onLogout}>Logout</div>
                                     </div>
                                 </div>
