@@ -26,10 +26,13 @@ import SignUpForm from '../pages/Login/LoginForm';
 const AppLayout = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    
+    // Global state for the entire application
     const [user, setUser] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [authMode, setAuthMode] = useState('signin');
 
+    // This effect runs once to check for a logged-in user when the app loads
     useEffect(() => {
         const checkUserSession = () => {
             const token = localStorage.getItem('token');
@@ -38,7 +41,7 @@ const AppLayout = () => {
                 try {
                     setUser(JSON.parse(userData));
                 } catch (error) {
-                    console.error("Failed to parse user data:", error);
+                    console.error("Failed to parse user data from storage", error);
                     localStorage.clear();
                 }
             }
@@ -46,15 +49,18 @@ const AppLayout = () => {
         checkUserSession();
     }, []);
 
+    // This effect manages the special body class for the homepage's transparent navbar
     useEffect(() => {
         if (location.pathname === '/') {
             document.body.classList.add('is-home-page');
         } else {
             document.body.classList.remove('is-home-page');
         }
+        return () => document.body.classList.remove('is-home-page');
     }, [location.pathname]);
 
-    const handleLogin = (userData, token) => {
+    // --- Global Authentication Handlers ---
+    const handleLoginSuccess = (userData, token) => {
         localStorage.setItem('user', JSON.stringify(userData));
         localStorage.setItem('token', token);
         setUser(userData);
@@ -65,20 +71,22 @@ const AppLayout = () => {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
         setUser(null);
-        navigate('/');
+        navigate('/'); // Navigate to home to ensure a clean state
     };
 
-    const openLoginModal = () => {
+    const handleOpenLogin = () => {
         setAuthMode('signin');
         setIsModalOpen(true);
     };
+    
+    const handleCloseLogin = () => setIsModalOpen(false);
 
     return (
         <>
-            <Navbar user={user} onLogout={handleLogout} onLoginRequest={openLoginModal} />
-            <main className={location.pathname === '/' ? 'home-main' : ''}>
+            <Navbar user={user} onLogout={handleLogout} onOpenLogin={handleOpenLogin} />
+            <main>
                 <Routes>
-                    <Route path="/" element={<Home onLoginRequest={openLoginModal} />} />
+                    <Route path="/" element={<Home onOpenLogin={handleOpenLogin} />} />
                     <Route path="/venue" element={<Venue />} />
                     <Route path="/speaker" element={<Speaker />} />
                     <Route path="/contact" element={<Contact />} />
@@ -87,7 +95,7 @@ const AppLayout = () => {
                     <Route path="/committees/organizing-committee" element={<OrganizingCom />} />
                     <Route path="/committees/research-and-review-committee" element={<ResearchCom />} />
                     <Route path="/register" element={<RegistrationForm />} />
-                    <Route path="/status-tracker" element={<SubmissionStatusTracker />} />
+                    <Route path="/status" element={<SubmissionStatusTracker />} />
                     <Route path="/conferencetrack" element={<ConferenceTracksPage />} />
                     <Route path="/journal" element={<Journal />} />
                     <Route path="/feestructure" element={<FeeStructure />} />
@@ -95,24 +103,32 @@ const AppLayout = () => {
             </main>
             <Footer />
 
-            {isModalOpen && (
-                <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                    {authMode === 'signin' ? (
-                        <SignInForm onSwitch={() => setAuthMode('signup')} onLoginSuccess={handleLogin} onClose={() => setIsModalOpen(false)} />
-                    ) : (
-                        <SignUpForm onSwitch={() => setAuthMode('signin')} onClose={() => setIsModalOpen(false)} />
-                    )}
-                </Modal>
-            )}
+            {/* Login/Signup Modal managed globally */}
+            <Modal isOpen={isModalOpen} onClose={handleCloseLogin}>
+                {authMode === 'signin' ? (
+                    <SignInForm 
+                        onSwitch={() => setAuthMode('signup')} 
+                        onClose={handleCloseLogin}
+                        onLoginSuccess={handleLoginSuccess}
+                    />
+                ) : (
+                    <RegistrationFormLogin 
+                        onSwitch={() => setAuthMode('signin')} 
+                        onClose={handleCloseLogin} 
+                    />
+                )}
+            </Modal>
         </>
     );
 };
 
-const AppRoutes = () => (
-    <Router>
-        <AppLayout />
-    </Router>
-);
+const AppRoutes = () => {
+    return (
+        <Router>
+            <AppLayout />
+        </Router>
+    );
+};
 
 export default AppRoutes;
 

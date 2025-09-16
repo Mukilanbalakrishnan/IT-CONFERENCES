@@ -7,9 +7,6 @@ import Map from './Map';
 import Patrons from './Patrons';
 import Chair from './Chair';
 import ChiefPatron from './Chiefpatron';
-import Modal from '/src/pages/Login/Modal';
-import SignInForm from '/src/pages/Login/Signin';
-import RegistrationForm from '/src/pages/Login/LoginForm';
 import UpcomingDeadlines from './ImportentDates';
 import Convenor from './Convenor';
 import { useNavigate } from "react-router-dom";
@@ -55,19 +52,9 @@ const Countdown = () => {
 };
 
 // --- Hero Component ---
-const Hero = ({ onLoginRequest }) => {
+const Hero = ({ onOpenLogin }) => {
   const title = "Joint International Conference on";
   const navigate = useNavigate();
-
-  const handleSubmitPaper = () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-        // A simple check. For production, you'd decode and check expiry.
-        navigate("/register");
-    } else {
-        onLoginRequest();
-    }
-  };
 
   const handleViewTracks = () => navigate("/conferencetrack");
 
@@ -101,7 +88,7 @@ const Hero = ({ onLoginRequest }) => {
         </p>
         <p className="hero-date">March 26th Thursday & 27th Friday, 2026</p>
         <div className="hero-buttons">
-          <button onClick={handleSubmitPaper} className="btn btn-primary">Submit a Paper</button>
+          <button onClick={onOpenLogin} className="btn btn-primary">Submit a Paper</button>
           <button onClick={handleViewTracks} className="btn btn-secondary">View Tracks</button>
         </div>
       </div>
@@ -244,10 +231,10 @@ const About = () => {
 };
 
 // --- Home Page Component ---
-const Home = ({ onLoginRequest }) => {
+const Home = ({ onOpenLogin }) => {
   return (
       <main className="home-main">
-        <Hero onLoginRequest={onLoginRequest} />
+        <Hero onOpenLogin={onOpenLogin} />
         <Collaboration />
         <About />
         <ChiefPatron/>
