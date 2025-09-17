@@ -15,7 +15,7 @@ import ConferenceTracksPage from '../pages/ConferenceTrack/ConferenceTracksPage'
 import Journal from '../pages/Journal/journal';
 import FeeStructure from '../pages/FeeStructure/FeeStructure';
 import TeamProfile from '../pages/TeamProfile/TeamProfile';
-
+import PaperSubmission from '../pages/PaperSubmission/PaperSubmission';
 
 // Import Layout & Auth Components
 import Navbar from '../header/Navbar';
@@ -101,6 +101,7 @@ const AppLayout = () => {
                     <Route path="/journal" element={<Journal />} />
                     <Route path="/feestructure" element={<FeeStructure />} />
                     <Route path="/team" element={<TeamProfile />} />
+                    <Route path="/paper-submission" element={<PaperSubmission />} />
                 </Routes>
             </main>
             <Footer />
