@@ -14,15 +14,14 @@ const PaperSubmission = () => {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            // Check file type
             const allowedTypes = ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
             if (!allowedTypes.includes(file.type)) {
                 toast.error("Invalid file type. Please upload a .doc or .docx file.");
-                e.target.value = null; // Reset the input
+                e.target.value = null;
                 return;
             }
             setPaperFile(file);
-            setFormErrors({}); // Clear previous file error
+            setFormErrors({});
         }
     };
 
@@ -39,25 +38,20 @@ const PaperSubmission = () => {
         e.preventDefault();
         setLoading(true);
         
-        // In a real application, you would handle payment processing here
-        
         const formData = new FormData();
         formData.append('paper', paperFile);
-        // You would also append payment details or a payment token
-
+        
         try {
             const token = localStorage.getItem("token");
-            // Mock API call
             await new Promise(resolve => setTimeout(resolve, 2000));
+            // Example API call (replace with your actual endpoint)
             // const response = await axios.post('YOUR_API_ENDPOINT/submit-paper', formData, {
             //     headers: {
             //         'Content-Type': 'multipart/form-data',
             //         'Authorization': `Bearer ${token}`
             //     }
             // });
-
             toast.success("Your paper and payment have been submitted successfully!");
-            // Redirect or update UI after success
         } catch (error) {
             toast.error("Submission failed. Please try again.");
             console.error("Submission error:", error);
@@ -70,21 +64,33 @@ const PaperSubmission = () => {
         <>
             <ToastContainer position="top-right" />
             <div className="ps-page-container">
+                <header className="ps-page-header">
+                    <h1>Final Submission</h1>
+                    <p>Complete your registration by uploading your paper and processing the fee.</p>
+                </header>
+
                 <div className="ps-main-container">
                     {/* Left Panel */}
                     <div className="ps-left-panel">
                         <div>
-                            <h1 className="ps-left-panel-title">Final Submission</h1>
-                            <p className="ps-left-panel-subtitle">Paper Upload & Payment</p>
-                            <p className="ps-left-panel-description">
-                                Complete the final step by uploading your full paper and processing the registration fee.
-                            </p>
+                            <h2 className="ps-left-panel-title">Submission Process</h2>
+                             <div className="ps-step-indicator">
+                                <div className={`ps-step ${step === 1 ? 'active' : ''}`}>
+                                    <div className="ps-step-number">1</div>
+                                    <div className="ps-step-label">Upload Paper</div>
+                                </div>
+                                <div className="ps-step-connector"></div>
+                                <div className={`ps-step ${step === 2 ? 'active' : ''}`}>
+                                    <div className="ps-step-number">2</div>
+                                    <div className="ps-step-label">Process Payment</div>
+                                </div>
+                            </div>
                             <div className="ps-left-panel-info">
-                                <p className="ps-info-title">Process:</p>
+                                <p className="ps-info-title">Key Information:</p>
                                 <ul className="ps-info-list">
-                                    <li>Step 1: Upload your paper in .doc or .docx format.</li>
-                                    <li>Step 2: Complete the payment to finalize your registration.</li>
-                                    <li>Ensure all details are correct before submission.</li>
+                                    <li>Your abstract has been approved.</li>
+                                    <li>Upload your final paper in .doc or .docx format.</li>
+                                    <li>Complete the payment to finalize your registration.</li>
                                 </ul>
                             </div>
                         </div>
@@ -94,9 +100,10 @@ const PaperSubmission = () => {
                     <div className="ps-right-panel">
                         {step === 1 && (
                             <div className="ps-form-body">
-                                <h2 className="ps-form-title">Step 1: Upload Your Full Paper</h2>
+                                <h3 className="ps-form-title">Step 1: Upload Your Full Paper</h3>
                                 <div className="ps-upload-area">
                                     <FaFileUpload className="ps-upload-icon" />
+                                     <p>Drag & drop your file here or</p>
                                     <input 
                                         type="file" 
                                         id="paperUpload" 
@@ -105,7 +112,7 @@ const PaperSubmission = () => {
                                         style={{ display: 'none' }}
                                     />
                                     <label htmlFor="paperUpload" className="ps-upload-label">
-                                        Choose File
+                                        Browse File
                                     </label>
                                     {paperFile && <p className="ps-file-name">Selected: {paperFile.name}</p>}
                                     {formErrors.file && <p className="ps-error-text">{formErrors.file}</p>}
@@ -119,7 +126,7 @@ const PaperSubmission = () => {
                         {step === 2 && (
                             <div className="ps-form-body">
                                 <button onClick={() => setStep(1)} className="ps-back-btn"><FaArrowLeft /> Back to Upload</button>
-                                <h2 className="ps-form-title">Step 2: Complete Payment</h2>
+                                <h3 className="ps-form-title">Step 2: Complete Payment</h3>
                                 <form onSubmit={handleSubmit}>
                                     <fieldset className="ps-form-fieldset">
                                         <legend className="ps-fieldset-legend">Payment Details</legend>
@@ -158,3 +165,4 @@ const PaperSubmission = () => {
 };
 
 export default PaperSubmission;
+

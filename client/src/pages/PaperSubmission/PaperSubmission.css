@@ -16,7 +16,25 @@
 /* --- Main Layout --- */
 .ps-page-container {
     padding: 2rem 1rem;
+    background-color: var(--surface-light);
 }
+
+.ps-page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+.ps-page-header h1 {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    color: var(--brand-blue-dark);
+    margin-bottom: 0.5rem;
+}
+.ps-page-header p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
 .ps-main-container {
     width: 100%;
     max-width: 72rem;
@@ -53,13 +71,14 @@
 .ps-left-panel-subtitle {
     font-size: 1.125rem;
     font-weight: 600;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     color: #bfdbfe;
 }
 .ps-left-panel-description {
     color: #dbeafe;
     line-height: 1.6;
     font-size: 0.9rem;
+    margin-bottom: 2rem;
 }
 .ps-left-panel-info {
     margin-top: 2rem;
@@ -70,16 +89,63 @@
     font-weight: 700;
 }
 .ps-info-list {
-    list-style-position: inside;
-    list-style-type: disc;
+    list-style-type: none;
     margin-top: 0.5rem;
     font-size: 0.875rem;
     color: #bfdbfe;
     padding-left: 0;
 }
 .ps-info-list li {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
 }
+.ps-info-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--brand-orange);
+}
+
+/* Step Indicator */
+.ps-step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.ps-step {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+}
+.ps-step.active {
+    opacity: 1;
+}
+.ps-step-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid var(--brand-orange);
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+}
+.ps-step.active .ps-step-number {
+    background-color: var(--brand-orange);
+}
+.ps-step-label {
+    font-weight: 600;
+}
+.ps-step-connector {
+    flex-grow: 1;
+    height: 2px;
+    background-color: rgba(255,255,255,0.2);
+}
+
 
 /* --- Right Panel (Form) --- */
 .ps-right-panel {
@@ -103,26 +169,29 @@
 .ps-upload-area {
     border: 2px dashed var(--surface-dark);
     border-radius: var(--radius);
-    padding: 3rem 1rem;
+    padding: 2rem;
     text-align: center;
-    transition: border-color 0.3s;
+    transition: all 0.3s;
 }
 .ps-upload-area:hover {
     border-color: var(--brand-orange);
+    background-color: var(--surface-light);
 }
 .ps-upload-icon {
-    font-size: 3rem;
+    font-size: 2.5rem;
     color: var(--brand-blue-primary);
     margin-bottom: 1rem;
 }
 .ps-upload-label {
     background-color: var(--brand-blue-primary);
     color: white;
-    padding: 0.75rem 2rem;
+    padding: 0.6rem 1.5rem;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
     transition: background-color 0.2s;
+    display: inline-block;
+    margin-top: 0.5rem;
 }
 .ps-upload-label:hover {
     background-color: var(--brand-blue-dark);
@@ -191,3 +260,4 @@
 .ps-back-btn:hover {
     color: var(--brand-blue-dark);
 }
+
