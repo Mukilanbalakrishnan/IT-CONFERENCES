@@ -117,7 +117,7 @@ const styles = {
   },
 };
 
-function SignInForm({ onSwitch, onClose }) {
+function SignInForm({ onSwitch, onClose ,onLoginSuccess}) {
   const [username, setUsername] = useState(""); // matches backend
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -139,6 +139,7 @@ function SignInForm({ onSwitch, onClose }) {
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data));
+      onLoginSuccess(data);
 
       toast.success("Signed in successfully 🎉");
       setTimeout(() => {

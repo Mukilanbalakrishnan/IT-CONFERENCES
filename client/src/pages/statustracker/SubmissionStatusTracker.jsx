@@ -489,4 +489,3 @@ const SubmissionStatusTracker = () => {
 };
 
 export default SubmissionStatusTracker;
-

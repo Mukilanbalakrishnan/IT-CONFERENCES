@@ -16,11 +16,11 @@ const EventSpeaker = () => {
         },
         {
             id: 'spk2',
-            name: 'Dr. Sandeepan Mila',
-            title: 'Associate Professor',
+            name: 'Dr. Sandipan Mallik',
+            title: 'Professor',
             title2: 'Department of Electronics and Communication Engineering',
             image: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755757219/sgphhfiniml8lavztk6w.jpg',
-            bio: 'NIST University (National Institute of Science and Technology), Odisha, India.',
+            bio: 'NIST University,Berhampur, Odisha, India.',
             social: { linkedin: '#', twitter: '#', website: '#' }
         },
         {
