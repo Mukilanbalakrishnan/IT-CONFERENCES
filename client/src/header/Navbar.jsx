@@ -105,7 +105,7 @@ const Navbar = ({ user, onLogout, onOpenLogin }) => {
                             <div className="user-profile-menu" ref={profileRef}>
                                 <div className="profile-trigger" onClick={() => setIsProfileOpen(!isProfileOpen)}>
                                     <img src={`https://ui-avatars.com/api/?name=${user.name}&background=0D47A1&color=fff`} alt="User Profile" className="profile-picture" />
-                                    <span className="profile-user-name">{user.name}</span>
+                                    <span className="profile-user-name">{user.userId}</span>
                                     <IoIosArrowDown className={`profile-chevron ${isProfileOpen ? 'open' : ''}`} />
                                 </div>
                                 <div className={`profile-dropdown-content ${isProfileOpen ? 'open' : ''}`}>

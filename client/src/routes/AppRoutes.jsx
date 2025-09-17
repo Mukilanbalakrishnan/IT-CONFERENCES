@@ -68,6 +68,22 @@ const AppLayout = () => {
         setIsModalOpen(false); // Close modal on successful login
     };
 
+
+    const handleAuthSuccess = (responseData) => {
+        if (!responseData || !responseData.token) {
+            console.error("Auth success response is invalid:", responseData);
+            return;
+        }
+
+        // Destructure the token from the rest of the user data for cleaner storage
+        const { token, ...userData } = responseData;
+        
+        localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('token', token);
+        setUser(userData);
+        setIsModalOpen(false); // Close modal on success
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
@@ -87,7 +103,8 @@ const AppLayout = () => {
             <Navbar user={user} onLogout={handleLogout} onOpenLogin={handleOpenLogin} />
             <main>
                 <Routes>
-                    <Route path="/" element={<Home onOpenLogin={handleOpenLogin} />} />
+                    // ✅ This is the UPDATED code
+<Route path="/" element={<Home user={user} onOpenLogin={handleOpenLogin} />} />
                     <Route path="/venue" element={<Venue />} />
                     <Route path="/speaker" element={<Speaker />} />
                     <Route path="/contact" element={<Contact />} />
@@ -111,12 +128,13 @@ const AppLayout = () => {
                     <SignInForm 
                         onSwitch={() => setAuthMode('signup')} 
                         onClose={handleCloseLogin}
-                        onLoginSuccess={handleLoginSuccess}
+                        onLoginSuccess={handleAuthSuccess}
                     />
                 ) : (
                     <SignUpForm 
                         onSwitch={() => setAuthMode('signin')} 
                         onClose={handleCloseLogin} 
+                        onSignUpSuccess={handleAuthSuccess}
                     />
                 )}
             </Modal>
