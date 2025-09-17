@@ -70,6 +70,9 @@ const Navbar = ({ user, onLogout, onOpenLogin }) => {
         onOpenLogin();
     };
 
+
+    
+
     const navLinkClass = ({ isActive }) => (isActive ? "active" : "");
     const headerClass = `header ${!isTransparent ? "scrolled" : ""}`;
 

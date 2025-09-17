@@ -100,7 +100,7 @@ const AppLayout = () => {
                     <Route path="/conferencetrack" element={<ConferenceTracksPage />} />
                     <Route path="/journal" element={<Journal />} />
                     <Route path="/feestructure" element={<FeeStructure />} />
-                    <Route path="/teamprofile" element={<TeamProfile />} />
+                    <Route path="/team" element={<TeamProfile />} />
                 </Routes>
             </main>
             <Footer />
@@ -114,7 +114,7 @@ const AppLayout = () => {
                         onLoginSuccess={handleLoginSuccess}
                     />
                 ) : (
-                    <RegistrationFormLogin 
+                    <SignUpForm 
                         onSwitch={() => setAuthMode('signin')} 
                         onClose={handleCloseLogin} 
                     />
