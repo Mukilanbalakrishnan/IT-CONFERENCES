@@ -8,54 +8,16 @@ import './Navbar.css';
 import SignIn from '/src/pages/Login/Signin';
 import RegistrationForm from '/src/pages/Login/LoginForm';
 
-const Navbar = () => {
+const Navbar = ({ user, onLogout, onOpenLogin }) => {
     const [sidemenu, setSideMenu] = useState(false);
     const [isTransparent, setIsTransparent] = useState(true);
-    const [showPopup, setShowPopup] = useState(false);
-    const [authMode, setAuthMode] = useState("signin");
-    const [user, setUser] = useState(null);
-    const [hasSubmitted, setHasSubmitted] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const profileRef = useRef(null);
 
     const navigate = useNavigate();
     const location = useLocation();
 
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        setUser(null);
-        setHasSubmitted(false);
-        setIsProfileOpen(false);
-        navigate('/');
-    };
-
-    // Check login status on component mount and location change
-    useEffect(() => {
-        const checkUserStatus = async () => {
-            const token = localStorage.getItem("token");
-            if (token) {
-                try {
-                    const response = await fetch("https://it-con-backend.onrender.com/api/users/me", {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-                        setUser(data);
-                        setHasSubmitted(data.hasSubmittedAbstract || false);
-                    } else {
-                        handleLogout(); // Token is invalid or expired
-                    }
-                } catch (error) {
-                    console.error("Failed to fetch user status:", error);
-                    handleLogout();
-                }
-            }
-        };
-        checkUserStatus();
-    }, [location.pathname]); // Re-check on route change
-    
-    // Handle scroll transparency
+    // Handle scroll transparency and body class
     useEffect(() => {
         const isHomePage = location.pathname === '/';
         const handleScroll = () => setIsTransparent(window.scrollY <= 10);
@@ -72,20 +34,14 @@ const Navbar = () => {
         };
     }, [location.pathname]);
 
-    // Add body classes for scroll lock and homepage styles
+    // Add body classes for scroll lock
     useEffect(() => {
         if (sidemenu) {
             document.body.classList.add('body-no-scroll');
         } else {
             document.body.classList.remove('body-no-scroll');
         }
-        
-        if (location.pathname === '/') {
-            document.body.classList.add('is-home-page');
-        } else {
-            document.body.classList.remove('is-home-page');
-        }
-    }, [sidemenu, location.pathname]);
+    }, [sidemenu]);
     
     // Close profile dropdown when clicking outside
     useEffect(() => {
@@ -101,17 +57,21 @@ const Navbar = () => {
     const handleSubmitPaper = () => {
         const token = localStorage.getItem("token");
         if (token) {
-            try {
+             try {
                 const payload = JSON.parse(atob(token.split('.')[1]));
                 if (payload.exp * 1000 > Date.now()) {
                     navigate("/register");
                     return;
                 }
-            } catch (e) { /* fallthrough */ }
+            } catch (e) {
+                console.error("Invalid token:", e);
+            }
         }
-        setAuthMode("signin");
-        setShowPopup(true);
+        onOpenLogin();
     };
+
+
+    
 
     const navLinkClass = ({ isActive }) => (isActive ? "active" : "");
     const headerClass = `header ${!isTransparent ? "scrolled" : ""}`;
@@ -120,7 +80,6 @@ const Navbar = () => {
         <>
             <header className={headerClass}>
                 <div className="header-container">
-                    
                     <ul className="desktop-nav">
                         <li><NavLink to="/" className={navLinkClass}>Home</NavLink></li>
                         <li className="nav-item-dropdown">
@@ -146,12 +105,14 @@ const Navbar = () => {
                             <div className="user-profile-menu" ref={profileRef}>
                                 <div className="profile-trigger" onClick={() => setIsProfileOpen(!isProfileOpen)}>
                                     <img src={`https://ui-avatars.com/api/?name=${user.name}&background=0D47A1&color=fff`} alt="User Profile" className="profile-picture" />
+                                    <span className="profile-user-name">{user.name}</span>
+                                    <IoIosArrowDown className={`profile-chevron ${isProfileOpen ? 'open' : ''}`} />
                                 </div>
                                 <div className={`profile-dropdown-content ${isProfileOpen ? 'open' : ''}`}>
                                     <div className="profile-links">
                                         <div className="dropdown-link" onClick={() => { navigate('/team'); setIsProfileOpen(false); }}>Team</div>
                                         <div className="dropdown-link" onClick={() => { navigate('/status'); setIsProfileOpen(false); }}>Status</div>
-                                        <div className="dropdown-link" onClick={handleLogout}>Logout</div>
+                                        <div className="dropdown-link" onClick={onLogout}>Logout</div>
                                     </div>
                                 </div>
                             </div>
@@ -163,18 +124,6 @@ const Navbar = () => {
                 </div>
             </header>
             
-            {showPopup && (
-                <div className="popup-overlay">
-                    <div className="popup-content" key={authMode}>
-                        {authMode === "signin" ? (
-                            <SignIn onClose={() => setShowPopup(false)} onSwitch={() => setAuthMode("signup")} />
-                        ) : (
-                            <RegistrationForm onClose={() => setShowPopup(false)} onSwitch={() => setAuthMode("signin")} />
-                        )}
-                    </div>
-                </div>
-            )}
-
             <div className={`mobile-sidemenu ${sidemenu ? "open" : ""}`}>
                 <div className="sidemenu-header">
                     <span className="sidemenu-title">Menu</span>
