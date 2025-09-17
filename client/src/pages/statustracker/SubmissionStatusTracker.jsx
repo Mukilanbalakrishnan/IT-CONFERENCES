@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaCheckCircle, FaTimesCircle, FaHourglassHalf } from 'react-icons/fa';
 
 // This component includes its own styles for a self-contained setup.
@@ -51,16 +51,17 @@ const componentStyles = `
     display: flex;
     position: relative;
 }
-
+/* The line connecting the dots */
 .st-timeline-item:not(:last-child)::before {
     content: '';
     position: absolute;
-    top: 22px; 
-    left: 22px; 
+    top: 22px; /* Start below the icon center */
+    left: 22px; /* Center with the icon */
     width: 2px;
     height: 100%;
     background-color: var(--surface-dark);
     transform: translateX(-50%);
+    transition: background-color 0.4s ease;
 }
 
 .st-timeline-item.completed:not(:last-child)::before {
@@ -82,6 +83,7 @@ const componentStyles = `
     place-items: center;
     background-color: var(--white);
     border: 2px solid var(--surface-dark);
+    transition: border-color 0.4s ease;
 }
 
 .st-timeline-item.completed .st-status-icon-wrapper {
@@ -100,7 +102,7 @@ const componentStyles = `
 }
 
 .status-icon.completed { color: var(--brand-blue-primary); }
-.status-icon.active { color: var(--brand-orange); }
+.status-icon.active { color: var(--brand-orange); animation: pulse 1.5s infinite; }
 .status-icon.rejected { color: var(--brand-red); }
 .status-icon.pending {
     width: 14px;
@@ -118,8 +120,9 @@ const componentStyles = `
 .st-item-title {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-secondary);
+    color: var(--text-secondary); /* Default to gray */
     margin: 0 0 0.25rem;
+    transition: color 0.4s ease;
 }
 
 .st-timeline-item.completed .st-item-title,
@@ -252,6 +255,18 @@ const componentStyles = `
     font-weight: 500;
     color: var(--text-secondary);
 }
+.st-error-message {
+    text-align: center;
+    padding: 4rem 1rem;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
 
 @keyframes st-loader-bounce {
     from {
@@ -322,7 +337,6 @@ const SubmissionStatusTracker = () => {
     const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Fetch data effect
     useEffect(() => {
         const fetchStatus = async () => {
             const token = localStorage.getItem('token');
@@ -333,7 +347,7 @@ const SubmissionStatusTracker = () => {
             }
 
             try {
-                // Simulate API call
+                // Simulate API call delay
                 await new Promise(resolve => setTimeout(resolve, 1500));
                 
                 const response = await fetch("https://it-con-backend.onrender.com/api/users/me", {
@@ -341,11 +355,15 @@ const SubmissionStatusTracker = () => {
                 });
 
                 if (!response.ok) {
-                    throw new Error("Could not fetch submission status. Please try again.");
+                    if(response.status === 404) {
+                         setSubmissionData({ abstractStatus: 'No Data' });
+                    } else {
+                        throw new Error("Could not fetch submission status. Please try again.");
+                    }
+                } else {
+                    const data = await response.json();
+                    setSubmissionData(data);
                 }
-
-                const data = await response.json();
-                setSubmissionData(data);
 
             } catch (err) {
                 setError(err.message);
@@ -356,11 +374,10 @@ const SubmissionStatusTracker = () => {
 
         fetchStatus();
     }, []);
-    
 
     const handleModalSubmit = async (fileName) => {
         console.log(`Paper submitted: ${fileName}`);
-        setSubmissionData(prev => ({ ...prev, paymentStatus: 'approved', finalPaperStatus: 'approved' }));
+        setSubmissionData(prev => ({ ...prev, paymentStatus: 'paid', paperStatus: 'submitted' }));
         setIsModalOpen(false);
     };
     
@@ -372,39 +389,40 @@ const SubmissionStatusTracker = () => {
         { id: 4, title: 'Conference Registration Complete' }
     ];
 
-    const statusMap = { 'pending': 1, 'under review': 2, 'approved': 3, 'rejected': 3 };
-    
-    let currentStatusIndex = 0;
-    if (submissionData) {
-      currentStatusIndex = statusMap[submissionData.abstractStatus] || 1;
-      if (submissionData.abstractStatus === 'approved') {
-        currentStatusIndex = 3;
-        if (submissionData.finalPaperStatus === 'approved') {
-          currentStatusIndex = 4;
-          if (submissionData.paymentStatus === 'approved') {
-            currentStatusIndex = 5;
-          }
+    const getStatusStep = () => {
+        if (!submissionData || submissionData.abstractStatus === 'No Data') return 0;
+        if (submissionData.abstractStatus === 'under review' || submissionData.abstractStatus === 'pending') return 1;
+        if (submissionData.abstractStatus === 'rejected') return 2;
+        if (submissionData.abstractStatus === 'approved') {
+             if (submissionData.paperStatus === 'submitted' && submissionData.paymentStatus === 'paid') {
+                return 4; // Corresponds to the 5th stage (index 4)
+            }
+            return 3; // Corresponds to Full Paper & Payment stage
         }
-      }
-    }
+        return 0;
+    };
     
-    const isRejected = submissionData?.abstractStatus === 'rejected' || submissionData?.finalPaperStatus === 'rejected';
+    const currentStatusIndex = getStatusStep();
+    const isRejected = submissionData?.abstractStatus === 'rejected';
 
     const getStatusDescription = (index) => {
-        if (!submissionData) return "Please submit your abstract to begin.";
+        if (currentStatusIndex === 0 && index === 0) {
+            return "You have not submitted an abstract yet. Please complete your registration to begin.";
+        }
+        
         switch(index) {
-            case 0: return "Your abstract has been successfully received by our team.";
+            case 0: return "Your abstract has been successfully received and is awaiting review.";
             case 1: return "Our committee is carefully reviewing your submission.";
-            case 2: return isRejected ? `Unfortunately, your submission was not accepted. Reason: ${submissionData.rejectedReason || 'Not provided.'}` : "Congratulations! Your abstract has been accepted.";
-            case 3: return "Thank you for submitting your paper and completing payment.";
+            case 2: return isRejected ? `Unfortunately, your abstract was not selected. Reason: ${submissionData?.rejectedReason || 'Not provided.'}` : "Congratulations! Your abstract has been accepted.";
+            case 3: return "Please complete your registration by submitting your final paper and payment.";
             case 4: return "Your registration is complete. We look forward to seeing you!";
             default: return "";
         }
     };
     
     const getStatusIcon = (index) => {
-        if (index < currentStatusIndex - 1) return <FaCheckCircle className="status-icon completed" />;
-        if (index === currentStatusIndex - 1) {
+        if (index < currentStatusIndex) return <FaCheckCircle className="status-icon completed" />;
+        if (index === currentStatusIndex) {
              if (isRejected) return <FaTimesCircle className="status-icon rejected" />;
             return <FaHourglassHalf className="status-icon active" />;
         }
@@ -422,10 +440,7 @@ const SubmissionStatusTracker = () => {
     if (error) {
         return <div className="st-error-message">{error}</div>;
     }
-    if (!submissionData) {
-        return <div className="st-error-message">You have not submitted an abstract yet.</div>
-    }
-
+    
     return (
         <React.Fragment>
             <style>{componentStyles}</style>
@@ -440,9 +455,9 @@ const SubmissionStatusTracker = () => {
                         {stages.map((stage, index) => (
                             <div 
                                 key={stage.id} 
-                                className={`st-timeline-item completed
-                                    ${index < currentStatusIndex -1 ? 'completed' : ''} 
-                                    ${index === currentStatusIndex - 1 ? 'active' : ''}
+                                className={`st-timeline-item 
+                                    ${index < currentStatusIndex ? 'completed' : ''} 
+                                    ${index === currentStatusIndex ? 'active' : ''}
                                     ${isRejected && index === 2 ? 'rejected' : ''}`
                                 }
                             >
@@ -454,13 +469,12 @@ const SubmissionStatusTracker = () => {
                                 <div className="st-timeline-content">
                                     <h3 className="st-item-title">{stage.title}</h3>
                                     <p className="st-item-description">{getStatusDescription(index)}</p>
-                                    {index === 2 && currentStatusIndex === 3 && !isRejected && (
+                                    {index === 2 && currentStatusIndex === 2 && !isRejected && (
                                         <button 
                                             onClick={() => setIsModalOpen(true)} 
                                             className="st-gateway-btn"
-                                            disabled={currentStatusIndex > 3}
                                         >
-                                            {currentStatusIndex > 3 ? 'Submission Complete' : 'Proceed to Gateway'}
+                                            Proceed to Gateway
                                         </button>
                                     )}
                                 </div>
