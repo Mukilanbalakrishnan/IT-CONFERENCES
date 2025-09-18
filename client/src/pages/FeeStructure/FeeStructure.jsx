@@ -10,7 +10,6 @@ const feeData = [
         prices: {
             early: '8,000',
             regular: '10,000',
-            onsite: '12,000'
         },
         featured: false,
     },
@@ -20,7 +19,6 @@ const feeData = [
         prices: {
             early: '10,000',
             regular: '12,000',
-            onsite: '14,000'
         },
         featured: true, // This card will be highlighted
     },
@@ -30,30 +28,10 @@ const feeData = [
         prices: {
             early: '10,000',
             regular: '12,000',
-            onsite: '14,000'
         },
         featured: false,
     },
-    {
-        icon: <FaUserFriends />,
-        category: 'Accompanying Person',
-        prices: {
-            early: '4,000',
-            regular: '5,000',
-            onsite: '7,000'
-        },
-        featured: false,
-    },
-    {
-        icon: <FaToolbox />,
-        category: 'Workshop Only (Optional)',
-        prices: {
-            early: '2,000',
-            regular: '3,000',
-            onsite: '4,000'
-        },
-        featured: false,
-    }
+    
 ];
 
 const importantNotes = [
@@ -67,11 +45,6 @@ const importantNotes = [
         title: 'Regular Payment Deadline',
         text: 'Before 20th February 2026'
     },
-    {
-        icon: <FaRegCalendarAlt />,
-        title: 'On-site Payment',
-        text: 'March 26th (Thursday) & 27th (Friday), 2026'
-    }
 ];
 
 
@@ -125,10 +98,6 @@ const FeeStructure = () => {
                                     <li className="price-item">
                                         <span className="price-label">Regular</span>
                                         <span className="price-value">₹{fee.prices.regular}</span>
-                                    </li>
-                                    <li className="price-item">
-                                        <span className="price-label">On-site</span>
-                                        <span className="price-value">₹{fee.prices.onsite}</span>
                                     </li>
                                 </ul>
 

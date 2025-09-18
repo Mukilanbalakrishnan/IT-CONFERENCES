@@ -231,13 +231,13 @@
 
 /* --- Important Notes Section --- */
 .fees-notes-section {
-    margin-bottom: 4rem; /* Changed from margin-top */
+    margin-bottom: 4rem; 
     padding: 2.5rem;
     background: var(--white);
     border: 1px solid var(--surface-dark);
     box-shadow: var(--shadow-soft);
     border-radius: var(--radius);
-    animation: fadeInUp 0.5s 0.2s ease-out backwards; /* Adjusted animation delay */
+    animation: fadeInUp 0.5s 0.2s ease-out backwards;
 }
 
 .notes-title {
@@ -256,7 +256,7 @@
 
 @media (min-width: 768px) {
     .notes-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 

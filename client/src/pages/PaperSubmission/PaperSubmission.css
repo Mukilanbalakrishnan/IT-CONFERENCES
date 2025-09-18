@@ -54,50 +54,43 @@
 
 /* --- Left Panel --- */
 .ps-left-panel {
-    background-image: linear-gradient(rgba(13, 71, 161, 0.85), rgba(13, 71, 161, 0.95)), url('https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80');
+    background-image: linear-gradient(rgba(13, 71, 161, 0.9), rgba(13, 71, 161, 0.95)), url('https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80');
     background-size: cover;
     background-position: center;
     color: white;
-    padding: 2rem 3rem;
+    padding: 3rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 .ps-left-panel-title {
-    font-size: 1.875rem;
+    font-size: 2.75rem;
     font-weight: 800;
-    margin-bottom: 0.5rem;
-}
-.ps-left-panel-subtitle {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin-bottom: 2rem;
-    color: #bfdbfe;
-}
-.ps-left-panel-description {
-    color: #dbeafe;
-    line-height: 1.6;
-    font-size: 0.9rem;
-    margin-bottom: 2rem;
+    margin: 0 0 2.5rem 0;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 .ps-left-panel-info {
-    margin-top: 2rem;
-    border-top: 1px solid #60a5fa;
-    padding-top: 1.5rem;
+    margin-top: 3rem;
+    border-top: 1px solid rgba(255,255,255,0.3);
+    padding-top: 2rem;
 }
 .ps-info-title {
     font-weight: 700;
+    font-size: 1.2rem;
+    color: #dbeafe;
+    margin-bottom: 1rem;
 }
 .ps-info-list {
     list-style-type: none;
-    margin-top: 0.5rem;
-    font-size: 0.875rem;
+    font-size: 1rem;
     color: #bfdbfe;
     padding-left: 0;
+    margin: 0;
 }
 .ps-info-list li {
-    margin-bottom: 0.5rem;
-    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+    padding-left: 1.75rem;
     position: relative;
 }
 .ps-info-list li::before {
@@ -105,45 +98,50 @@
     position: absolute;
     left: 0;
     color: var(--brand-orange);
+    font-weight: 700;
 }
 
 /* Step Indicator */
 .ps-step-indicator {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
 }
 .ps-step {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    opacity: 0.6;
+    gap: 1rem;
+    opacity: 0.5;
     transition: opacity 0.3s;
+    text-align: left;
 }
 .ps-step.active {
     opacity: 1;
 }
 .ps-step-number {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.1);
-    border: 2px solid var(--brand-orange);
+    background: transparent;
+    border: 2px solid var(--white);
     display: grid;
     place-items: center;
     font-weight: 700;
+    transition: all 0.3s;
+    flex-shrink: 0;
 }
 .ps-step.active .ps-step-number {
     background-color: var(--brand-orange);
+    border-color: var(--brand-orange);
 }
 .ps-step-label {
     font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.4;
 }
-.ps-step-connector {
-    flex-grow: 1;
-    height: 2px;
-    background-color: rgba(255,255,255,0.2);
+.ps-step-label span {
+    display: block;
 }
 
 
@@ -207,7 +205,7 @@
     margin-top: 1rem;
 }
 
-/* --- Payment Form --- */
+/* --- Payment Form & Summary --- */
 .ps-form-fieldset {
     border: none; padding: 0; margin: 0;
 }
@@ -235,6 +233,35 @@
     box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
     outline: none;
 }
+.ps-payment-summary {
+    border: 1px solid var(--surface-dark);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    background-color: var(--surface-light);
+    margin-bottom: 1rem;
+}
+.ps-payment-summary h4 {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--surface-dark);
+    padding-bottom: 1rem;
+}
+.ps-summary-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+.ps-summary-item.total {
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: 1rem;
+    border-top: 1px solid var(--surface-dark);
+    padding-top: 1rem;
+}
+
 
 /* --- Buttons --- */
 .ps-btn {
