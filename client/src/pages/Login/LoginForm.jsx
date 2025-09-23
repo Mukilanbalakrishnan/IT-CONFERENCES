@@ -137,7 +137,9 @@ function RegistrationForm({ onSwitch, onClose }) {
 
       localStorage.setItem("user", JSON.stringify(data));
       toast.success("Account created successfully 🎉");
-      setTimeout(() => onClose?.(), 1500);
+      setTimeout(() => {
+      onSwitch?.();  // call this to switch to signin
+    }, 1500);
 
     } catch (err) {
       toast.error(err.response?.data?.message || "Registration failed ⚠");

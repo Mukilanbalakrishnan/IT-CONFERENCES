@@ -13,17 +13,17 @@
 
         const scheduleData = [
             {
-                dayLabel: { day: 'Monday', date: '12.06.2026' },
+                dayLabel: { day: 'Thursday', date: '26.03.2026' },
                 events: [
-                    { id: 'track1', time: '11:00 - 12:00', title: 'Innovative and Sustainable Smart Technologies in Electrical Engineering', description: 'Focuses on smart grids, renewable energy integration, and energy-efficient electrical systems.' },
-                    { id: 'track2', time: '09:30 - 10:30', title: 'Innovative and Sustainable Smart Technologies in Communication Engineering', description: 'Covers energy-efficient wireless systems, 5G/6G connectivity, and smart IoT networks.' },
+                    { id: 'track1', time: '11:30 - 1:00', title: 'Innovative and Sustainable Smart Technologies in Electrical Engineering', description: 'Focuses on smart grids, renewable energy integration, and energy-efficient electrical systems.' },
+                    { id: 'track2', time: '2:00 - 4:00', title: 'Innovative and Sustainable Smart Technologies in Communication Engineering', description: 'Covers energy-efficient wireless systems, 5G/6G connectivity, and smart IoT networks.' },
                 ],
             },
             {
-                dayLabel: { day: 'Tuesday', date: '13.06.2025' },
+                dayLabel: { day: 'Friday', date: '27.03.2025' },
                 events: [
-                    { id: 'track3', time: '14:00 - 15:00', title: 'Innovative and Sustainable Smart Technologies in Biomedical Engineering', description: 'Explores smart biomedical devices, AI-powered diagnostics, and IoT-enabled healthcare.' },
-                    { id: 'track4', time: '17:00 - 18:00', title: 'Innovative and Sustainable Smart Technologies in Computer Science', description: 'Highlights green computing, sustainable AI, and smart data analytics for societal impact.' },
+                    { id: 'track3', time: '11:30 - 1:00', title: 'Innovative and Sustainable Smart Technologies in Biomedical Engineering', description: 'Explores smart biomedical devices, AI-powered diagnostics, and IoT-enabled healthcare.' },
+                    { id: 'track4', time: '2:00 - 4:00', title: 'Innovative and Sustainable Smart Technologies in Computer Science', description: 'Highlights green computing, sustainable AI, and smart data analytics for societal impact.' },
                 ],
             },
         ];

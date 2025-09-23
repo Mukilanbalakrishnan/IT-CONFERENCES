@@ -256,7 +256,7 @@ const deadlineData = [
   { month: 'DEC', day: '15', title: 'Late Submission', description: 'Extended Deadline for 2025', color: 'var(--brand-blue-primary)' },
   { month: 'JAN', day: '31', title: 'Acceptance Notification', description: 'For 2026 Submissions', color: 'var(--brand-orange)' },
   { month: 'FEB', day: '20', title: 'Author Registration', description: 'Registration Deadline for 2026', color: 'var(--brand-blue-primary)' },
-  { month: 'MAR', day: '10', title: 'Final Track Registration', description: 'Final Deadline for 2026', color: 'var(--brand-orange)' },
+  { month: 'FEB', day: '27', title: 'Final Track Registration', description: 'Final Deadline for 2026', color: 'var(--brand-orange)' },
   { month: 'MAR', day: '26-27', title: 'Conference Days', description: "S3-ECBE' 2026", color: 'var(--brand-blue-primary)' },
 ];
 

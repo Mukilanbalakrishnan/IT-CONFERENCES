@@ -7,7 +7,7 @@ const chairsData = [
     id: 1,
     name: 'Dr. G. Singaravel',
     role: 'Head – International Relation',
-    organization:'KSR College of Engineering',
+    organization:'K.S.R College of Engineering',
     Area:"India",
     imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1755927904/t5tivhg7kx10mgurtnjx.webp', // Placeholder image
     blobColor: '#0d47a1',

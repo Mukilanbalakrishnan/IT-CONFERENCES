@@ -30,7 +30,7 @@
 /* --- Base Page & Hero Styles --- */
 .agenda-page {
     background-color: var(--surface-light);
-    margin-top: -18rem; 
+    margin-top: -275px; 
 }
 .agenda-container { width: 100%; max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--gutter); }
 .agenda-hero { padding: 7rem 0 6rem; text-align: center; color: var(--white); background-image: radial-gradient(circle at 50% 30%, rgba(13, 71, 161, 0.85) 0%, rgba(13, 71, 161, 0.95) 100%), url('https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2012&auto=format&fit=crop') no-repeat center center/cover; }
@@ -41,35 +41,10 @@
 .agenda-hero-subtitle { font-size: 1.2rem; max-width: 600px; margin: 0 auto 2.5rem; opacity: 0.9; }
 
 /* --- Countdown --- */
-.agenda-countdown-container {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-}
-.agenda-countdown-item {
-    background: var(--surface-dark);
-    border: 1px solid var(--border-color);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    border-radius: var(--radius);
-    padding: 1.25rem;
-    min-width: 110px;
-    text-align: center;
-}
-.agenda-countdown-number {
-    font-size: clamp(2.5rem, 6vw, 3.5rem);
-    font-weight: 700;
-    line-height: 1;
-    color: var(--brand-blue-dark);
-}
-.agenda-countdown-label {
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-top: 0.5rem;
-    display: block;
-    color: var(--text-secondary);
-}
+.agenda-countdown-container { display: flex; justify-content: center; gap: 1.5rem; }
+.agenda-countdown-item { background: var(--surface-dark); border: 1px solid var(--border-color); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); border-radius: var(--radius); padding: 1.25rem; min-width: 110px; text-align: center; }
+.agenda-countdown-number { font-size: clamp(2.5rem, 6vw, 3.5rem); font-weight: 700; line-height: 1; color: var(--brand-blue-dark); }
+.agenda-countdown-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0.5rem; display: block; color: var(--text-secondary); }
 .agenda-conference-live { font-size: 2rem; padding: 1rem 2rem; background: var(--brand-orange); color: var(--white); border-radius: var(--radius); }
 
 /* --- Schedule Container & Tabs --- */
@@ -89,7 +64,33 @@
 .agenda-time { font-size: 1.1rem; font-weight: 700; color: var(--brand-blue-primary); text-align: right; padding-right: 2.5rem; }
 .agenda-time-connector { position: absolute; top: 0; right: 0; bottom: 0; width: 2px; background-color: var(--border-color); }
 .agenda-time-connector::after { content: ''; position: absolute; top: calc(1.5rem + 10px); right: -7px; width: 16px; height: 16px; background-color: var(--white); border: 3px solid var(--border-color); border-radius: 50%; transition: border-color 0.3s ease; }
-.agenda-card { border: 1px solid var(--border-color); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; background-color: var(--white); transition: all 0.3s ease; opacity: 0; animation: fadeInUp 0.5s ease-out forwards; }
+
+.agenda-card {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    padding-left: 2rem; /* MODIFIED: Increased left padding for the new bar */
+    margin-bottom: 1.5rem;
+    background-color: var(--white);
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fadeInUp 0.5s ease-out forwards;
+    position: relative; /* MODIFIED: Needed for the ::before pseudo-element */
+    overflow: hidden; /* MODIFIED: Keeps the new bar contained */
+}
+
+/* NEW: Decorative bar on the left of the card */
+.agenda-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background-color: var(--brand-blue-primary); /* Default color for upcoming */
+    transition: background-color 0.3s ease;
+}
+
 .agenda-card-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
 .agenda-icon { font-size: 1.5rem; color: var(--brand-blue-primary); margin-top: 3px; }
 .agenda-title-group { flex: 1; }
@@ -106,25 +107,23 @@
 .agenda-grid-item.in-progress .agenda-time { color: var(--brand-orange); }
 .agenda-grid-item.in-progress .agenda-time-connector::after { border-color: var(--brand-orange); }
 .agenda-grid-item.in-progress .agenda-card { background-color: var(--brand-orange-light); border-color: var(--brand-orange); animation: glow 3s infinite, fadeInUp 0.5s ease-out forwards; }
-.agenda-grid-item.completed { opacity: 0.6; }
+.agenda-grid-item.in-progress .agenda-card::before { background-color: var(--brand-orange); } /* MODIFIED */
+
+.agenda-grid-item.completed { opacity: 0.8; }
 .agenda-grid-item.completed .agenda-time-connector::after { border-color: var(--brand-green); background-color: var(--brand-green); }
 .agenda-grid-item.completed .agenda-card { background-color: var(--surface-light); }
+.agenda-grid-item.completed .agenda-card::before { background-color: var(--brand-green); } /* MODIFIED */
+.agenda-grid-item.completed .agenda-event-title { color: var(--text-secondary); }
+
 
 /* --- Responsive (Mobile) --- */
 @media (max-width: 768px) {
-    .agenda-page{margin-top: -14rem;}
-    .agenda-schedule-container { padding: 1.5rem;}
+    .agenda-page{ margin-top: -275px; } /* Adjusted margin for better layout */
+    .agenda-schedule-container { padding: 1.5rem; }
     .agenda-grid { grid-template-columns: 1fr; gap: 0; }
     .agenda-time-slot { display: none; }
     .agenda-card { width: 100%; margin-bottom: 1rem; }
-    
-    /* FIXED: This rule ensures the clock icon and time are on the same line */
-    .agenda-event-duration {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    
+    .agenda-event-duration { display: flex; align-items: center; gap: 0.5rem; }
     .agenda-card-header { flex-wrap: wrap; }
     .agenda-hero { padding: 5rem 0; }
     .agenda-countdown-container { gap: 0.5rem; flex-wrap: wrap; }
