@@ -116,7 +116,7 @@ const AppLayout = () => {
                     <Route path="/status" element={<SubmissionStatusTracker />} />
                     <Route path="/conferencetrack" element={<ConferenceTracksPage />} />
                     <Route path="/journal" element={<Journal />} />
-                    <Route path="/feestructure" element={<FeeStructure />} />
+                    <Route path="/feestructure" element={<FeeStructure onOpenLogin={handleOpenLogin} />} />
                     <Route path="/team" element={<TeamProfile />} />
                     <Route path="/paper-submission" element={<PaperSubmission />} />
                 </Routes>

@@ -3,29 +3,131 @@ import './AdvisoryBoardPage.css';
 
 const AdvisoryBoardPage = () => {
     const NationalAdvisory = [
-        { name: 'Prof. P. Somasundaram', role: 'Professor', department: 'Electrical and Electronics Engineering', institution: 'Anna University Chennai, Tamil Nadu India' },
-        { name: 'Prof. A. Kirubakaran', role: 'Associate Professor', department: 'Electrical and Electronics Engineering', institution: 'National Institute of Technology Warangal, Telangana India' },
-        { name: 'Dr. N.P. Subramanian', role: 'Associate Professor', department: 'Electrical and Electronics Engineering', institution: 'Puducherry Technological University, Puducherry, India' },
-        { name: 'Dr. Bharatiraja C', role: 'Professor', department: 'Faculty of Engineering and Technology', institution: 'SRM Institute of Science and Technology, Kattankulathur, Tamil Nadu India' },
-        { name: 'Dr. Rijo Jackson Tom', role: 'Principal Data Scientist', department: 'Information Technology', institution: 'Augusta Hitech Soft Solutions, Coimbatore, Tamil Nadu India' },
-        { name: 'Dr. S. Moorthi', role: 'Associate Professor', department: 'Electrical and Electronics Engineering', institution: 'National Institute of Technology, Tiruchirappalli, Tamil Nadu India' },
-        { name: 'Dr. W. Wilfred Godfrey', role: 'Associate Professor', department: 'Electronics and Communication Engineering', institution: 'Indian Institute of Technology and Management, Gwalior, Madhya Pradesh India' },
-        { name: 'Dr. S. Janakiraman', role: 'Associate Professor', department: 'Banking Technology, School of Management', institution: 'Pondicherry University, Puducherry, India' },
-        { name: 'Dr. P. Damodharan', role: 'Associate Professor', department: 'Electronics and Communication Engineering', institution: 'Indian Institute of Information Technology Design & Manufacturing (IIITD&M), Kancheepuram, Tamil Nadu India' },
-        { name: 'Dr. Vijayakumar Krishnasamy', role: 'Associate Professor', department: 'Electronics and Communication Engineering', institution: 'IIITDM Kancheepuram, Chennai, Tamil Nadu India' }
-    ];
+    { 
+        name: 'Dr N Sivakumaran', 
+        role: 'Professor', 
+        department: 'Instrumentation and Control Engineering', 
+        institution: 'National Institute of Technology, Tiruchirappalli' 
+    },
+    { 
+        name: 'Dr S Poonguzhali', 
+        role: 'Professor', 
+        department: 'Medical Electronics', 
+        institution: 'Anna University, Chennai' 
+    },
+    { 
+        name: 'Dr G Kulanthaivel', 
+        role: 'Professor', 
+        department: 'Electronics and Communication Engineering', 
+        institution: 'National Institute of Technical Teachers Training and Research' 
+    },
+    { 
+        name: 'Dr P Abdul Rasheed', 
+        role: 'Professor', 
+        department: 'Biological Science and Engineering', 
+        institution: 'Indian Institute of Technology, Palakkad' 
+    },
+    { 
+        name: 'Dr M IYAPPARAJA', 
+        role: 'HoD & Professor', 
+        department: 'Department of Smart computing', 
+        institution: 'Vellore Institute of Technology' 
+    },
+    { 
+        name: 'Dr. Rijo Jackson Tom', 
+        role: 'Principal Data Scientist', 
+        department: 'Information Technology', 
+        institution: 'Augusta Hitech Soft Solutions, Rathinam Tech Zone, Coimbatore' 
+    },
+    { 
+        name: 'Dr. S. Moorthi', 
+        role: 'Associate Professor', 
+        department: 'Electrical and Electronics Engineering', 
+        institution: 'National Institute of Technology, Tiruchirappalli' 
+    },
+    { 
+        name: 'Dr. W. Wilfred Godfrey', 
+        role: 'Associate Professor', 
+        department: 'Department of Electronics and Communication Engineering', 
+        institution: 'Indian Institute of Technology and Management, Gwalior-474015' 
+    },
+    { 
+        name: 'Dr. S. Janakiraman', 
+        role: 'Associate Professor', 
+        department: 'Department of Banking Technology, School of Management', 
+        institution: 'Pondicherry University, Pondicherry - 605014' 
+    },
+    { 
+        name: 'Dr. P. DAMODHARAN', 
+        role: 'Associate Professor', 
+        department: 'Department of Electronics and Communication Engineering', 
+        institution: 'Indian Institute of Information Technology, Design & Manufacturing (IIITD&M), Kancheepuram, Tamil Nadu' 
+    }
+];
 
     const InternationalAdvisory = [
-        { name: 'Dr. Muhammad H Rashid', role: 'Professor', department: 'Electrical and Computer Engineering', institution: 'University of West Florida, Pensacola, Florida USA' },
-        { name: 'Dr. H.J. Ahmad Rashidy Razali', role: 'Professor', department: 'Electronics and Communication Engineering', institution: 'Universiti Teknologi MARA (UiTM), Shah Alam, Selangor Malaysia' },
-        { name: 'Dr. Jens Bo Holm Nielsen', role: 'Emeritus Associate Professor', department: 'Faculty of Engineering and Science', institution: 'Aalborg University, Aalborg, Denmark' },
-        { name: 'Dr. Atsuo Kawamura', role: 'Professor', department: 'Electrical and Computer Engineering', institution: 'Yokohama National University, Yokohama, Kanagawa Japan' },
-        { name: 'Dr. Murugappan M', role: 'Professor', department: 'Electronics and Communication Engineering', institution: 'Kuwait College of Science and Technology, Kuwait City, Kuwait' },
-        { name: 'Dr. Saad Mekhilef', role: 'Professor', department: 'Electrical Engineering', institution: 'University of Malaya, Kuala Lumpur, Malaysia' },
-        { name: 'Brindha Venkateswaran', role: 'Software Embedded Engineer', department: 'Automotive R&D Department', institution: 'Aumovio Singapore, Singapore' },
-        { name: 'Gunasekaran Thangavel', role: 'Professor', department: 'Electronics and Communication Engineering', institution: 'University of Technology and Applied Sciences, Muscat, Oman' },
-        { name: 'Akhtar Kalam', role: 'Professor', department: 'Head of External Engagement, Leader – Smart Energy Research Unit', institution: 'College of Engineering and Science, Victoria, Australia' },
-        { name: 'Dr. Abid Yahya', role: 'Associate Professor', department: 'Computer | Electrical & Telecommunications Engineering', institution: 'Botswana International University of Science and Technology, Palapye, Botswana' }
+        {
+        name: 'Dr. H.J. Ahmad Rashidy Razali',
+        role: 'Professor, Software Embedded',
+        department: 'Electronics and Communication Engineering',
+        institution: 'Universiti Teknologi MARA (UiTM), Shah Alam, Malaysia'
+    },
+    {
+        name: 'Brindha Venkateswaran',
+        role: 'Engineer',
+        department: 'Automotive R&D Department',
+        institution: 'Aumovio, Singapore'
+    },
+    {
+        name: 'Gunasekaran Thangavel',
+        role: 'Professor',
+        department: 'Electronics and Communication Engineering',
+        institution: 'University of Technology and Applied Sciences, Muscat, Oman'
+    },
+    {
+        name: 'Akhtar Kalam',
+        role: 'Professor',
+        department: 'Head of External Engagement, Leader - Smart Energy Research Unit',
+        institution: 'College of Engineering and Science, Victoria University, Australia'
+    },
+    {
+        name: 'Dr. Abid Yahya',
+        role: 'Associate Professor',
+        department: 'Computer, Electrical & Telecommunications Engineering',
+        institution: 'Botswana International University of Science and Technology, Palapye, Botswana'
+    },
+
+    // Data from image_8a8df2.png
+    {
+        name: 'Dr. Wan Suhaimizan Bin W',
+        role: 'Professor',
+        department: 'Faculty of Electrical and Electronics Engineering',
+        institution: 'Universiti Tun Hussein Onn Malaysia, Johor, Malaysia'
+    },
+    {
+        name: 'Dr. Ashok Vajravelu',
+        role: 'Professor',
+        department: 'Faculty of Electrical and Electronics Engineering',
+        institution: 'Universiti Tun Hussein Onn Malaysia, Johor, Malaysia'
+    },
+    {
+        name: 'Dr. Ariffuddin Bin Joret',
+        role: 'Professor',
+        department: 'Faculty of Electrical and Electronics Engineering',
+        institution: 'Universiti Tun Hussein Onn Malaysia, Johor, Malaysia'
+    },
+    {
+        name: 'Dr. Nitin Williams',
+        role: 'Adjunct Professor',
+        department: 'Department of Neuroscience & Biomedical Engineering',
+        institution: 'Aalto University, Espoo, Finland'
+    },
+    {
+        name: 'Dr. Dinesh Kumar',
+        role: 'Professor',
+        department: 'School of Electrical and Computer Engineering',
+        institution: 'RMIT University, Melbourne, Australia'
+    }
     ];
 
     const sectionRef = useRef(null);

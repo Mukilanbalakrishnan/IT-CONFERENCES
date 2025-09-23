@@ -10,27 +10,37 @@
   }
 }
 
-/* NEW: Keyframe for the circle drawing animation */
 @keyframes draw-speaker-border {
   to {
     stroke-dashoffset: 0;
   }
 }
 
+/* NEW: Keyframe for the pop-up effect on scroll */
+@keyframes card-popup-scroll {
+  to {
+    transform: translateY(-15px) scale(1.05);
+    box-shadow: 0 25px 40px -10px rgba(0,0,0,0.15);
+  }
+}
+
 .speaker-page-main{
-  margin-top: -10rem;
+  margin-top: -300px;
 }
 
 /* --- Global Container for this page --- */
 .event-container {
     width: 100%;
-    max-width: var(--page-max-width, 1200px);
+    max-width: var(--page-max-width, 1400px); 
     margin: 0 auto;
     padding: 0 var(--gutter, 1.25rem);
+    margin-top: -50px;
 }
 
 /* --- Page Header --- */
 .event-page-header {
+  padding-top: 12rem;
+  padding-bottom: 2rem;
   text-align: center;
   animation: fadeInUp 0.6s ease-out;
 }
@@ -67,12 +77,12 @@
   background-color: var(--surface-light);
 }
 
-/* --- Grid Layout --- */
+/* --- Flexbox Layout for Desktop --- */
 .event-speakers-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 7rem 2rem; /* Increased row gap */
-  margin-top: 4rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 7rem;
 }
 
 /* --- Speaker Card Design --- */
@@ -80,18 +90,21 @@
   background: var(--white);
   border-radius: var(--radius, 12px);
   padding: 1.5rem;
-  padding-top: 80px; /* Space for the overlapping image */
-  width: 100%;
-  max-width: 350px;
+  padding-top: 80px;
+  width: 320px;
+  flex-shrink: 0;
   box-shadow: var(--shadow-soft);
   text-align: center;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   
-  /* Initial state for scroll animation */
+  /* Initial state for animations */
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+
+  /* UPDATED: Smoother transition for all properties */
+  transition: opacity 0.6s ease-out, 
+              transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .event-speaker-profile.is-visible {
@@ -99,20 +112,22 @@
     transform: translateY(0);
 }
 
+/* UPDATED: Added scale to the hover effect */
 .event-speaker-profile:hover {
-  transform: translateY(-15px);
+  transform: translateY(-15px) scale(1.05);
   box-shadow: 0 25px 40px -10px rgba(0,0,0,0.15);
 }
 
-/* --- Overlapping Image & NEW SVG BORDER --- */
+/* --- Overlapping Image & SVG Border --- */
 .event-speaker-image-wrapper {
-  width: 160px; /* Increased size to accommodate border */
+  width: 160px;
   height: 160px;
   position: absolute;
   top: -80px;
   left: 50%;
   transform: translateX(-50%);
-  transition: transform 0.35s ease;
+  /* UPDATED: Smoother transition */
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .event-speaker-profile:hover .event-speaker-image-wrapper {
     transform: translateX(-50%) scale(1.05);
@@ -122,7 +137,6 @@
     fill: none;
     stroke-width: 5;
     stroke-linecap: round;
-    /* Circumference of the circle arc */
     stroke-dasharray: 236; 
     stroke-dashoffset: 236;
     transition: stroke-dashoffset 0.8s cubic-bezier(0.25, 1, 0.5, 1);
@@ -139,8 +153,7 @@
     transition-delay: 0.1s;
 }
 
-
-/* --- Speaker Info --- */
+/* --- Speaker Info (No changes here) --- */
 .event-speaker-info {
   margin-top: 1rem;
   display: flex;
@@ -171,7 +184,7 @@
   font-size: 0.95rem;
   color: var(--text-secondary);
   line-height: 1.6;
-  margin-top: auto; /* Pushes bio to the bottom */
+  margin-top: auto;
   padding-top: 1.5rem;
   border-top: 1px solid var(--surface-dark);
 }
@@ -186,42 +199,61 @@
 .event-speaker-socials a {
   color: var(--text-secondary);
   font-size: 1.25rem;
-  transition: color 0.3s ease, transform 0.3s ease;
+  /* UPDATED: Smoother transition */
+  transition: all 0.3s ease-in-out;
 }
 .event-speaker-socials a:hover {
   color: var(--brand-orange);
   transform: scale(1.2);
 }
 
-/* --- Responsive adjustments --- */
+/* --- Responsive adjustments FOR MOBILE --- */
 @media (max-width: 768px) {
+  .event-speakers-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 7rem;
+  }
+  .speaker-page-main {
+    margin-top: -300px;
+  }
+  .event-container {
+    margin-top: 0;
+  }
   .event-speakers-section, .event-page-header {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
 
-  /* --- NEW: Scroll-triggered animation for SVG border on mobile --- */
+  /* --- Scroll-triggered animations --- */
+
   .event-speaker-profile {
-      /* Create a named timeline for the scroll animation */
-      view-timeline-name: --speaker-card-scroll;
+    /* 1. Set up the timeline and apply the pop-up animation */
+    view-timeline-name: --speaker-card-scroll;
+    animation: card-popup-scroll linear forwards;
+    animation-timeline: --speaker-card-scroll;
+    animation-range-start: entry 25%;
+    animation-range-end: entry 60%;
   }
 
+  /* 2. Disable hover effects on mobile */
+  .event-speaker-profile:hover {
+      transform: none; /* Prevents jumping on tap */
+      box-shadow: var(--shadow-soft);
+  }
   .event-speaker-profile:hover .event-speaker-svg-border path {
-      stroke-dashoffset: 236; /* Disable hover effect on mobile */
+      stroke-dashoffset: 236;
   }
 
+  /* 3. Apply the circle-drawing animation */
   .event-speaker-svg-border path {
       animation: draw-speaker-border linear forwards;
       animation-timeline: --speaker-card-scroll;
-      /* Define when the animation runs as the card scrolls */
       animation-range-start: entry 25%;
       animation-range-end: entry 70%;
   }
-
   .event-speaker-svg-border .event-border-path-2 {
-      /* Add a slight delay for the two-color effect */
       animation-range-start: entry 35%;
       animation-range-end: entry 80%;
   }
 }
-

@@ -75,6 +75,7 @@
     line-height: 1.7;
     margin-bottom: 2rem;
     flex-grow: 1;
+    text-align: justify;
 }
 
 .ctp-buttons-row {
@@ -298,6 +299,7 @@
 .ctp-track-summary-content {
     border-top: 1px solid var(--surface-dark);
     padding-top: 2.5rem;
+    text-align: justify;
 }
 .ctp-track-summary-content h3 {
     font-size: 1.25rem;
@@ -310,6 +312,7 @@
     color: var(--text-secondary);
     line-height: 1.7;
     white-space: pre-wrap;
+    
 }
 
 .ctp-modal-footer {

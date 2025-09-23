@@ -122,10 +122,11 @@
     margin-top: 1rem;
 }
 
-.footer-copyright-bar p {
+.footer-copyright-bar-company {
     color: var(--white);
     margin: 0;
 }
+
 
 /* --- Responsive Adjustments --- */
 /* Medium screens and up */

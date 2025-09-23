@@ -3,11 +3,18 @@ import './Map.css'; // Make sure to import the CSS
 
 const locations = {
   venue: {
-    name: "KSR College of Engineering",
-    address: "KSR Kalvi Nagar, Tiruchengode, Tamil Nadu 637215, India",
+    name: "K.S.R College of Engineering",
+    address: "K.S.R Kalvi Nagar, Tiruchengode, Tamil Nadu 637215, India",
     mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3911.673750413204!2d77.82913321114565!3d11.358523288781234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba964017038dfe3%3A0xd5a68d71e9c1aec7!2sK%20S%20R%20College%20of%20Engineering!5e0!3m2!1sen!2sin!4v1755101071051!5m2!1sen!2sin"
   },
   transport: [
+    {
+  name: "Coimbatore International Airport (CJB)",
+  description: "Approx. 157 km from Salem", 
+  icon: "✈",
+  mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3850.687492341207!2d77.041667!3d11.026667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba8593190e7f22d%3A0x817e2f86bb2324fa!2sCoimbatore%20International%20Airport!5e0!3m2!1sen!2sin!4v1755100718646!5m2!1sen!2sin"
+},
+
     { name: "Salem Airport (SXV)", description: "Approx. 50 km away", icon: "✈", mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3905.7500342797102!2d78.0592873111514!3d11.782642588385752!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3babf8f87b1279e3%3A0xbe8dbb2438f66f95!2sSalem%20Airport!5e0!3m2!1sen!2sin!4v1755100718646!5m2!1sen!2sin" },
     { name: "Tiruchengode Bus Stand", description: "Approx. 8 km away", icon: "🚌", mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3911.351032081166!2d77.89279476114602!3d11.382030388759267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba961d2f41f9cd3%3A0x37576bd54e30bae6!2sThiruchengodu%20New%20Bus%20Stand!5e0!3m2!1sen!2sin!4v1755100829207!5m2!1sen!2sin" },
     { name: "Erode Bus Stand", description: "Approx. 20 km away", icon: "🚌", mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3911.83289731373!2d77.71708601114557!3d11.346913188792085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba96fcae26b8dc7%3A0xeb1047fe62374b3d!2sErode%20bus%20stand!5e0!3m2!1sen!2sin!4v1755100920084!5m2!1sen!2sin" },
@@ -16,7 +23,20 @@ const locations = {
   visit: [
     { name: "Ardhanareeswarar Temple", description: "A historic Hindu temple located atop a hill.", icon: "🏛", mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3910.688888888889!2d77.89166666666667!3d11.375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba9640f00000001%3A0x8f2d3f7a3b0a4d3a!2sArdhanareeswarar%20Temple!5e0!3m2!1sen!2sin!4v1678887214141!5m2!1sen!2sin" },
     { name: "Kailasanathar Temple", description: "An ancient temple known for its Dravidian architecture.", icon: "🏰", mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3910.688888888889!2d77.89166666666667!3d11.375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba9640f00000001%3A0x8f2d3f7a3b0a4d3a!2sKailasanathar%20Temple!5e0!3m2!1sen!2sin!4v1678887247147!5m2!1sen!2sin" },
-    { name: "Sankagiri Fort", description: "A historical fort with panoramic views.", icon: "⛰", mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3908.888888888889!2d77.88333333333333!3d11.483333333333334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba94df000000001%3A0x8f2d3f7a3b0a4d3a!2sSankagiri%20Fort!5e0!3m2!1sen!2sin!4v1678887280180!5m2!1sen!2sin" }
+    { name: "Sankagiri Fort", description: "A historical fort with panoramic views.", icon: "⛰", mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3908.888888888889!2d77.88333333333333!3d11.483333333333334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba94df000000001%3A0x8f2d3f7a3b0a4d3a!2sSankagiri%20Fort!5e0!3m2!1sen!2sin!4v1678887280180!5m2!1sen!2sin" },
+    {
+  name: "Mettur Dam",
+  description: "An engineering marvel & scenic dam over the Cauvery, surrounded by hills and reservoir", 
+  icon: "💧",
+  mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3904.3456789012345!2d77.79999999999998!3d11.800000000000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3babfxxxxxxx%3A0xyyyyyyyyyyyy!2sMettur%20Dam!5e0!3m2!1sen!2sin!4vLAST_UPDATED_TIMESTAMP!5m2!1sen!2sin"
+},
+{
+  name: "Kurumbapatti Zoological Park",
+  description: "Zoo and park in natural surroundings, good for wildlife & nature walk, ~10 km from Salem", 
+  icon: "🐾",
+  mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3905.1234567890123!2d78.15789012345678!3d11.672345678901234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3babfzzzzzzzzzzz%3A0xwwwwwwwwwwwww!2sKurumbapatti%20Zoological%20Park!5e0!3m2!1sen!2sin!4vLAST_UPDATED_TIMESTAMP!5m2!1sen!2sin"
+}
+
   ]
 };
 

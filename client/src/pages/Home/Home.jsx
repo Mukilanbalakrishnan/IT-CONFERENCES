@@ -146,7 +146,7 @@
 //           </div>
 //           <div className="collaboration-content-wrapper">
 //               <div className="logo-item">
-//                   <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1755753110/pcytcphmgc1irewg4suw.webp " alt="KSR College of Engineering" />
+//                   <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1755753110/pcytcphmgc1irewg4suw.webp " alt="K.S.R College of Engineering" />
 //                    <div className="host-details">
 //                       <h4>Host Institution</h4>
 //                       <p>Department of Electronics and Communication, Electrical and Electronics & Biomedical Engineering, K.S.R. College of Engineering (Autonomous), Tiruchengode, Namakkal – 637215, Tamilnadu, India</p>
@@ -415,7 +415,7 @@ const Collaboration = () => {
           </div>
           <div className="collaboration-content-wrapper">
               <div className="logo-item">
-                  <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1755753110/pcytcphmgc1irewg4suw.webp " alt="KSR College of Engineering" />
+                  <img src="https://res.cloudinary.com/dllbh1v1m/image/upload/v1755753110/pcytcphmgc1irewg4suw.webp " alt="K.S.R College of Engineering" />
                    <div className="host-details">
                        <h4>Host Institution</h4>
                        <p>Department of Electronics and Communication, Electrical and Electronics & Biomedical Engineering, K.S.R. College of Engineering (Autonomous), Tiruchengode, Namakkal – 637215, Tamilnadu, India</p>

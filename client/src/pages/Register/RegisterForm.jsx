@@ -566,6 +566,7 @@ const TermsModal = ({ onAccept, onDecline, onClose }) => (
                                     id="termsAccepted"
                                     checked={termsAccepted}
                                     readOnly
+                                    onClick={() => setIsTermsModalOpen(true)}
                                     className="form-checkbox"
                                 />
                                 <label htmlFor="termsAccepted" className="form-label-sm">

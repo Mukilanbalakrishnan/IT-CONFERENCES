@@ -8,7 +8,7 @@ const chairsData = [
   name: 'Dr.C. Gowri Shankar',
   role: 'Professor and Head of ECE',
   department:' Electronics and Communication Engineering',
-  organization:'KSR College of Engineering',
+  organization:'K.S.R College of Engineering',
   Area:"India",
   imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1757312482/u9f6suylf9n6bwuyjzkn.webp', // Placeholder image
   blobColor: '#0d47a1',
@@ -19,7 +19,7 @@ const chairsData = [
   name: 'Dr.S. Ramesh',
   role: 'Professor and Head of EEE',
   department:' Electrical and Electronics Engineering',
-  organization:'KSR College of Engineering',
+  organization:'K.S.R College of Engineering',
   Area:"India",
   imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1757312857/rqwklwozt9ie8nvh8sia.webp', // Placeholder image
   blobColor: '#F57C00',
@@ -30,7 +30,7 @@ const chairsData = [
   name: 'Dr.R. Prabu',
   role: 'Professor and Head of BME',
   department:' Biomedical Engineering',
-  organization:'KSR College of Engineering',
+  organization:'K.S.R College of Engineering',
   Area:"India",
   imageUrl: 'https://res.cloudinary.com/dllbh1v1m/image/upload/v1757314953/jtjvt8ytoflnqhku8ntq.jpg', // Placeholder image
   blobColor: '#0d47a1',
