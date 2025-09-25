@@ -433,6 +433,7 @@ const Collaboration = () => {
       </section>
     );
 };
+
  
 // --- About Section Component ---
 const About = () => {

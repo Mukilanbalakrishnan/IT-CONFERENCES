@@ -28,7 +28,7 @@ const AdvisoryBoardPage = () => {
         institution: 'Indian Institute of Technology, Palakkad' 
     },
     { 
-        name: 'Dr M IYAPPARAJA', 
+        name: 'Dr M Iyapparaja', 
         role: 'HoD & Professor', 
         department: 'Department of Smart computing', 
         institution: 'Vellore Institute of Technology' 
@@ -58,11 +58,42 @@ const AdvisoryBoardPage = () => {
         institution: 'Pondicherry University, Pondicherry - 605014' 
     },
     { 
-        name: 'Dr. P. DAMODHARAN', 
+        name: 'Dr. P.Damodharan', 
         role: 'Associate Professor', 
         department: 'Department of Electronics and Communication Engineering', 
         institution: 'Indian Institute of Information Technology, Design & Manufacturing (IIITD&M), Kancheepuram, Tamil Nadu' 
-    }
+    },
+    { 
+        name: 'Dr. Vijayakumar Krishnasamy', 
+        role: 'Associate Professor', 
+        department: 'Department of ECE', 
+        institution: 'Indian Institute of Information Technology, Design and Manufacturing, Kancheepuram' 
+    },
+    { 
+        name: 'Dr.N.P. Subramanian', 
+        role: 'Associate Professor', 
+        department: 'Department of EEE', 
+        institution: 'Puducherry Technological University' 
+    },
+    { 
+        name: 'Dr. Bharatiraja C', 
+        role: 'Professor', 
+        department: 'Faculty of Engineering & Technology', 
+        institution: 'SRM Institute of Science and Technology' 
+    },
+    { 
+    name: 'Prof.P Somasundaram', 
+    role: 'Professor', 
+    department: 'Electrical and Electronics Engineering', 
+    institution: 'Anna University, Chennai' 
+},
+{ 
+    name: 'Prof.A. Kirubakaran', 
+    role: 'Associate Professor', 
+    department: 'Department of Electrical Engineering', 
+    institution: 'NIT, Warangal' 
+},
+
 ];
 
     const InternationalAdvisory = [
@@ -73,30 +104,12 @@ const AdvisoryBoardPage = () => {
         institution: 'Universiti Teknologi MARA (UiTM), Shah Alam, Malaysia'
     },
     {
-        name: 'Brindha Venkateswaran',
-        role: 'Engineer',
-        department: 'Automotive R&D Department',
-        institution: 'Aumovio, Singapore'
-    },
-    {
-        name: 'Gunasekaran Thangavel',
-        role: 'Professor',
-        department: 'Electronics and Communication Engineering',
-        institution: 'University of Technology and Applied Sciences, Muscat, Oman'
-    },
-    {
-        name: 'Akhtar Kalam',
-        role: 'Professor',
-        department: 'Head of External Engagement, Leader - Smart Energy Research Unit',
-        institution: 'College of Engineering and Science, Victoria University, Australia'
-    },
-    {
         name: 'Dr. Abid Yahya',
         role: 'Associate Professor',
         department: 'Computer, Electrical & Telecommunications Engineering',
         institution: 'Botswana International University of Science and Technology, Palapye, Botswana'
     },
-
+    
     // Data from image_8a8df2.png
     {
         name: 'Dr. Wan Suhaimizan Bin W',
@@ -127,7 +140,56 @@ const AdvisoryBoardPage = () => {
         role: 'Professor',
         department: 'School of Electrical and Computer Engineering',
         institution: 'RMIT University, Melbourne, Australia'
-    }
+    },
+    { 
+        name: 'Dr. Muhammad H Rashid', 
+        role: 'Professor', 
+        department: 'Electrical and Computer Engineering', 
+        institution: 'University of West Florida, USA' 
+    },
+    { 
+        name: 'Dr. Saad Mekhilef', 
+        role: 'Professor', 
+        department: 'Electrical Engineering', 
+        institution: 'University of Malaysia, Malaysia' 
+    },
+    { 
+        name: 'Dr. Jens Bo Holm Nielsen', 
+        role: 'Emeritus Associate Professor', 
+        department: 'Faculty of Engineering and Science', 
+        institution: 'Aalborg University, Denmark' 
+    },
+    { 
+        name: 'Dr. Atsuo Kawamura', 
+        role: 'Professor', 
+        department: 'Electrical and Computer Engineering', 
+        institution: 'Yokohama National University, Japan' 
+    },
+    { 
+        name: 'Dr. Murugappan M', 
+        role: 'Professor', 
+        department: 'Electronics & Communications Engineering', 
+        institution: 'Kuwait College of Science and Technology, Kuwait' 
+    },
+    {
+        name: 'Brindha Venkateswaran',
+        role: 'Engineer',
+        department: 'Automotive R&D Department',
+        institution: 'Aumovio, Singapore'
+    },
+    {
+        name: 'Gunasekaran Thangavel',
+        role: 'Professor',
+        department: 'Electronics and Communication Engineering',
+        institution: 'University of Technology and Applied Sciences, Muscat, Oman'
+    },
+    {
+        name: 'Akhtar Kalam',
+        role: 'Professor',
+        department: 'Head of External Engagement, Leader - Smart Energy Research Unit',
+        institution: 'College of Engineering and Science, Victoria University, Australia'
+    },
+
     ];
 
     const sectionRef = useRef(null);

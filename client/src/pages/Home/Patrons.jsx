@@ -15,7 +15,7 @@ const patronsData = [
     },
     {
         id: 2,
-        name: 'Dr. P. Meenachi Devi',
+        name: 'Dr. P. Meenakshi Devi',
         role: 'Principal',
         organization: 'K.S.R College of Engineering',
         Area: "India",
