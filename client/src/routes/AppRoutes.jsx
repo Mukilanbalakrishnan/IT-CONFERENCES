@@ -16,6 +16,7 @@ import Journal from '../pages/Journal/journal';
 import FeeStructure from '../pages/FeeStructure/FeeStructure';
 import TeamProfile from '../pages/TeamProfile/TeamProfile';
 import PaperSubmission from '../pages/PaperSubmission/PaperSubmission';
+import ScrollToTop from '../scrolltop/ScrollToTop';
 
 // Import Layout & Auth Components
 import Navbar from '../header/Navbar';
@@ -102,6 +103,7 @@ const AppLayout = () => {
         <>
             <Navbar user={user} onLogout={handleLogout} onOpenLogin={handleOpenLogin} />
             <main>
+                <ScrollToTop />
                 <Routes>
                     // ✅ This is the UPDATED code
 <Route path="/" element={<Home user={user} onOpenLogin={handleOpenLogin} />} />

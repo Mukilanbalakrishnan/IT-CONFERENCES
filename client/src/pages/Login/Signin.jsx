@@ -157,6 +157,19 @@ function SignInForm({ onSwitch, onClose ,onLoginSuccess}) {
   };
 
   return (
+    
+
+    <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      minHeight: "100vh",
+      // background: "var(--surface-light)", // optional background
+      padding: "16px", // ensures gap on both sides
+      boxSizing: "border-box",
+    }}
+  >
     <div style={styles.card}>
       <button
         onClick={onClose}
@@ -180,7 +193,9 @@ function SignInForm({ onSwitch, onClose ,onLoginSuccess}) {
 
       <form onSubmit={handleSubmit}>
         <div style={styles.inputGroup}>
-          <label style={styles.inputLabel} htmlFor="username">Email or Mobile number</label>
+          <label style={styles.inputLabel} htmlFor="username">
+            Email or Mobile number
+          </label>
           <input
             id="username"
             type="text"
@@ -193,7 +208,9 @@ function SignInForm({ onSwitch, onClose ,onLoginSuccess}) {
         </div>
 
         <div style={styles.inputGroup}>
-          <label style={styles.inputLabel} htmlFor="password">Password</label>
+          <label style={styles.inputLabel} htmlFor="password">
+            Password
+          </label>
           <div style={styles.passwordWrapper}>
             <input
               id="password"
@@ -214,7 +231,11 @@ function SignInForm({ onSwitch, onClose ,onLoginSuccess}) {
           </div>
         </div>
 
-        {error && <p style={{ color: "red", fontSize: "0.9rem", marginTop: "6px" }}>{error}</p>}
+        {error && (
+          <p style={{ color: "red", fontSize: "0.9rem", marginTop: "6px" }}>
+            {error}
+          </p>
+        )}
 
         <button type="submit" style={styles.primaryBtn} disabled={loading}>
           {loading ? "Signing In..." : "Sign In"}
@@ -228,12 +249,24 @@ function SignInForm({ onSwitch, onClose ,onLoginSuccess}) {
       </div>
 
       <div style={styles.socialRow}>
-        <button style={styles.socialBtn} aria-label="Sign in with Google"><GoogleIcon /></button>
-        <button style={styles.socialBtn} aria-label="Sign in with Apple"><AppleIcon /></button>
-        <button style={styles.socialBtn} aria-label="Sign in with Microsoft"><MicrosoftIcon /></button>
+        <button style={styles.socialBtn} aria-label="Sign in with Google">
+          <GoogleIcon />
+        </button>
+        <button style={styles.socialBtn} aria-label="Sign in with Apple">
+          <AppleIcon />
+        </button>
+        <button style={styles.socialBtn} aria-label="Sign in with Microsoft">
+          <MicrosoftIcon />
+        </button>
       </div>
 
-      <p style={{ marginTop: "22px", textAlign: "center", fontSize: "0.85rem" }}>
+      <p
+        style={{
+          marginTop: "22px",
+          textAlign: "center",
+          fontSize: "0.85rem",
+        }}
+      >
         Don't have an account?{" "}
         <span style={styles.link} onClick={onSwitch}>
           Sign Up
@@ -242,6 +275,8 @@ function SignInForm({ onSwitch, onClose ,onLoginSuccess}) {
 
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
+  </div>
+  
   );
 }
 

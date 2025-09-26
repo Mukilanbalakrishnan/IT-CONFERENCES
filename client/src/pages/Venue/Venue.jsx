@@ -7,7 +7,7 @@ const eventData = [
         id: 'evt1',
         type: 'event',
         name: 'Inauguration Ceremony',
-        venue: 'KSR Auditorium',
+        venue: 'Platinum Hall',
         time: '09:30 AM',
         description: 'The official opening of the Global Summit 2025, featuring a welcome address by the Chairman.',
         image: 'https://placehold.co/600x400/0D47A1/FFFFFF?text=KSR+Auditorium',
@@ -16,8 +16,8 @@ const eventData = [
     {
         id: 'evt2',
         type: 'event',
-        name: 'Keynote by Dr. Maya Singh',
-        venue: 'Main Conference Hall',
+        name: 'Keynote by Dr. Malathy Batumalay',
+        venue: 'Platinum Hall',
         time: '11:00 AM',
         description: 'A thought-provoking keynote address by renowned AI researcher Dr. Maya Singh.',
         image: 'https://placehold.co/600x400/F57C00/FFFFFF?text=Conference+Hall',
@@ -29,7 +29,7 @@ const hostelData = [
     {
         id: 'hst1',
         type: 'hostel',
-        name: "Cauvery Men's Hostel",
+        name: "Marina Hostel(Men)",
         description: "A well-furnished hostel for men with modern amenities, including Wi-Fi and 24/7 security.",
         breakfast: '7:30 - 8:30 AM',
         lunch: '12:30 - 1:30 PM',
@@ -40,7 +40,7 @@ const hostelData = [
     {
         id: 'hst2',
         type: 'hostel',
-        name: "Bhavani Women's Hostel",
+        name: "Tiruchy Hostel(Women)",
         description: "A secure and comfortable hostel for women, offering a pleasant living environment.",
         breakfast: '7:30 - 8:30 AM',
         lunch: '12:30 - 1:30 PM',
