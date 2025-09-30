@@ -150,11 +150,9 @@
         background-color: var(--surface-light);
     }
     .info-table th, .info-table td {
-        display: table-cell;     /* ensure table layout */
-    padding: 1.25rem;
-    border-bottom: 1px solid var(--surface-dark);
-    text-align: left;        /* align text properly */
-    vertical-align: middle;  /* center content vertically */
+        display: table-cell;
+        padding: 1.25rem;
+        border-bottom: 1px solid var(--surface-dark);
     }
     .info-table tr:last-child td {
         border-bottom: none;
@@ -170,15 +168,6 @@
     .info-table td[data-label="Action"] {
         text-align: center;
     }
-    .info-table td {
-    justify-content: unset;  /* reset flexbox */
-    align-items: unset;      /* reset flexbox */
-  }
-
-  .info-table th:last-child,
-  .info-table td[data-label="Action"] {
-    text-align: right;
-  }
 }
 
 /* --- Modal Styles --- */

@@ -149,42 +149,13 @@ function RegistrationForm({ onSwitch, onClose }) {
   };
 
   return (
-    
-       <div
-    style={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      minHeight: "100vh",
-      padding: "16px",
-      // background: "var(--surface-light)",
-      boxSizing: "border-box",
-    }}
-  >
     <div style={styles.card}>
-      <button
-        onClick={onClose}
-        style={{
-          position: "absolute",
-          top: "12px",
-          right: "16px",
-          background: "none",
-          border: "none",
-          fontSize: "28px",
-          fontWeight: "bold",
-          cursor: "pointer",
-        }}
-      >
-        &times;
-      </button>
-
+      <button onClick={onClose} style={{ position: "absolute", top: "12px", right: "16px", background: "none", border: "none", fontSize: "28px", fontWeight: "bold", cursor: "pointer" }}>&times;</button>
       <h2 style={styles.title}>Create Account</h2>
 
       <form onSubmit={handleSubmit}>
         <div style={styles.inputGroup}>
-          <label style={styles.inputLabel} htmlFor="name">
-            Full name
-          </label>
+          <label style={styles.inputLabel} htmlFor="name">Full name</label>
           <input
             id="name"
             type="text"
@@ -197,9 +168,7 @@ function RegistrationForm({ onSwitch, onClose }) {
         </div>
 
         <div style={styles.inputGroup}>
-          <label style={styles.inputLabel} htmlFor="email">
-            Email address
-          </label>
+          <label style={styles.inputLabel} htmlFor="email">Email address</label>
           <input
             id="email"
             type="email"
@@ -212,9 +181,7 @@ function RegistrationForm({ onSwitch, onClose }) {
         </div>
 
         <div style={styles.inputGroup}>
-          <label style={styles.inputLabel} htmlFor="mobileno">
-            Mobile number
-          </label>
+          <label style={styles.inputLabel} htmlFor="mobileno">Mobile number</label>
           <input
             id="mobileno"
             type="tel"
@@ -227,9 +194,7 @@ function RegistrationForm({ onSwitch, onClose }) {
         </div>
 
         <div style={styles.inputGroup}>
-          <label style={styles.inputLabel} htmlFor="password">
-            Password
-          </label>
+          <label style={styles.inputLabel} htmlFor="password">Password</label>
           <div style={styles.passwordWrapper}>
             <input
               id="password"
@@ -240,11 +205,7 @@ function RegistrationForm({ onSwitch, onClose }) {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <button
-              type="button"
-              style={styles.toggleBtn}
-              onClick={() => setShowPwd((s) => !s)}
-            >
+            <button type="button" style={styles.toggleBtn} onClick={() => setShowPwd((s) => !s)}>
               {showPwd ? "Hide" : "Show"}
             </button>
           </div>
@@ -262,43 +223,20 @@ function RegistrationForm({ onSwitch, onClose }) {
       </div>
 
       <div style={styles.socialRow}>
-        <button style={styles.socialBtn}>
-          <GoogleIcon />
-        </button>
-        <button style={styles.socialBtn}>
-          <AppleIcon />
-        </button>
-        <button style={styles.socialBtn}>
-          <MicrosoftIcon />
-        </button>
+        <button style={styles.socialBtn}><GoogleIcon /></button>
+        <button style={styles.socialBtn}><AppleIcon /></button>
+        <button style={styles.socialBtn}><MicrosoftIcon /></button>
       </div>
 
-      <p
-        style={{
-          textAlign: "center",
-          marginTop: "6px",
-          color: "var(--text-secondary)",
-          fontSize: "0.9rem",
-        }}
-      >
+      <p style={{ textAlign: "center", marginTop: "6px", color: "var(--text-secondary)", fontSize: "0.9rem" }}>
         Have an account?{" "}
-        <button
-          onClick={onSwitch}
-          style={{
-            ...styles.link,
-            background: "none",
-            border: "none",
-            padding: 0,
-          }}
-        >
+        <button onClick={onSwitch} style={{ ...styles.link, background: "none", border: "none", padding: 0 }}>
           Log in
         </button>
       </p>
 
       <ToastContainer position="top-right" autoClose={2000} hideProgressBar />
     </div>
-  </div>
-    
   );
 }
 
