@@ -25,6 +25,8 @@ import Modal from '../pages/Login/Modal';
 import SignInForm from '../pages/Login/Signin';
 import SignUpForm from '../pages/Login/LoginForm'; 
 
+
+
 const AppLayout = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -33,13 +35,25 @@ const AppLayout = () => {
     const [user, setUser] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [authMode, setAuthMode] = useState('signin');
+    const TOKEN_EXPIRY = 12 * 60 * 60 * 1000;
 
-    // This effect runs once to check for a logged-in user when the app loads
+
+
+
     useEffect(() => {
-        const checkUserSession = () => {
-            const token = localStorage.getItem('token');
-            const userData = localStorage.getItem('user');
-            if (token && userData) {
+    const checkUserSession = () => {
+        const token = localStorage.getItem('token');
+        const userData = localStorage.getItem('user');
+        const loginTime = localStorage.getItem('loginTime');
+
+        if (token && userData && loginTime) {
+            const now = Date.now();
+            if (now - parseInt(loginTime, 10) > TOKEN_EXPIRY) {
+                // ❌ Session expired, clear storage
+                localStorage.clear();
+                setUser(null);
+                navigate('/');
+            } else {
                 try {
                     setUser(JSON.parse(userData));
                 } catch (error) {
@@ -47,9 +61,27 @@ const AppLayout = () => {
                     localStorage.clear();
                 }
             }
-        };
-        checkUserSession();
-    }, []);
+        }
+    };
+    checkUserSession();
+}, [navigate]);
+
+    // This effect runs once to check for a logged-in user when the app loads
+    // useEffect(() => {
+    //     const checkUserSession = () => {
+    //         const token = localStorage.getItem('token');
+    //         const userData = localStorage.getItem('user');
+    //         if (token && userData) {
+    //             try {
+    //                 setUser(JSON.parse(userData));
+    //             } catch (error) {
+    //                 console.error("Failed to parse user data from storage", error);
+    //                 localStorage.clear();
+    //             }
+    //         }
+    //     };
+    //     checkUserSession();
+    // }, []);
 
     // This effect manages the special body class for the homepage's transparent navbar
     useEffect(() => {
@@ -81,6 +113,7 @@ const AppLayout = () => {
         
         localStorage.setItem('user', JSON.stringify(userData));
         localStorage.setItem('token', token);
+        localStorage.setItem('loginTime', Date.now().toString());
         setUser(userData);
         setIsModalOpen(false); // Close modal on success
     };
