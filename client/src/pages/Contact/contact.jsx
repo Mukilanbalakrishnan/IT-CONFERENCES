@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import Map from '../Home/Map';
 import './contact.css';
 
-const ContactUsPreview = () => {
+const ContactUsPreview = ({ onOpenLogin = () => {} }) => {
+
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -76,8 +77,8 @@ const ContactUsPreview = () => {
 
     const token = localStorage.getItem('token');
     if (!token) {
-      alert("Authentication error: Please log in to send a message.");
       setIsSubmitting(false);
+      onOpenLogin();
       return;
     }
 

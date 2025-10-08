@@ -221,17 +221,7 @@ function SignInForm({ onSwitch, onClose ,onLoginSuccess}) {
         </button>
       </form>
 
-      <div style={styles.orRow}>
-        <span style={styles.orLine} />
-        <span style={{ margin: "0 12px" }}>or sign in with</span>
-        <span style={styles.orLine} />
-      </div>
-
-      <div style={styles.socialRow}>
-        <button style={styles.socialBtn} aria-label="Sign in with Google"><GoogleIcon /></button>
-        <button style={styles.socialBtn} aria-label="Sign in with Apple"><AppleIcon /></button>
-        <button style={styles.socialBtn} aria-label="Sign in with Microsoft"><MicrosoftIcon /></button>
-      </div>
+      
 
       <p style={{ marginTop: "22px", textAlign: "center", fontSize: "0.85rem" }}>
         Don't have an account?{" "}

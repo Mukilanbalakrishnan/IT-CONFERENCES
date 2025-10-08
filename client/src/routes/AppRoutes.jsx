@@ -142,7 +142,7 @@ const AppLayout = () => {
 <Route path="/" element={<Home user={user} onOpenLogin={handleOpenLogin} />} />
                     <Route path="/venue" element={<Venue />} />
                     <Route path="/speaker" element={<Speaker />} />
-                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/contact" element={<Contact onOpenLogin={handleOpenLogin} />} />
                     <Route path="/agenda" element={<Agenda />} />
                     <Route path="/committees/advisory-board" element={<AdvisoryBoard />} />
                     <Route path="/committees/organizing-committee" element={<OrganizingCom />} />
