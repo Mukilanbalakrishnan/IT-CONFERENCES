@@ -216,17 +216,6 @@ function RegistrationForm({ onSwitch, onClose }) {
         </button>
       </form>
 
-      <div style={styles.orRow}>
-        <span style={styles.orLine} />
-        <span style={{ margin: "0 12px" }}>or sign up with</span>
-        <span style={styles.orLine} />
-      </div>
-
-      <div style={styles.socialRow}>
-        <button style={styles.socialBtn}><GoogleIcon /></button>
-        <button style={styles.socialBtn}><AppleIcon /></button>
-        <button style={styles.socialBtn}><MicrosoftIcon /></button>
-      </div>
 
       <p style={{ textAlign: "center", marginTop: "6px", color: "var(--text-secondary)", fontSize: "0.9rem" }}>
         Have an account?{" "}

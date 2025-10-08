@@ -25,22 +25,26 @@ const TeamProfile = () => {
     useEffect(() => {
         const timer = setTimeout(() => { // Using a timer to make loader visible
             const fetchProfileData = async () => {
-                try {
-                    const token = localStorage.getItem('token');
-                    if (!token) throw new Error('Authentication token not found. Please log in.');
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('Authentication token not found. Please log in.');
 
-                    const response = await axios.get('https://it-con-backend.onrender.com/api/users/me', {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
+        const response = await axios.get('https://it-con-backend.onrender.com/api/users/me', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
 
-                    if (!response.data) throw new Error('No profile data found in the API response.');
-                    setProfileData(response.data);
-                } catch (err) {
-                    setError(err.response?.data?.message || err.message || 'Failed to fetch profile data.');
-                } finally {
-                    setIsLoading(false);
-                }
-            };
+        console.log("Profile Data from API:", response.data);
+        const data = response.data.user || response.data; // ✅ handles nested object
+        if (!data) throw new Error('No profile data found in the API response.');
+        
+        setProfileData(data);
+    } catch (err) {
+        setError(err.response?.data?.message || err.message || 'Failed to fetch profile data.');
+    } finally {
+        setIsLoading(false);
+    }
+};
+
             fetchProfileData();
         }, 1500); // 1.5-second delay to demonstrate loader
 
@@ -77,6 +81,7 @@ const TeamProfile = () => {
                             <h2>{profileData.name}</h2>
                             <p>{profileData.participants[0]?.designation || 'Lead Participant'}</p>
                             <span className="user-id-badge">{profileData.userId}</span>
+
                         </div>
                     </div>
                     <div className="user-profile-details">
