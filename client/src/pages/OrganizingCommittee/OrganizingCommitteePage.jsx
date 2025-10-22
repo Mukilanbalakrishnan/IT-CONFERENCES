@@ -274,8 +274,8 @@ const OrganizingCommitteePage = () => {
                 { name: 'M. Hariharan', role: 'Student-ECE', institution: ' K.S.R College of Engineering, Tiruchengode, Tamilnadu, India' },
                 { name: 'V.H. Vasudhan', role: 'Student-ECE', institution: ' K.S.R College of Engineering, Tiruchengode, Tamilnadu, India' },
                 { name: 'B. Mukilan', role: 'Student-IT', institution: ' K.S.R College of Engineering, Tiruchengode, Tamilnadu, India' },
-                { name: 'Kaviarasan', role: 'Student-ECE', institution: ' K.S.R College of Engineering, Tiruchengode, Tamilnadu, India' },
-                { name: 'B. BarathKumar', role: 'Student-ECE', institution: ' K.S.R College of Engineering, Tiruchengode, Tamilnadu, India' }
+                { name: 'M. Kaviarasan', role: 'Student-ECE', institution: ' K.S.R College of Engineering, Tiruchengode, Tamilnadu, India' },
+                { name: 'C. BarathKumar', role: 'Student-ECE', institution: ' K.S.R College of Engineering, Tiruchengode, Tamilnadu, India' }
             ]
         }
     ];
