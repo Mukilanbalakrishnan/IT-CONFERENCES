@@ -764,54 +764,124 @@ function RegistrationForm({ onSwitch, onClose }) {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  
+  // Validate all fields before submission
+  const country = getSelectedCountry();
+  const finalMobileError = validateMobileNumber(mobileno, country);
+  const finalPasswordError = validatePassword(password);
+  
+  if (finalMobileError) {
+    setMobileError(finalMobileError);
+    toast.error("Please fix mobile number errors before submitting.");
+    return;
+  }
+
+  if (finalPasswordError) {
+    setPasswordError(finalPasswordError);
+    toast.error("Please fix password errors before submitting.");
+    return;
+  }
+
+  if (!mobileno) {
+    setMobileError("Mobile number is required.");
+    return;
+  }
+
+  if (!password) {
+    setPasswordError("Password is required.");
+    return;
+  }
+
+  if (!name.trim()) {
+    toast.error("Please enter your full name.");
+    return;
+  }
+
+  if (!email.trim()) {
+    toast.error("Please enter your email address.");
+    return;
+  }
+
+  setLoading(true);
+
+  // Show a loading toast for better UX
+  const loadingToast = toast.loading("Creating your account...");
+
+  try {
+    // Prepare the request data
+    const requestData = {
+      name: name.trim(),
+      email: email.trim(),
+      mobilenocountrycode,
+      mobileno,
+      password,
+    };
+
+    const { data } = await axios.post(
+      "https://it-con-backend.onrender.com/api/users/signup",
+      requestData,
+      { 
+        withCredentials: true,
+        timeout: 30000, // Increased to 30 seconds for slow backend
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    // Dismiss loading toast and show success
+    toast.dismiss(loadingToast);
+    toast.success("Account created successfully 🎉");
     
-    const country = getSelectedCountry();
-    const finalMobileError = validateMobileNumber(mobileno, country);
-    const finalPasswordError = validatePassword(password);
+    // Reset form
+    setName("");
+    setEmail("");
+    setMobileNo("");
+    setPassword("");
+    setMobileError("");
+    setPasswordError("");
     
-    if (finalMobileError) {
-      setMobileError(finalMobileError);
-      toast.error("Please fix mobile number errors before submitting.");
-      return;
-    }
+    setTimeout(() => {
+      onSwitch?.();
+    }, 1500);
 
-    if (finalPasswordError) {
-      setPasswordError(finalPasswordError);
-      toast.error("Please fix password errors before submitting.");
-      return;
-    }
-
-    if (!mobileno) {
-      setMobileError("Mobile number is required.");
-      return;
-    }
-
-    if (!password) {
-      setPasswordError("Password is required.");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const { data } = await axios.post(
-        "https://it-con-backend.onrender.com/api/users/signup",
-        { name, email, mobilenocountrycode, mobileno, password },
-        { withCredentials: true }
-      );
-
-      toast.success("Account created successfully 🎉");
+  } catch (err) {
+    // Dismiss loading toast first
+    toast.dismiss(loadingToast);
+    
+    // Enhanced error handling with better timeout messaging
+    if (err.code === 'ECONNABORTED') {
+      toast.error("Server is taking longer than expected. Your account might still be created. Please check your email or try logging in.");
+      
       setTimeout(() => {
-        onSwitch?.();
-      }, 1500);
-
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Registration failed ⚠");
-    } finally {
-      setLoading(false);
+        setName("");
+        setEmail("");
+        setMobileNo("");
+        setPassword("");
+        setMobileError("");
+        setPasswordError("");
+        toast.info("You can try logging in now to check if your account was created.");
+      }, 2000);
+      
+    } else if (err.response) {
+      // Server responded with error status
+      const errorMessage = err.response.data?.message || 
+                         err.response.data?.error ||
+                         `Registration failed (${err.response.status})`;
+      toast.error(errorMessage);
+      
+    } else if (err.request) {
+      // Network error
+      toast.error("Network error. Please check your connection and try again.");
+    } else {
+      // Other errors
+      toast.error("An unexpected error occurred. Please try again.");
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
 
   const selectedCountry = getSelectedCountry();
 
