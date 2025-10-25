@@ -73,16 +73,32 @@ const CrossIcon = () => (
 );
 
 const styles = {
+  overlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000,
+    padding: "20px",
+  },
   card: {
-    width: "440px",
-    maxWidth: "95%",
+    width: "100%",
+    maxWidth: "440px",
+    minHeight: "auto",
     margin: "0 auto",
     background: "var(--white)",
-    borderRadius: "var(--radius)",
-    boxShadow: "var(--shadow-soft)",
-    padding: "42px 36px",
+    borderRadius: "12px",
+    boxShadow: "0 10px 40px rgba(0, 0, 0, 0.1)",
+    padding: "30px 25px",
     fontFamily: "'Poppins','Segoe UI',Roboto,Arial,sans-serif",
     position: "relative",
+    overflow: "auto",
+    maxHeight: "90vh",
   },
   title: {
     fontSize: "1.75rem",
@@ -90,6 +106,7 @@ const styles = {
     color: "var(--brand-blue-dark)",
     margin: "6px 0 22px",
     textAlign: "center",
+    lineHeight: "1.3",
   },
   inputGroup: { 
     marginBottom: "16px",
@@ -111,14 +128,15 @@ const styles = {
     color: "var(--text-primary)",
     background: "var(--white)",
     boxSizing: "border-box",
+    minHeight: "44px",
   },
-  // Improved Mobile Row Styles
+  // Mobile Row Styles
   mobileRow: {
     display: "flex",
     gap: "0", 
     border: "1px solid var(--surface-dark)", 
     borderRadius: "10px", 
-    overflow: "hidden", 
+    overflow: "visible", 
     position: "relative",
     alignItems: "stretch",
     transition: "all 0.2s ease",
@@ -140,9 +158,10 @@ const styles = {
     borderRight: "1px solid var(--surface-dark)",
     minWidth: "140px",
     paddingLeft: "40px",
+    flexShrink: 0,
   },
-  // Custom dropdown styles
-  customSelectWrapper: {
+  // Dropdown styles
+  dropdownContainer: {
     position: "relative",
     width: "100%",
   },
@@ -161,17 +180,23 @@ const styles = {
     display: "flex",
     alignItems: "center",
     gap: "8px",
+    minHeight: "44px",
   },
   customDropdown: {
-    position: "fixed",
-    background: "var(--white)",
-    border: "1px solid var(--surface-dark)",
-    borderRadius: "8px",
-    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-    zIndex: 9999,
-    maxHeight: "350px",
-    overflow: "hidden",
-    width: "300px",
+    position: "fixed", // Changed from "absolute" to "fixed"
+  top: "auto", // Remove fixed positioning
+  left: "auto", // Remove fixed positioning
+  marginTop: "4px",
+  background: "var(--white)",
+  border: "1px solid var(--surface-dark)",
+  borderRadius: "8px",
+  boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+  zIndex: 10000,
+  maxHeight: "300px",
+  overflow: "hidden",
+  width: "300px",
+  // Add these to ensure proper positioning
+  transform: "translate(0, 0)",
   },
   searchContainer: {
     padding: "12px 16px",
@@ -193,11 +218,6 @@ const styles = {
     background: "var(--white)",
     boxSizing: "border-box",
     fontFamily: "'Poppins','Segoe UI',Roboto,Arial,sans-serif",
-    transition: "all 0.2s ease",
-  },
-  searchInputFocus: {
-    border: "1px solid var(--brand-orange)",
-    boxShadow: "0 0 0 2px rgba(245, 124, 0, 0.1)",
   },
   searchIcon: {
     position: "absolute",
@@ -208,7 +228,7 @@ const styles = {
     pointerEvents: "none",
   },
   dropdownOptions: {
-    maxHeight: "250px",
+    maxHeight: "200px",
     overflowY: "auto",
   },
   dropdownOption: {
@@ -261,7 +281,6 @@ const styles = {
     color: "var(--text-secondary)",
     pointerEvents: "none",
     transition: "transform 0.2s ease",
-    zIndex: 2,
   },
   countryCodeIconOpen: {
     transform: "translateY(-50%) rotate(180deg)",
@@ -273,7 +292,6 @@ const styles = {
     transform: "translateY(-50%)",
     pointerEvents: "none",
     fontSize: "18px",
-    zIndex: 2,
   },
   mobileNumberInput: {
     flex: "1", 
@@ -286,6 +304,7 @@ const styles = {
     boxSizing: "border-box",
     borderRadius: "0",
     fontFamily: "'Poppins','Segoe UI',Roboto,Arial,sans-serif",
+    minWidth: "0",
   },
   passwordWrapper: { 
     position: "relative",
@@ -384,6 +403,12 @@ const styles = {
     marginTop: "4px",
     display: "block",
     fontFamily: "'Poppins','Segoe UI',Roboto,Arial,sans-serif",
+  },
+  countryInfoRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: "4px",
   },
 };
 
@@ -624,9 +649,7 @@ function RegistrationForm({ onSwitch, onClose }) {
   const [isMobileInputFocused, setIsMobileInputFocused] = useState(false);
   const [mobileError, setMobileError] = useState("");
   const [hoveredOption, setHoveredOption] = useState(null);
-  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const [searchQuery, setSearchQuery] = useState("");
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [passwordError, setPasswordError] = useState("");
 
   const dropdownRef = useRef(null);
@@ -644,7 +667,7 @@ function RegistrationForm({ onSwitch, onClose }) {
 
   const isPasswordValid = Object.values(passwordValidation).every(Boolean);
 
-  // Close dropdown when clicking outside and calculate position
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target) && 
@@ -740,13 +763,6 @@ function RegistrationForm({ onSwitch, onClose }) {
   };
 
   const handleDropdownToggle = () => {
-    if (buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      setDropdownPosition({
-        top: rect.bottom + window.scrollY,
-        left: rect.left + window.scrollX
-      });
-    }
     setIsDropdownOpen(!isDropdownOpen);
     setSearchQuery("");
   };
@@ -755,408 +771,354 @@ function RegistrationForm({ onSwitch, onClose }) {
     setSearchQuery(e.target.value);
   };
 
-  const handleSearchFocus = () => {
-    setIsSearchFocused(true);
-  };
-
-  const handleSearchBlur = () => {
-    setIsSearchFocused(false);
-  };
-
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  
-  // Validate all fields before submission
-  const country = getSelectedCountry();
-  const finalMobileError = validateMobileNumber(mobileno, country);
-  const finalPasswordError = validatePassword(password);
-  
-  if (finalMobileError) {
-    setMobileError(finalMobileError);
-    toast.error("Please fix mobile number errors before submitting.");
-    return;
-  }
+    e.preventDefault();
+    
+    const country = getSelectedCountry();
+    const finalMobileError = validateMobileNumber(mobileno, country);
+    const finalPasswordError = validatePassword(password);
+    
+    if (finalMobileError) {
+      setMobileError(finalMobileError);
+      toast.error("Please fix mobile number errors before submitting.");
+      return;
+    }
 
-  if (finalPasswordError) {
-    setPasswordError(finalPasswordError);
-    toast.error("Please fix password errors before submitting.");
-    return;
-  }
+    if (finalPasswordError) {
+      setPasswordError(finalPasswordError);
+      toast.error("Please fix password errors before submitting.");
+      return;
+    }
 
-  if (!mobileno) {
-    setMobileError("Mobile number is required.");
-    return;
-  }
+    if (!mobileno) {
+      setMobileError("Mobile number is required.");
+      return;
+    }
 
-  if (!password) {
-    setPasswordError("Password is required.");
-    return;
-  }
+    if (!password) {
+      setPasswordError("Password is required.");
+      return;
+    }
 
-  if (!name.trim()) {
-    toast.error("Please enter your full name.");
-    return;
-  }
+    if (!name.trim()) {
+      toast.error("Please enter your full name.");
+      return;
+    }
 
-  if (!email.trim()) {
-    toast.error("Please enter your email address.");
-    return;
-  }
+    if (!email.trim()) {
+      toast.error("Please enter your email address.");
+      return;
+    }
 
-  setLoading(true);
+    setLoading(true);
+    const loadingToast = toast.loading("Creating your account...");
 
-  // Show a loading toast for better UX
-  const loadingToast = toast.loading("Creating your account...");
+    try {
+      const requestData = {
+        name: name.trim(),
+        email: email.trim(),
+        mobilenocountrycode,
+        mobileno,
+        password,
+      };
 
-  try {
-    // Prepare the request data
-    const requestData = {
-      name: name.trim(),
-      email: email.trim(),
-      mobilenocountrycode,
-      mobileno,
-      password,
-    };
-
-    const { data } = await axios.post(
-      "https://it-con-backend.onrender.com/api/users/signup",
-      requestData,
-      { 
-        withCredentials: true,
-        timeout: 30000, // Increased to 30 seconds for slow backend
-        headers: {
-          'Content-Type': 'application/json',
+      const { data } = await axios.post(
+        "https://it-con-backend.onrender.com/api/users/signup",
+        requestData,
+        { 
+          withCredentials: true,
+          timeout: 30000,
         }
-      }
-    );
+      );
 
-    // Dismiss loading toast and show success
-    toast.dismiss(loadingToast);
-    toast.success("Account created successfully 🎉");
-    
-    // Reset form
-    setName("");
-    setEmail("");
-    setMobileNo("");
-    setPassword("");
-    setMobileError("");
-    setPasswordError("");
-    
-    setTimeout(() => {
-      onSwitch?.();
-    }, 1500);
-
-  } catch (err) {
-    // Dismiss loading toast first
-    toast.dismiss(loadingToast);
-    
-    // Enhanced error handling with better timeout messaging
-    if (err.code === 'ECONNABORTED') {
-      toast.error("Server is taking longer than expected. Your account might still be created. Please check your email or try logging in.");
+      toast.dismiss(loadingToast);
+      toast.success("Account created successfully 🎉");
+      
+      setName("");
+      setEmail("");
+      setMobileNo("");
+      setPassword("");
+      setMobileError("");
+      setPasswordError("");
       
       setTimeout(() => {
-        setName("");
-        setEmail("");
-        setMobileNo("");
-        setPassword("");
-        setMobileError("");
-        setPasswordError("");
-        toast.info("You can try logging in now to check if your account was created.");
-      }, 2000);
+        onSwitch?.();
+      }, 1500);
+
+    } catch (err) {
+      toast.dismiss(loadingToast);
       
-    } else if (err.response) {
-      // Server responded with error status
-      const errorMessage = err.response.data?.message || 
-                         err.response.data?.error ||
-                         `Registration failed (${err.response.status})`;
-      toast.error(errorMessage);
-      
-    } else if (err.request) {
-      // Network error
-      toast.error("Network error. Please check your connection and try again.");
-    } else {
-      // Other errors
-      toast.error("An unexpected error occurred. Please try again.");
+      if (err.code === 'ECONNABORTED') {
+        toast.error("Server is taking longer than expected. Please try logging in.");
+      } else if (err.response) {
+        const errorMessage = err.response.data?.message || "Registration failed";
+        toast.error(errorMessage);
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    } finally {
+      setLoading(false);
     }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const selectedCountry = getSelectedCountry();
 
   return (
-    <div style={styles.card}>
-      <button onClick={onClose} style={styles.closeBtn}>&times;</button>
-      <h2 style={styles.title}>Create Account</h2>
+    <div style={styles.overlay}>
+      <div style={styles.card}>
+        <button onClick={onClose} style={styles.closeBtn}>&times;</button>
+        <h2 style={styles.title}>Create Account</h2>
 
-      <form onSubmit={handleSubmit}>
-        <div style={styles.inputGroup}>
-          <label style={styles.inputLabel} htmlFor="name">Full name</label>
-          <input
-            id="name"
-            type="text"
-            placeholder="Full name"
-            style={styles.input}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          {/* Full Name */}
+          <div style={styles.inputGroup}>
+            <label style={styles.inputLabel} htmlFor="name">Full name</label>
+            <input
+              id="name"
+              type="text"
+              placeholder="Full name"
+              style={styles.input}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
 
-        <div style={styles.inputGroup}>
-          <label style={styles.inputLabel} htmlFor="email">Email address</label>
-          <input
-            id="email"
-            type="email"
-            placeholder="Email address"
-            style={styles.input}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+          {/* Email */}
+          <div style={styles.inputGroup}>
+            <label style={styles.inputLabel} htmlFor="email">Email address</label>
+            <input
+              id="email"
+              type="email"
+              placeholder="Email address"
+              style={styles.input}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-        {/* Enhanced Mobile Number Section with Custom Dropdown */}
-        <div style={styles.inputGroup}>
-          <label style={styles.inputLabel} htmlFor="mobileno">Mobile number</label>
-          <div 
-            style={{
-              ...styles.mobileRow,
-              ...(isMobileInputFocused ? styles.mobileRowFocus : {}),
-              ...(mobileError ? styles.mobileRowError : {})
-            }}
-          >
-            <div style={styles.countryCodeContainer}>
-              <span style={styles.flagIcon}>
-                {selectedCountry?.flag || "🏳️"}
-              </span>
-              
-              {/* Custom Dropdown */}
-              <div style={styles.customSelectWrapper}>
-                <button
-                  ref={buttonRef}
-                  type="button"
-                  style={styles.customSelectButton}
-                  onClick={handleDropdownToggle}
+          {/* Mobile Number */}
+          <div style={styles.inputGroup}>
+            <label style={styles.inputLabel} htmlFor="mobileno">Mobile number</label>
+            <div 
+              style={{
+                ...styles.mobileRow,
+                ...(isMobileInputFocused ? styles.mobileRowFocus : {}),
+                ...(mobileError ? styles.mobileRowError : {})
+              }}
+            >
+              {/* Country Code Section */}
+              <div style={styles.countryCodeContainer}>
+                <span style={styles.flagIcon}>
+                  {selectedCountry?.flag || "🏳️"}
+                </span>
+                
+                <div style={styles.dropdownContainer}>
+                  <button
+                    ref={buttonRef}
+                    type="button"
+                    style={styles.customSelectButton}
+                    onClick={handleDropdownToggle}
+                  >
+                    <span style={{ fontWeight: "600" }}>{selectedCountry?.code}</span>
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {isDropdownOpen && (
+                    <div 
+                      ref={dropdownRef}
+                      style={styles.customDropdown}
+                    >
+                      <div style={styles.searchContainer}>
+                        <div style={styles.searchInputContainer}>
+                          <span style={styles.searchIcon}>
+                            <SearchIcon />
+                          </span>
+                          <input
+                            ref={searchInputRef}
+                            type="text"
+                            placeholder="Search country or code..."
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                            style={styles.searchInput}
+                          />
+                        </div>
+                      </div>
+
+                      <div style={styles.dropdownOptions}>
+                        {filteredCountries.length > 0 ? (
+                          filteredCountries.map((country) => (
+                            <div
+                              key={country.code}
+                              style={{
+                                ...styles.dropdownOption,
+                                ...(hoveredOption === country.code ? styles.dropdownOptionHover : {}),
+                                ...(mobilenocountrycode === country.code ? styles.dropdownOptionSelected : {})
+                              }}
+                              onClick={() => handleCountryCodeChange(country.code)}
+                              onMouseEnter={() => setHoveredOption(country.code)}
+                              onMouseLeave={() => setHoveredOption(null)}
+                            >
+                              <span style={styles.optionFlag}>{country.flag}</span>
+                              <span style={styles.optionCode}>{country.code}</span>
+                              <span style={styles.optionName}>{country.name}</span>
+                            </div>
+                          ))
+                        ) : (
+                          <div style={styles.noResults}>
+                            No countries found for "{searchQuery}"
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                <span 
+                  style={{
+                    ...styles.countryCodeIcon,
+                    ...(isDropdownOpen ? styles.countryCodeIconOpen : {})
+                  }}
                 >
-                  <span style={{ fontWeight: "600" }}>{selectedCountry?.code}</span>
-                </button>
+                  <ChevronDownIcon />
+                </span>
               </div>
               
-              <span 
-                style={{
-                  ...styles.countryCodeIcon,
-                  ...(isDropdownOpen ? styles.countryCodeIconOpen : {})
-                }}
-              >
-                <ChevronDownIcon />
+              {/* Mobile Number Input */}
+              <input
+                id="mobileno"
+                type="tel"
+                placeholder={`e.g., ${Array(selectedCountry?.minLength || 10).fill('0').join('')}`}
+                style={styles.mobileNumberInput}
+                value={mobileno}
+                onChange={(e) => handleMobileNumberChange(e.target.value)}
+                onFocus={() => setIsMobileInputFocused(true)}
+                onBlur={() => setIsMobileInputFocused(false)}
+                maxLength={selectedCountry?.maxLength || 15}
+                required
+              />
+            </div>
+            
+            {/* Country Info */}
+            <div style={styles.countryInfoRow}>
+              <span style={styles.infoText}>
+                {selectedCountry?.name} • {mobileno.length}/{selectedCountry?.maxLength}
+              </span>
+              <span style={styles.infoText}>
+                {selectedCountry?.minLength} digits
               </span>
             </div>
             
-            <input
-              id="mobileno"
-              type="tel"
-              placeholder={`e.g., ${Array(selectedCountry?.minLength || 10).fill('0').join('')}`}
-              style={styles.mobileNumberInput}
-              value={mobileno}
-              onChange={(e) => handleMobileNumberChange(e.target.value)}
-              onFocus={() => setIsMobileInputFocused(true)}
-              onBlur={() => setIsMobileInputFocused(false)}
-              maxLength={selectedCountry?.maxLength || 15}
-              required
-            />
-          </div>
-          
-          {/* Country and validation info */}
-          <div style={{ 
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: "4px"
-          }}>
-            <span style={styles.infoText}>
-              {selectedCountry?.name} • {mobileno.length}/{selectedCountry?.maxLength}
-            </span>
-            {selectedCountry?.minLength === selectedCountry?.maxLength ? (
-              <span style={styles.infoText}>
-                {selectedCountry.minLength} digits
-              </span>
-            ) : (
-              <span style={styles.infoText}>
-                {selectedCountry?.minLength}-{selectedCountry?.maxLength} digits
+            {mobileError && (
+              <span style={styles.errorText}>
+                {mobileError}
               </span>
             )}
           </div>
-          
-          {mobileError && (
-            <span style={styles.errorText}>
-              {mobileError}
-            </span>
-          )}
-        </div>
 
-        <div style={styles.inputGroup}>
-          <label style={styles.inputLabel} htmlFor="password">Password</label>
-          <div style={styles.passwordWrapper}>
-            <input
-              id="password"
-              type={showPwd ? "text" : "password"}
-              placeholder="Password"
-              style={{ 
-                ...styles.input, 
-                paddingRight: "55px",
-                ...(passwordError ? { border: "1px solid #e74c3c" } : {})
-              }}
-              value={password}
-              onChange={(e) => handlePasswordChange(e.target.value)}
-              required
-            />
-            <button type="button" style={styles.toggleBtn} onClick={() => setShowPwd((s) => !s)}>
-              {showPwd ? "Hide" : "Show"}
-            </button>
-          </div>
-
-          {/* Password Validation Rules */}
-          {password && (
-            <div style={styles.passwordValidation}>
-              <div style={{
-                ...styles.validationRule,
-                ...(passwordValidation.minLength ? styles.validationValid : styles.validationInvalid)
-              }}>
-                <span style={styles.validationIcon}>
-                  {passwordValidation.minLength ? <CheckIcon /> : <CrossIcon />}
-                </span>
-                At least 8 characters
-              </div>
-              <div style={{
-                ...styles.validationRule,
-                ...(passwordValidation.hasUpperCase ? styles.validationValid : styles.validationInvalid)
-              }}>
-                <span style={styles.validationIcon}>
-                  {passwordValidation.hasUpperCase ? <CheckIcon /> : <CrossIcon />}
-                </span>
-                At least 1 uppercase letter (A-Z)
-              </div>
-              <div style={{
-                ...styles.validationRule,
-                ...(passwordValidation.hasLowerCase ? styles.validationValid : styles.validationInvalid)
-              }}>
-                <span style={styles.validationIcon}>
-                  {passwordValidation.hasLowerCase ? <CheckIcon /> : <CrossIcon />}
-                </span>
-                At least 1 lowercase letter (a-z)
-              </div>
-              <div style={{
-                ...styles.validationRule,
-                ...(passwordValidation.hasNumber ? styles.validationValid : styles.validationInvalid)
-              }}>
-                <span style={styles.validationIcon}>
-                  {passwordValidation.hasNumber ? <CheckIcon /> : <CrossIcon />}
-                </span>
-                At least 1 number (0-9)
-              </div>
-              <div style={{
-                ...styles.validationRule,
-                ...(passwordValidation.hasSpecialChar ? styles.validationValid : styles.validationInvalid)
-              }}>
-                <span style={styles.validationIcon}>
-                  {passwordValidation.hasSpecialChar ? <CheckIcon /> : <CrossIcon />}
-                </span>
-                At least 1 special character (!@#$% etc.)
-              </div>
-            </div>
-          )}
-          
-          {passwordError && (
-            <span style={styles.errorText}>
-              {passwordError}
-            </span>
-          )}
-        </div>
-
-        <button 
-          type="submit" 
-          style={{
-            ...styles.primaryBtn,
-            opacity: loading || mobileError || passwordError ? 0.7 : 1,
-            cursor: loading || mobileError || passwordError ? "not-allowed" : "pointer"
-          }} 
-          disabled={loading || !!mobileError || !!passwordError}
-        >
-          {loading ? "Creating..." : "Create Account"}
-        </button>
-      </form>
-
-      {/* Dropdown rendered outside the form container */}
-      {isDropdownOpen && (
-        <div 
-          ref={dropdownRef}
-          style={{
-            ...styles.customDropdown,
-            top: dropdownPosition.top,
-            left: dropdownPosition.left
-          }}
-        >
-          {/* Search Input */}
-          <div style={styles.searchContainer}>
-            <div style={styles.searchInputContainer}>
-              <span style={styles.searchIcon}>
-                <SearchIcon />
-              </span>
+          {/* Password */}
+          <div style={styles.inputGroup}>
+            <label style={styles.inputLabel} htmlFor="password">Password</label>
+            <div style={styles.passwordWrapper}>
               <input
-                ref={searchInputRef}
-                type="text"
-                placeholder="Search country or code..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-                onFocus={handleSearchFocus}
-                onBlur={handleSearchBlur}
-                style={{
-                  ...styles.searchInput,
-                  ...(isSearchFocused ? styles.searchInputFocus : {})
+                id="password"
+                type={showPwd ? "text" : "password"}
+                placeholder="Password"
+                style={{ 
+                  ...styles.input, 
+                  paddingRight: "55px",
+                  ...(passwordError ? { border: "1px solid #e74c3c" } : {})
                 }}
+                value={password}
+                onChange={(e) => handlePasswordChange(e.target.value)}
+                required
               />
+              <button type="button" style={styles.toggleBtn} onClick={() => setShowPwd((s) => !s)}>
+                {showPwd ? "Hide" : "Show"}
+              </button>
             </div>
-          </div>
 
-          {/* Filtered Options */}
-          <div style={styles.dropdownOptions}>
-            {filteredCountries.length > 0 ? (
-              filteredCountries.map((country) => (
-                <div
-                  key={country.code}
-                  style={{
-                    ...styles.dropdownOption,
-                    ...(hoveredOption === country.code ? styles.dropdownOptionHover : {}),
-                    ...(mobilenocountrycode === country.code ? styles.dropdownOptionSelected : {})
-                  }}
-                  onClick={() => handleCountryCodeChange(country.code)}
-                  onMouseEnter={() => setHoveredOption(country.code)}
-                  onMouseLeave={() => setHoveredOption(null)}
-                >
-                  <span style={styles.optionFlag}>{country.flag}</span>
-                  <span style={styles.optionCode}>{country.code}</span>
-                  <span style={styles.optionName}>{country.name}</span>
+            {/* Password Validation */}
+            {password && (
+              <div style={styles.passwordValidation}>
+                <div style={{
+                  ...styles.validationRule,
+                  ...(passwordValidation.minLength ? styles.validationValid : styles.validationInvalid)
+                }}>
+                  <span style={styles.validationIcon}>
+                    {passwordValidation.minLength ? <CheckIcon /> : <CrossIcon />}
+                  </span>
+                  At least 8 characters
                 </div>
-              ))
-            ) : (
-              <div style={styles.noResults}>
-                No countries found for "{searchQuery}"
+                <div style={{
+                  ...styles.validationRule,
+                  ...(passwordValidation.hasUpperCase ? styles.validationValid : styles.validationInvalid)
+                }}>
+                  <span style={styles.validationIcon}>
+                    {passwordValidation.hasUpperCase ? <CheckIcon /> : <CrossIcon />}
+                  </span>
+                  At least 1 uppercase letter
+                </div>
+                <div style={{
+                  ...styles.validationRule,
+                  ...(passwordValidation.hasLowerCase ? styles.validationValid : styles.validationInvalid)
+                }}>
+                  <span style={styles.validationIcon}>
+                    {passwordValidation.hasLowerCase ? <CheckIcon /> : <CrossIcon />}
+                  </span>
+                  At least 1 lowercase letter
+                </div>
+                <div style={{
+                  ...styles.validationRule,
+                  ...(passwordValidation.hasNumber ? styles.validationValid : styles.validationInvalid)
+                }}>
+                  <span style={styles.validationIcon}>
+                    {passwordValidation.hasNumber ? <CheckIcon /> : <CrossIcon />}
+                  </span>
+                  At least 1 number
+                </div>
+                <div style={{
+                  ...styles.validationRule,
+                  ...(passwordValidation.hasSpecialChar ? styles.validationValid : styles.validationInvalid)
+                }}>
+                  <span style={styles.validationIcon}>
+                    {passwordValidation.hasSpecialChar ? <CheckIcon /> : <CrossIcon />}
+                  </span>
+                  At least 1 special character
+                </div>
               </div>
             )}
+            
+            {passwordError && (
+              <span style={styles.errorText}>
+                {passwordError}
+              </span>
+            )}
           </div>
-        </div>
-      )}
 
-      <p style={styles.switchText}>
-        Have an account?{" "}
-        <button onClick={onSwitch} style={{ ...styles.link, background: "none", border: "none", padding: 0 }}>
-          Log in
-        </button>
-      </p>
+          <button 
+            type="submit" 
+            style={{
+              ...styles.primaryBtn,
+              opacity: loading || mobileError || passwordError ? 0.7 : 1,
+              cursor: loading || mobileError || passwordError ? "not-allowed" : "pointer"
+            }} 
+            disabled={loading || !!mobileError || !!passwordError}
+          >
+            {loading ? "Creating..." : "Create Account"}
+          </button>
+        </form>
 
-      <ToastContainer position="top-right" autoClose={2000} hideProgressBar />
+        <p style={styles.switchText}>
+          Have an account?{" "}
+          <button onClick={onSwitch} style={{ ...styles.link, background: "none", border: "none", padding: 0 }}>
+            Log in
+          </button>
+        </p>
+
+        <ToastContainer position="top-right" autoClose={2000} hideProgressBar />
+      </div>
     </div>
   );
 }
