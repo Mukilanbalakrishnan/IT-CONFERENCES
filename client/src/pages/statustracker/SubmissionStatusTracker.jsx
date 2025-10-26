@@ -182,6 +182,7 @@ const componentStyles = `
     font-weight: 700;
     margin-bottom: 1.5rem;
     color: var(--brand-blue-dark);
+    text-align: center;
 }
 .st-modal-form {
     display: flex;
@@ -220,6 +221,85 @@ const componentStyles = `
 }
 .st-modal-submit-btn:hover {
     background-color: var(--brand-orange-dark);
+}
+.st-modal-submit-btn:disabled {
+    background-color: #a0aec0;
+    cursor: not-allowed;
+}
+
+/* Bill Styles */
+.st-bill-container {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 2px solid #e9ecef;
+}
+.st-bill-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px dashed #dee2e6;
+}
+.st-bill-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2c5530;
+    margin: 0 0 0.5rem 0;
+}
+.st-bill-subtitle {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0;
+}
+.st-bill-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.st-bill-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+.st-bill-label {
+    color: #495057;
+    font-weight: 500;
+}
+.st-bill-value {
+    color: #212529;
+    font-weight: 600;
+}
+.st-bill-divider {
+    border: none;
+    border-top: 2px dashed #dee2e6;
+    margin: 1rem 0;
+}
+.st-bill-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0 0 0;
+    border-top: 2px solid #dee2e6;
+    margin-top: 0.5rem;
+}
+.st-bill-total-label {
+    color: #2c5530;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+.st-bill-total-value {
+    color: #2c5530;
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+.st-bill-note {
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.8rem;
+    margin-top: 1rem;
+    font-style: italic;
 }
 
 .st-loading-container {
@@ -276,7 +356,7 @@ const componentStyles = `
 }
 `;
 
-// --- Loader Component ---
+// Loader Component
 const Loader = () => (
     <div className="st-loading-container">
         <div className="st-loader">
@@ -288,77 +368,347 @@ const Loader = () => (
     </div>
 );
 
-// --- Payment Modal Component ---
-const PaymentModal = ({ onClose, onSubmit, discount }) => {
-    const [paymentDetails, setPaymentDetails] = useState({ cardNumber: '', expiry: '', cvv: '' });
+// Payment Modal Component
+const PaymentModal = ({ onClose, discount }) => {
+    const [loading, setLoading] = useState(false);
+    const [paymentData, setPaymentData] = useState(null);
+    const [error, setError] = useState(null);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        
-        if (!paymentDetails.cardNumber || !paymentDetails.expiry || !paymentDetails.cvv) {
-            alert("Please fill all payment fields.");
-            return;
+    useEffect(() => {
+        fetchPaymentDetails();
+    }, []);
+
+    const fetchPaymentDetails = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const token = localStorage.getItem('token');
+            
+            if (!token) {
+                setError('Authentication token not found. Please log in again.');
+                return;
+            }
+
+            console.log('Fetching payment details...');
+            
+            // CORRECT ENDPOINT - with /api/payment prefix
+            const response = await fetch('https://it-con-backend.onrender.com/api/payments/create-payment', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('Response status:', response.status);
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Server response error:', errorText);
+                throw new Error(`Server error: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            console.log('Payment data received:', data);
+            
+            if (data.success) {
+                setPaymentData(data);
+            } else {
+                setError(data.message || 'Failed to create payment order');
+            }
+        } catch (err) {
+            console.error('Payment details fetch error:', err);
+            setError(err.message || 'Network error. Please check your connection and try again.');
+        } finally {
+            setLoading(false);
         }
+    };
 
-        onSubmit();
+    const handlePayment = async () => {
+        if (!paymentData) return;
+
+        try {
+            setLoading(true);
+            setError(null);
+
+            // Check if Razorpay is already loaded
+            if (window.Razorpay) {
+                initializeRazorpay();
+                return;
+            }
+
+            // Load Razorpay script
+            const script = document.createElement('script');
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            script.async = true;
+            
+            script.onload = () => {
+                console.log('Razorpay script loaded successfully');
+                initializeRazorpay();
+            };
+            
+            script.onerror = () => {
+                setError('Failed to load payment gateway. Please try again.');
+                setLoading(false);
+            };
+            
+            document.body.appendChild(script);
+        } catch (err) {
+            console.error('Razorpay initialization error:', err);
+            setError('Failed to initialize payment gateway');
+            setLoading(false);
+        }
+    };
+
+    const initializeRazorpay = () => {
+        try {
+            if (!window.Razorpay) {
+                throw new Error('Razorpay not loaded');
+            }
+
+            const options = {
+                key: paymentData.keyId,
+                amount: paymentData.amount, // Already in paise from backend (10000 = ₹100)
+                currency: paymentData.currency,
+                name: 'IT Conference',
+                description: 'Conference Registration Payment',
+                order_id: paymentData.orderId,
+                handler: async function (response) {
+                    console.log('Payment response:', response);
+                    await verifyPayment(response);
+                },
+                prefill: {
+                    name: paymentData.name,
+                    email: paymentData.email,
+                    contact: paymentData.contact
+                },
+                theme: {
+                    color: '#F97316'
+                },
+                modal: {
+                    ondismiss: function() {
+                        console.log('Payment modal closed');
+                        setLoading(false);
+                    }
+                }
+            };
+
+            console.log('Razorpay options:', options);
+            
+            const rzp = new window.Razorpay(options);
+            rzp.open();
+            setLoading(false);
+        } catch (err) {
+            console.error('Razorpay instance creation error:', err);
+            setError('Failed to create payment instance: ' + err.message);
+            setLoading(false);
+        }
+    };
+
+    const verifyPayment = async (response) => {
+        try {
+            setLoading(true);
+            const token = localStorage.getItem('token');
+            
+            console.log('Verifying payment...', response);
+
+            // CORRECT VERIFICATION ENDPOINT
+            const verifyResponse = await fetch('https://it-con-backend.onrender.com/api/payments/verify-payment', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_signature: response.razorpay_signature
+                })
+            });
+
+            const verifyData = await verifyResponse.json();
+            console.log('Verification response:', verifyData);
+            
+            if (verifyData.success) {
+                alert('🎉 Payment successful! Your registration is now complete.');
+                onClose();
+                // Refresh the page to update status
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                alert('❌ Payment verification failed: ' + (verifyData.message || 'Unknown error'));
+                setLoading(false);
+            }
+        } catch (err) {
+            console.error('Payment verification error:', err);
+            alert('❌ Payment verification failed. Please contact support.');
+            setLoading(false);
+        }
     };
 
     const calculateAmount = () => {
-        const baseAmount = 100;
-        return discount ? baseAmount * 0.8 : baseAmount;
+        if (!paymentData) return { baseAmount: 100, finalAmount: discount ? 80 : 100 };
+        
+        // Use convertedAmount from backend which is in actual currency units
+        const baseAmount = paymentData.convertedAmount || 100;
+        const finalAmount = discount ? baseAmount * 0.8 : baseAmount;
+        return { baseAmount, finalAmount };
     };
+
+    const { baseAmount, finalAmount } = calculateAmount();
 
     return (
         <div className="st-modal-overlay" onClick={onClose}>
             <div className="st-modal-content" onClick={(e) => e.stopPropagation()}>
                 <h3 className="st-modal-title">Payment Gateway</h3>
                 
-                <div style={{ marginBottom: '1rem', padding: '1rem', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
-                    <strong>Payment Amount: ${calculateAmount()}</strong>
-                    {discount && <span style={{ color: 'green', marginLeft: '0.5rem' }}>(20% discount applied!)</span>}
-                </div>
+                {loading && !paymentData && (
+                    <div className="st-loading-container" style={{ minHeight: '200px', padding: '2rem' }}>
+                        <div className="st-loader">
+                            <div className="st-loader-dot"></div>
+                            <div className="st-loader-dot"></div>
+                            <div className="st-loader-dot"></div>
+                        </div>
+                        <p className="st-loading-text">Loading payment details...</p>
+                    </div>
+                )}
 
-                <form onSubmit={handleSubmit} className="st-modal-form">
-                    <div>
-                        <label htmlFor="cardNumber" className="st-form-label">Card Details</label>
-                        <div className="st-payment-grid">
-                            <input 
-                                type="text" 
-                                id="cardNumber" 
-                                placeholder="Card Number" 
-                                className="st-form-input" 
-                                required 
-                                onChange={(e) => setPaymentDetails({...paymentDetails, cardNumber: e.target.value})} 
-                            />
-                            <input 
-                                type="text" 
-                                id="expiry" 
-                                placeholder="MM/YY" 
-                                className="st-form-input" 
-                                required 
-                                onChange={(e) => setPaymentDetails({...paymentDetails, expiry: e.target.value})} 
-                            />
-                            <input 
-                                type="text" 
-                                id="cvv" 
-                                placeholder="CVV" 
-                                className="st-form-input" 
-                                required 
-                                onChange={(e) => setPaymentDetails({...paymentDetails, cvv: e.target.value})} 
-                            />
+                {error && (
+                    <div style={{ 
+                        background: '#fee2e2', 
+                        border: '1px solid #fecaca', 
+                        borderRadius: '8px', 
+                        padding: '1rem', 
+                        marginBottom: '1rem',
+                        color: '#dc2626'
+                    }}>
+                        <strong>Error:</strong> {error}
+                        <div style={{ marginTop: '0.5rem' }}>
+                            <button 
+                                onClick={fetchPaymentDetails}
+                                style={{
+                                    padding: '0.5rem 1rem',
+                                    background: '#dc2626',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    marginRight: '0.5rem'
+                                }}
+                            >
+                                Retry
+                            </button>
+                            <button 
+                                onClick={onClose}
+                                style={{
+                                    padding: '0.5rem 1rem',
+                                    background: 'transparent',
+                                    color: '#dc2626',
+                                    border: '1px solid #dc2626',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Cancel
+                            </button>
                         </div>
                     </div>
+                )}
 
-                    <button type="submit" className="st-modal-submit-btn">
-                        Pay ${calculateAmount()}
-                    </button>
-                </form>
+                {paymentData && (
+                    <>
+                        <div className="st-bill-container">
+                            <div className="st-bill-header">
+                                <h4 className="st-bill-title">Payment Invoice</h4>
+                                <p className="st-bill-subtitle">IT Conference Registration</p>
+                            </div>
+                            
+                            <div className="st-bill-details">
+                                <div className="st-bill-row">
+                                    <span className="st-bill-label">Conference Fee:</span>
+                                    <span className="st-bill-value">
+                                        {paymentData.currency === 'INR' ? '₹' : '$'}{baseAmount.toFixed(2)}
+                                    </span>
+                                </div>
+                                
+                                {discount && (
+                                    <div className="st-bill-row">
+                                        <span className="st-bill-label">Discount (20%):</span>
+                                        <span className="st-bill-value" style={{ color: 'green' }}>
+                                            -{paymentData.currency === 'INR' ? '₹' : '$'}{(baseAmount * 0.2).toFixed(2)}
+                                        </span>
+                                    </div>
+                                )}
+                                
+                                <hr className="st-bill-divider" />
+                                
+                                <div className="st-bill-total">
+                                    <span className="st-bill-total-label">Total Amount:</span>
+                                    <span className="st-bill-total-value">
+                                        {paymentData.currency === 'INR' ? '₹' : '$'}{finalAmount.toFixed(2)} {paymentData.currency}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <p className="st-bill-note">
+                                Secure payment processed by Razorpay
+                            </p>
+                        </div>
+
+                        <button 
+                            onClick={handlePayment}
+                            disabled={loading}
+                            className="st-modal-submit-btn"
+                            style={{ marginTop: '1rem' }}
+                        >
+                            {loading ? 'Processing...' : `Pay ${paymentData.currency === 'INR' ? '₹' : '$'}${finalAmount.toFixed(2)}`}
+                        </button>
+
+                        <p style={{ 
+                            textAlign: 'center', 
+                            fontSize: '0.8rem', 
+                            color: '#6c757d', 
+                            marginTop: '1rem' 
+                        }}>
+                            You will be redirected to Razorpay for secure payment
+                        </p>
+                    </>
+                )}
+
+                {!loading && !error && !paymentData && (
+                    <div style={{ textAlign: 'center', padding: '2rem' }}>
+                        <p>Unable to load payment details.</p>
+                        <button 
+                            onClick={fetchPaymentDetails}
+                            className="st-modal-submit-btn"
+                            style={{ marginTop: '1rem' }}
+                        >
+                            Try Again
+                        </button>
+                    </div>
+                )}
+
+                <button 
+                    onClick={onClose}
+                    style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        marginTop: '1rem',
+                        background: 'transparent',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '0.5rem',
+                        cursor: 'pointer',
+                        color: '#6b7280'
+                    }}
+                    disabled={loading}
+                >
+                    Cancel
+                </button>
             </div>
         </div>
     );
 };
 
-// --- Main Status Tracker Component ---
+// Main Status Tracker Component (keep the same as before)
 const SubmissionStatusTracker = () => {
     const [statusData, setStatusData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -452,8 +802,6 @@ const SubmissionStatusTracker = () => {
     const currentStatusIndex = getStatusStep();
     const isAbstractRejected = statusData?.abstractStatus === 'Rejected';
     const isPaperRejected = statusData?.paperStatus === 'Rejected';
-
-    console.log('Current status index:', currentStatusIndex);
 
     const getStatusDescription = (index) => {
         if (!statusData) {
@@ -559,27 +907,10 @@ const SubmissionStatusTracker = () => {
 
     const handleActionButtonClick = (stageIndex) => {
         if (stageIndex === 2) {
-            // Redirect to paper submission page
             navigate('/paper-submission');
         } else if (stageIndex === 4) {
-            // Open payment modal
             setIsPaymentModalOpen(true);
         }
-    };
-
-    const handlePaymentSubmit = async () => {
-        console.log('Payment submitted');
-        
-        // Update local state
-        setStatusData(prev => ({ 
-            ...prev, 
-            paymentStatus: 'paid'
-        }));
-        
-        setIsPaymentModalOpen(false);
-        
-        // Here you would make actual API call for payment
-        // await fetch('/api/process-payment', { method: 'POST', body: paymentData });
     };
 
     if (loading) {
@@ -646,7 +977,6 @@ const SubmissionStatusTracker = () => {
                 {isPaymentModalOpen && (
                     <PaymentModal 
                         onClose={() => setIsPaymentModalOpen(false)}
-                        onSubmit={handlePaymentSubmit}
                         discount={statusData?.discount}
                     />
                 )}
