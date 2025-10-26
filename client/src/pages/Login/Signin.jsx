@@ -11,44 +11,66 @@ const BackArrowIcon = () => (
 );
 
 const styles = {
+  overlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000,
+    padding: "20px",
+  },
   card: {
-    width: "440px",
-    maxWidth: "95%",
+    width: "100%",
+    maxWidth: "440px",
+    minHeight: "auto",
     margin: "0 auto",
     background: "var(--white)",
-    borderRadius: "var(--radius)",
-    boxShadow: "var(--shadow-soft)",
-    padding: "42px 36px",
+    borderRadius: "12px",
+    boxShadow: "0 10px 40px rgba(0, 0, 0, 0.1)",
+    padding: "clamp(30px, 5vw, 42px) clamp(20px, 4vw, 36px)",
     fontFamily: "'Poppins','Segoe UI',Roboto,Arial,sans-serif",
     position: "relative",
+    overflow: "auto",
+    maxHeight: "90vh",
   },
   title: {
-    fontSize: "1.75rem",
+    fontSize: "clamp(1.5rem, 4vw, 1.75rem)",
     fontWeight: 700,
     color: "var(--brand-blue-dark)",
     margin: "6px 0 22px",
     textAlign: "center",
+    lineHeight: "1.3",
   },
-  inputGroup: { marginBottom: "16px" },
+  inputGroup: { 
+    marginBottom: "clamp(12px, 3vw, 16px)" 
+  },
   inputLabel: {
     display: "block",
-    fontSize: "0.85rem",
+    fontSize: "clamp(0.8rem, 2.5vw, 0.85rem)",
     color: "var(--text-secondary)",
     marginBottom: "6px",
     fontWeight: 600,
   },
   input: {
     width: "100%",
-    padding: "12px 14px",
+    padding: "clamp(10px, 3vw, 12px) clamp(12px, 3vw, 14px)",
     borderRadius: "10px",
     border: "1px solid var(--surface-dark)",
     outline: "none",
-    fontSize: "0.95rem",
+    fontSize: "clamp(0.9rem, 2.5vw, 0.95rem)",
     color: "var(--text-primary)",
     background: "var(--white)",
     boxSizing: "border-box",
+    minHeight: "44px", // Better touch targets on mobile
   },
-  passwordWrapper: { position: "relative" },
+  passwordWrapper: { 
+    position: "relative" 
+  },
   toggleBtn: {
     position: "absolute",
     right: "10px",
@@ -59,41 +81,49 @@ const styles = {
     cursor: "pointer",
     color: "var(--text-secondary)",
     padding: "6px",
-    fontSize: "0.8rem",
+    fontSize: "clamp(0.75rem, 2vw, 0.8rem)",
     fontWeight: 600,
+    minHeight: "44px",
+    display: "flex",
+    alignItems: "center",
   },
   primaryBtn: {
     width: "100%",
-    padding: "12px 16px",
+    padding: "clamp(12px, 3vw, 14px) 16px",
     borderRadius: "10px",
     border: "none",
     background: "var(--brand-orange)",
     color: "var(--white)",
     fontWeight: 700,
     cursor: "pointer",
-    fontSize: "0.95rem",
+    fontSize: "clamp(0.9rem, 2.5vw, 0.95rem)",
     marginTop: "10px",
     boxShadow: "0 6px 18px rgba(245, 124, 0, 0.25)",
     transition: "all 0.2s ease",
     textTransform: "uppercase",
+    minHeight: "48px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   secondaryBtn: {
     width: "100%",
-    padding: "12px 16px",
+    padding: "clamp(12px, 3vw, 14px) 16px",
     borderRadius: "10px",
     border: "1px solid var(--surface-dark)",
     background: "transparent",
     color: "var(--text-primary)",
     fontWeight: 600,
     cursor: "pointer",
-    fontSize: "0.95rem",
+    fontSize: "clamp(0.9rem, 2.5vw, 0.95rem)",
     marginTop: "10px",
     transition: "all 0.2s ease",
+    minHeight: "48px",
   },
   backButton: {
     position: "absolute",
-    top: "16px",
-    left: "20px",
+    top: "clamp(12px, 3vw, 16px)",
+    left: "clamp(16px, 3vw, 20px)",
     background: "none",
     border: "none",
     fontSize: "24px",
@@ -105,19 +135,58 @@ const styles = {
     padding: "4px",
     borderRadius: "6px",
     transition: "all 0.2s ease",
+    minHeight: "44px",
+    minWidth: "44px",
   },
   stepIndicator: {
     textAlign: "center",
-    fontSize: "0.9rem",
+    fontSize: "clamp(0.8rem, 2.5vw, 0.9rem)",
     color: "var(--text-secondary)",
     marginBottom: "20px",
+    lineHeight: "1.4",
+    padding: "0 10px",
   },
   link: {
     color: "var(--brand-orange)",
     textDecoration: "none",
     fontWeight: 600,
     cursor: "pointer",
+    fontSize: "clamp(0.8rem, 2.5vw, 0.85rem)",
   },
+  errorText: {
+    color: "red",
+    fontSize: "clamp(0.8rem, 2.5vw, 0.9rem)",
+    marginTop: "6px",
+    textAlign: "center",
+  },
+  footerText: {
+    marginTop: "clamp(18px, 4vw, 22px)",
+    textAlign: "center",
+    fontSize: "clamp(0.8rem, 2.5vw, 0.85rem)",
+    lineHeight: "1.5",
+    padding: "0 10px",
+  },
+  forgotPasswordLink: {
+    textAlign: "center",
+    margin: "clamp(14px, 3vw, 16px) 0",
+  },
+  closeButton: {
+    position: "absolute",
+    top: "clamp(10px, 2vw, 12px)",
+    right: "clamp(14px, 2vw, 16px)",
+    background: "none",
+    border: "none",
+    fontSize: "clamp(24px, 5vw, 28px)",
+    fontWeight: "bold",
+    color: "var(--text-secondary)",
+    cursor: "pointer",
+    lineHeight: "1",
+    minHeight: "44px",
+    minWidth: "44px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  }
 };
 
 function SignInForm({ onSwitch, onClose, onLoginSuccess }) {
@@ -265,204 +334,255 @@ function SignInForm({ onSwitch, onClose, onLoginSuccess }) {
     }
   };
 
+  // Handle escape key to close
+  React.useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        onClose?.();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [onClose]);
+
   return (
-    <div style={styles.card}>
-      {/* Close Button */}
-      <button
-        onClick={onClose}
-        style={{
-          position: "absolute",
-          top: "12px",
-          right: "16px",
-          background: "none",
-          border: "none",
-          fontSize: "28px",
-          fontWeight: "bold",
-          color: "var(--text-secondary)",
-          cursor: "pointer",
-          lineHeight: "1",
-        }}
-      >
-        &times;
-      </button>
-
-      {/* Back Button - Show when not in signin mode */}
-      {(mode === "forgot-request" || mode === "forgot-reset") && (
+    <div style={styles.overlay}>
+      <div style={styles.card}>
+        {/* Close Button */}
         <button
-          onClick={handleBackToSignIn}
-          style={styles.backButton}
-          title="Back to Sign In"
+          onClick={onClose}
+          style={styles.closeButton}
+          aria-label="Close"
         >
-          <BackArrowIcon />
+          &times;
         </button>
-      )}
 
-      <h2 style={styles.title}>{getTitle()}</h2>
-      
-      {getStepIndicator() && (
-        <div style={styles.stepIndicator}>{getStepIndicator()}</div>
-      )}
-
-      {/* Sign In Form */}
-      {mode === "signin" && (
-        <form onSubmit={handleSignIn}>
-          <div style={styles.inputGroup}>
-            <label style={styles.inputLabel} htmlFor="username">Email or Mobile number</label>
-            <input
-              id="username"
-              type="text"
-              placeholder="Email or Mobile number"
-              style={styles.input}
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-
-          <div style={styles.inputGroup}>
-            <label style={styles.inputLabel} htmlFor="password">Password</label>
-            <div style={styles.passwordWrapper}>
-              <input
-                id="password"
-                type={showPwd ? "text" : "password"}
-                placeholder="Password"
-                style={{ ...styles.input, paddingRight: "55px" }}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                style={styles.toggleBtn}
-                onClick={() => setShowPwd((s) => !s)}
-              >
-                {showPwd ? "Hide" : "Show"}
-              </button>
-            </div>
-          </div>
-
-          {error && <p style={{ color: "red", fontSize: "0.9rem", marginTop: "6px" }}>{error}</p>}
-
-          <button type="submit" style={styles.primaryBtn} disabled={loading}>
-            {loading ? "Signing In..." : "Sign In"}
+        {/* Back Button - Show when not in signin mode */}
+        {(mode === "forgot-request" || mode === "forgot-reset") && (
+          <button
+            onClick={handleBackToSignIn}
+            style={styles.backButton}
+            title="Back to Sign In"
+            aria-label="Back to Sign In"
+          >
+            <BackArrowIcon />
           </button>
+        )}
 
-          <div style={{ textAlign: "center", margin: "16px 0" }}>
-            <span 
-              style={styles.link} 
-              onClick={handleForgotPassword}
+        <h2 style={styles.title}>{getTitle()}</h2>
+        
+        {getStepIndicator() && (
+          <div style={styles.stepIndicator}>{getStepIndicator()}</div>
+        )}
+
+        {/* Sign In Form */}
+        {mode === "signin" && (
+          <form onSubmit={handleSignIn}>
+            <div style={styles.inputGroup}>
+              <label style={styles.inputLabel} htmlFor="username">
+                Email or Mobile number
+              </label>
+              <input
+                id="username"
+                type="text"
+                placeholder="Email or Mobile number"
+                style={styles.input}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                aria-required="true"
+              />
+            </div>
+
+            <div style={styles.inputGroup}>
+              <label style={styles.inputLabel} htmlFor="password">
+                Password
+              </label>
+              <div style={styles.passwordWrapper}>
+                <input
+                  id="password"
+                  type={showPwd ? "text" : "password"}
+                  placeholder="Password"
+                  style={{ ...styles.input, paddingRight: "55px" }}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  aria-required="true"
+                />
+                <button
+                  type="button"
+                  style={styles.toggleBtn}
+                  onClick={() => setShowPwd((s) => !s)}
+                  aria-label={showPwd ? "Hide password" : "Show password"}
+                >
+                  {showPwd ? "Hide" : "Show"}
+                </button>
+              </div>
+            </div>
+
+            {error && <p style={styles.errorText}>{error}</p>}
+
+            <button 
+              type="submit" 
+              style={styles.primaryBtn} 
+              disabled={loading}
+              aria-busy={loading}
             >
-              Forgot Password?
-            </span>
-          </div>
+              {loading ? "Signing In..." : "Sign In"}
+            </button>
 
-          <p style={{ marginTop: "22px", textAlign: "center", fontSize: "0.85rem" }}>
-            Don't have an account?{" "}
-            <span style={styles.link} onClick={onSwitch}>
-              Sign Up
-            </span>
-          </p>
-        </form>
-      )}
-
-      {/* Forgot Password - Request OTP */}
-      {mode === "forgot-request" && (
-        <form onSubmit={handleRequestOtp}>
-          <div style={styles.inputGroup}>
-            <label style={styles.inputLabel} htmlFor="forgot-email">
-              Email Address
-            </label>
-            <input
-              id="forgot-email"
-              type="email"
-              placeholder="Enter your email"
-              style={styles.input}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          
-          <button type="submit" style={styles.primaryBtn} disabled={loading}>
-            {loading ? "Sending OTP..." : "Send OTP"}
-          </button>
-        </form>
-      )}
-
-      {/* Forgot Password - Reset */}
-      {mode === "forgot-reset" && (
-        <form onSubmit={handleResetPassword}>
-          <div style={styles.inputGroup}>
-            <label style={styles.inputLabel} htmlFor="otp">
-              OTP Code
-            </label>
-            <input
-              id="otp"
-              type="text"
-              placeholder="Enter 6-digit OTP"
-              style={styles.input}
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              maxLength={6}
-              required
-            />
-          </div>
-
-          <div style={styles.inputGroup}>
-            <label style={styles.inputLabel} htmlFor="new-password">
-              New Password
-            </label>
-            <div style={styles.passwordWrapper}>
-              <input
-                id="new-password"
-                type={showNewPwd ? "text" : "password"}
-                placeholder="Enter new password"
-                style={{ ...styles.input, paddingRight: "55px" }}
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                style={styles.toggleBtn}
-                onClick={() => setShowNewPwd((s) => !s)}
+            <div style={styles.forgotPasswordLink}>
+              <span 
+                style={styles.link} 
+                onClick={handleForgotPassword}
+                role="button"
+                tabIndex={0}
+                onKeyPress={(e) => e.key === 'Enter' && handleForgotPassword()}
               >
-                {showNewPwd ? "Hide" : "Show"}
-              </button>
+                Forgot Password?
+              </span>
             </div>
-          </div>
 
-          <div style={styles.inputGroup}>
-            <label style={styles.inputLabel} htmlFor="confirm-password">
-              Confirm New Password
-            </label>
-            <div style={styles.passwordWrapper}>
-              <input
-                id="confirm-password"
-                type={showConfirmPwd ? "text" : "password"}
-                placeholder="Confirm new password"
-                style={{ ...styles.input, paddingRight: "55px" }}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                style={styles.toggleBtn}
-                onClick={() => setShowConfirmPwd((s) => !s)}
+            <p style={styles.footerText}>
+              Don't have an account?{" "}
+              <span 
+                style={styles.link} 
+                onClick={onSwitch}
+                role="button"
+                tabIndex={0}
+                onKeyPress={(e) => e.key === 'Enter' && onSwitch()}
               >
-                {showConfirmPwd ? "Hide" : "Show"}
-              </button>
+                Sign Up
+              </span>
+            </p>
+          </form>
+        )}
+
+        {/* Forgot Password - Request OTP */}
+        {mode === "forgot-request" && (
+          <form onSubmit={handleRequestOtp}>
+            <div style={styles.inputGroup}>
+              <label style={styles.inputLabel} htmlFor="forgot-email">
+                Email Address
+              </label>
+              <input
+                id="forgot-email"
+                type="email"
+                placeholder="Enter your email"
+                style={styles.input}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                aria-required="true"
+              />
             </div>
-          </div>
+            
+            <button 
+              type="submit" 
+              style={styles.primaryBtn} 
+              disabled={loading}
+              aria-busy={loading}
+            >
+              {loading ? "Sending OTP..." : "Send OTP"}
+            </button>
+          </form>
+        )}
 
-          <button type="submit" style={styles.primaryBtn} disabled={loading}>
-            {loading ? "Resetting..." : "Reset Password"}
-          </button>
-        </form>
-      )}
+        {/* Forgot Password - Reset */}
+        {mode === "forgot-reset" && (
+          <form onSubmit={handleResetPassword}>
+            <div style={styles.inputGroup}>
+              <label style={styles.inputLabel} htmlFor="otp">
+                OTP Code
+              </label>
+              <input
+                id="otp"
+                type="text"
+                placeholder="Enter 6-digit OTP"
+                style={styles.input}
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                maxLength={6}
+                required
+                aria-required="true"
+                inputMode="numeric"
+                pattern="[0-9]*"
+              />
+            </div>
 
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+            <div style={styles.inputGroup}>
+              <label style={styles.inputLabel} htmlFor="new-password">
+                New Password
+              </label>
+              <div style={styles.passwordWrapper}>
+                <input
+                  id="new-password"
+                  type={showNewPwd ? "text" : "password"}
+                  placeholder="Enter new password"
+                  style={{ ...styles.input, paddingRight: "55px" }}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                  aria-required="true"
+                />
+                <button
+                  type="button"
+                  style={styles.toggleBtn}
+                  onClick={() => setShowNewPwd((s) => !s)}
+                  aria-label={showNewPwd ? "Hide new password" : "Show new password"}
+                >
+                  {showNewPwd ? "Hide" : "Show"}
+                </button>
+              </div>
+            </div>
+
+            <div style={styles.inputGroup}>
+              <label style={styles.inputLabel} htmlFor="confirm-password">
+                Confirm New Password
+              </label>
+              <div style={styles.passwordWrapper}>
+                <input
+                  id="confirm-password"
+                  type={showConfirmPwd ? "text" : "password"}
+                  placeholder="Confirm new password"
+                  style={{ ...styles.input, paddingRight: "55px" }}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  aria-required="true"
+                />
+                <button
+                  type="button"
+                  style={styles.toggleBtn}
+                  onClick={() => setShowConfirmPwd((s) => !s)}
+                  aria-label={showConfirmPwd ? "Hide confirm password" : "Show confirm password"}
+                >
+                  {showConfirmPwd ? "Hide" : "Show"}
+                </button>
+              </div>
+            </div>
+
+            <button 
+              type="submit" 
+              style={styles.primaryBtn} 
+              disabled={loading}
+              aria-busy={loading}
+            >
+              {loading ? "Resetting..." : "Reset Password"}
+            </button>
+          </form>
+        )}
+
+        <ToastContainer 
+          position="top-right" 
+          autoClose={3000} 
+          hideProgressBar
+          style={{
+            fontSize: "clamp(0.8rem, 2.5vw, 0.9rem)"
+          }}
+        />
+      </div>
     </div>
   );
 }

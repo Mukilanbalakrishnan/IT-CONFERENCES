@@ -1,25 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './PaperSubmission.css';
-import { FaFileUpload, FaArrowLeft } from 'react-icons/fa';
+import { FaFileUpload, FaCheckCircle, FaTimes, FaClock, FaChartBar } from 'react-icons/fa';
 
 const PaperSubmission = () => {
-    const [step, setStep] = useState(1);
     const [paperFile, setPaperFile] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [paymentDetails, setPaymentDetails] = useState({ amount: 0, currency: 'INR' });
+    const [submitted, setSubmitted] = useState(false);
+    const [showPreview, setShowPreview] = useState(false);
     const [user, setUser] = useState(null);
+    const navigate = useNavigate();
+    const fileInputRef = useRef(null);
 
-    // Load the Razorpay script when the component mounts
-    useEffect(() => {
-        const script = document.createElement('script');
-        script.src = "https://checkout.razorpay.com/v1/checkout.js";
-        script.async = true;
-        document.body.appendChild(script);
-
-        // Fetch user data from local storage
+    // Fetch user data from local storage
+    React.useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             setUser(JSON.parse(storedUser));
@@ -29,30 +26,62 @@ const PaperSubmission = () => {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            const allowedTypes = ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-            if (!allowedTypes.includes(file.type)) {
+            // Check file extension
+            const fileName = file.name.toLowerCase();
+            const allowedExtensions = ['.doc', '.docx'];
+            const fileExtension = fileName.substring(fileName.lastIndexOf('.'));
+            
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            
+            if (!allowedExtensions.includes(fileExtension)) {
                 toast.error("Invalid file type. Please upload a .doc or .docx file.");
-                e.target.value = null;
+                e.target.value = '';
                 return;
             }
+            
+            if (file.size > maxSize) {
+                toast.error("File size exceeds 10MB limit. Please upload a smaller file.");
+                e.target.value = '';
+                return;
+            }
+            
             setPaperFile(file);
+            setShowPreview(true);
         }
     };
-    
-    // This function will now also handle the paper upload
-    const handleProceedToPayment = async () => {
+
+    const handleRemoveFile = () => {
+        setPaperFile(null);
+        setShowPreview(false);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    };
+
+    const handleUploadAreaClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
+
+    const handleSubmitPaper = async () => {
         if (!paperFile) {
-            toast.error("Please upload your paper before proceeding.");
+            toast.error("Please upload your paper before submitting.");
             return;
         }
+
+        if (!user) {
+            toast.error("You must be logged in to submit a paper.");
+            return;
+        }
+
         setLoading(true);
         const token = localStorage.getItem("token");
         const formData = new FormData();
         formData.append('file', paperFile);
 
         try {
-            // This call now uploads the paper and gets the calculated payment amount
-            const response = await axios.post(
+            await axios.post(
                 'https://it-con-backend.onrender.com/api/register/paper', 
                 formData, {
                 headers: {
@@ -61,171 +90,158 @@ const PaperSubmission = () => {
                 }
             });
             
-            setPaymentDetails({
-                amount: response.data.amount,
-                currency: response.data.currency,
-            });
-            setStep(2);
+            toast.success("Paper submitted successfully!");
+            setSubmitted(true);
 
         } catch (error) {
-            toast.error(error.response?.data?.message || "Failed to upload paper. Please try again.");
-            console.error("File upload error:", error);
+            toast.error(error.response?.data?.message || "Failed to submit paper. Please try again.");
+            console.error("Paper submission error:", error);
         } finally {
             setLoading(false);
         }
     };
-    
-    const handlePayment = async () => {
-        setLoading(true);
-        const token = localStorage.getItem("token");
 
-        if (!user) {
-            toast.error("You must be logged in to proceed.");
-            setLoading(false);
-            return;
-        }
+    const handleCheckStatus = () => {
+        navigate('/status');
+    };
 
-        try {
-            // 1. Create Order on Your Backend
-            const { data: orderData } = await axios.post(
-                'https://it-con-backend.onrender.com/api/payments/create-order',
-                { userId: user._id },
-                { headers: { 'Authorization': `Bearer ${token}` } }
-            );
-
-            if (orderData.method !== 'razorpay') {
-                throw new Error("Razorpay is not the configured payment method.");
-            }
-
-            const { keyId, orderId } = orderData;
-
-            const options = {
-                key: keyId,
-                amount: paymentDetails.amount * 100, // Amount in paise
-                currency: paymentDetails.currency,
-                name: "S3-ECBE' 2026 Conference",
-                description: "Registration & Paper Submission Fee",
-                order_id: orderId,
-                handler: async function (response) {
-                    // 2. Verify Payment on Your Backend
-                    try {
-                        await axios.post('https://it-con-backend.onrender.com/api/payments/verify', 
-                        {
-                            paymentMethod: "razorpay",
-                            data: {
-                                razorpay_order_id: response.razorpay_order_id,
-                                razorpay_payment_id: response.razorpay_payment_id,
-                                razorpay_signature: response.razorpay_signature,
-                            }
-                        },
-                        { headers: { 'Authorization': `Bearer ${token}` } });
-
-                        toast.success("Payment successful!");
-                        // Optionally redirect to a success page or status page
-                        // navigate('/status');
-
-                    } catch (err) {
-                         toast.error("Payment verification failed. Please contact support.");
-                         console.error("Verification error:", err);
-                    }
-                },
-                prefill: {
-                    name: user.name,
-                    email: user.email,
-                    contact: user.mobileno,
-                },
-                theme: {
-                    color: "#0D47A1"
-                }
-            };
-
-            const rzp = new window.Razorpay(options);
-            rzp.on('payment.failed', function (response){
-                toast.error("Payment failed. Please try again.");
-                console.error(response.error);
-            });
-            rzp.open();
-
-        } catch (error) {
-            toast.error(error.response?.data?.message || "An error occurred. Please try again.");
-            console.error("Payment initiation error:", error);
-        } finally {
-            setLoading(false);
-        }
+    const formatFileSize = (bytes) => {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     };
 
     return (
         <>
             <ToastContainer position="top-right" />
             <div className="ps-page-container">
-                 <header className="ps-page-header">
-                    <h1>Final Submission</h1>
-                    <p>Complete your registration by uploading your paper and processing the fee.</p>
+                <header className="ps-page-header">
+                    <h1>Paper Submission</h1>
+                    <p>Upload your final paper for the conference review process</p>
                 </header>
                 <div className="ps-main-container">
                     <div className="ps-left-panel">
-                         <div>
-                            <h2 className="ps-left-panel-title">Submission<br/>Process</h2>
-                             <div className="ps-step-indicator">
-                                <div className={`ps-step ${step === 1 ? 'active' : ''}`}>
-                                    <div className="ps-step-number">1</div>
-                                    <div className="ps-step-label">
-                                        <span>Upload</span>
-                                        <span>Paper</span>
-                                    </div>
-                                </div>
-                                <div className={`ps-step ${step === 2 ? 'active' : ''}`}>
-                                    <div className="ps-step-number">2</div>
-                                    <div className="ps-step-label">
-                                        <span>Process</span>
-                                        <span>Payment</span>
-                                    </div>
-                                </div>
-                            </div>
+                        <div>
+                            <h2 className="ps-left-panel-title">Paper<br/>Submission</h2>
                             <div className="ps-left-panel-info">
-                                <p className="ps-info-title">Key Information:</p>
+                                <p className="ps-info-title">Submission Guidelines:</p>
                                 <ul className="ps-info-list">
-                                    <li>Your abstract has been approved.</li>
-                                    <li>Upload your final paper in .doc or .docx format.</li>
-                                    <li>Complete the payment to finalize your registration.</li>
+                                    <li>Your abstract has been approved</li>
+                                    <li>Upload final paper in .doc or .docx format</li>
+                                    <li>Maximum file size: 10MB</li>
+                                    <li>Follow all formatting guidelines</li>
+                                    <li>Preview your file before submission</li>
+                                    <li>Review process takes 2-3 weeks</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <div className="ps-right-panel">
-                        {step === 1 && (
+                        {!submitted ? (
                             <div className="ps-form-body">
-                                <h3 className="ps-form-title">Step 1: Upload Your Full Paper</h3>
-                                <div className="ps-upload-area">
-                                    <FaFileUpload className="ps-upload-icon" />
-                                    <p>Drag & drop your file here or</p>
-                                    <input type="file" id="paperUpload" onChange={handleFileChange} style={{ display: 'none' }} />
-                                    <label htmlFor="paperUpload" className="ps-upload-label">Browse File</label>
-                                    {paperFile && <p className="ps-file-name">Selected: {paperFile.name}</p>}
-                                </div>
-                                <button onClick={handleProceedToPayment} className="ps-btn ps-btn-primary" disabled={loading}>
-                                    {loading ? 'Uploading...' : 'Proceed to Payment'}
-                                </button>
+                                <h3 className="ps-form-title">Upload Your Full Paper</h3>
+                                
+                                {!showPreview ? (
+                                    <div className="ps-upload-area" onClick={handleUploadAreaClick}>
+                                        <FaFileUpload className="ps-upload-icon" />
+                                        <p>Drag & drop your file here or</p>
+                                        <input 
+                                            ref={fileInputRef}
+                                            type="file" 
+                                            id="paperUpload" 
+                                            onChange={handleFileChange} 
+                                            style={{ display: 'none' }} 
+                                            accept=".doc,.docx"
+                                        />
+                                        <div className="ps-upload-label">Browse File</div>
+                                        <p className="ps-upload-hint">Supported formats: .doc, .docx | Max size: 10MB</p>
+                                    </div>
+                                ) : (
+                                    <div className="ps-preview-container">
+                                        <div className="ps-preview-header">
+                                            <h4>File Preview</h4>
+                                            <button onClick={handleRemoveFile} className="ps-remove-btn" type="button">
+                                                <FaTimes />
+                                            </button>
+                                        </div>
+                                        <div className="ps-file-preview">
+                                            <div className="ps-file-icon">
+                                                <FaFileUpload />
+                                            </div>
+                                            <div className="ps-file-details">
+                                                <h5 className="ps-file-name">{paperFile.name}</h5>
+                                                <div className="ps-file-meta">
+                                                    <span className="ps-file-size">{formatFileSize(paperFile.size)}</span>
+                                                    <span className="ps-file-type">
+                                                        {paperFile.name.endsWith('.doc') ? 'DOC' : 'DOCX'}
+                                                    </span>
+                                                    <span className="ps-file-modified">
+                                                        Last modified: {new Date(paperFile.lastModified).toLocaleDateString()}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="ps-preview-actions">
+                                            <button 
+                                                onClick={handleSubmitPaper} 
+                                                className="ps-btn ps-btn-primary"
+                                                disabled={loading}
+                                                type="button"
+                                            >
+                                                {loading ? (
+                                                    <>
+                                                        <div className="ps-spinner"></div>
+                                                        Submitting...
+                                                    </>
+                                                ) : (
+                                                    'Submit Paper'
+                                                )}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                        )}
-                        {step === 2 && (
+                        ) : (
                             <div className="ps-form-body">
-                                <button onClick={() => setStep(1)} className="ps-back-btn"><FaArrowLeft /> Back to Upload</button>
-                                <h3 className="ps-form-title">Step 2: Complete Payment</h3>
-                                <div className="ps-payment-summary">
-                                    <h4>Payment Summary</h4>
-                                    <div className="ps-summary-item">
-                                        <span>Registration Fee:</span>
-                                        <span>{paymentDetails.currency} {paymentDetails.amount.toLocaleString()}</span>
+                                <div className="ps-success-message">
+                                    <div className="ps-success-header">
+                                        <FaCheckCircle className="ps-success-icon" />
+                                        <h3 className="ps-success-title">Paper Submitted Successfully!</h3>
                                     </div>
-                                    <div className="ps-summary-item total">
-                                        <span>Total Amount:</span>
-                                        <span>{paymentDetails.currency} {paymentDetails.amount.toLocaleString()}</span>
+                                    <div className="ps-submission-details">
+                                        <div className="ps-detail-item">
+                                            <span className="ps-detail-label">Paper Title:</span>
+                                            <span className="ps-detail-value">{paperFile?.name.replace(/\.[^/.]+$/, "")}</span>
+                                        </div>
+                                        <div className="ps-detail-item">
+                                            <span className="ps-detail-label">Submitted Date:</span>
+                                            <span className="ps-detail-value">{new Date().toLocaleDateString()}</span>
+                                        </div>
+                                        <div className="ps-detail-item">
+                                            <span className="ps-detail-label">Current Status:</span>
+                                            <span className="ps-status-badge">
+                                                <FaClock className="ps-status-icon" />
+                                                Under Review
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <p className="ps-success-text">
+                                        Thank you for submitting your paper. Your submission has been received and is now under review.
+                                        You will receive a confirmation email shortly with your submission details.
+                                    </p>
+                                    <div className="ps-success-actions">
+                                        <button 
+                                            onClick={handleCheckStatus} 
+                                            className="ps-btn ps-btn-primary"
+                                            type="button"
+                                        >
+                                            <FaChartBar className="ps-btn-icon" />
+                                            Check Status
+                                        </button>
                                     </div>
                                 </div>
-                                <button onClick={handlePayment} className="ps-btn ps-btn-primary" disabled={loading}>
-                                    {loading ? 'Processing...' : 'Pay Now'}
-                                </button>
                             </div>
                         )}
                     </div>
@@ -236,4 +252,3 @@ const PaperSubmission = () => {
 };
 
 export default PaperSubmission;
-

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { FaCheckCircle, FaTimesCircle, FaHourglassHalf } from 'react-icons/fa';
+import { CheckCircle, XCircle, Hourglass } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-// This component includes its own styles for a self-contained setup.
 const componentStyles = `
 /* --- Base Page Styles --- */
 .st-page {
@@ -96,7 +96,6 @@ const componentStyles = `
     border-color: var(--brand-red);
 }
 
-
 .status-icon {
     font-size: 1.5rem;
 }
@@ -110,7 +109,6 @@ const componentStyles = `
     background-color: var(--surface-dark);
     border-radius: 50%;
 }
-
 
 .st-timeline-content {
     padding-bottom: 2.5rem;
@@ -184,6 +182,7 @@ const componentStyles = `
     font-weight: 700;
     margin-bottom: 1.5rem;
     color: var(--brand-blue-dark);
+    text-align: center;
 }
 .st-modal-form {
     display: flex;
@@ -222,6 +221,85 @@ const componentStyles = `
 }
 .st-modal-submit-btn:hover {
     background-color: var(--brand-orange-dark);
+}
+.st-modal-submit-btn:disabled {
+    background-color: #a0aec0;
+    cursor: not-allowed;
+}
+
+/* Bill Styles */
+.st-bill-container {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 2px solid #e9ecef;
+}
+.st-bill-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px dashed #dee2e6;
+}
+.st-bill-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2c5530;
+    margin: 0 0 0.5rem 0;
+}
+.st-bill-subtitle {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0;
+}
+.st-bill-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.st-bill-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+.st-bill-label {
+    color: #495057;
+    font-weight: 500;
+}
+.st-bill-value {
+    color: #212529;
+    font-weight: 600;
+}
+.st-bill-divider {
+    border: none;
+    border-top: 2px dashed #dee2e6;
+    margin: 1rem 0;
+}
+.st-bill-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0 0 0;
+    border-top: 2px solid #dee2e6;
+    margin-top: 0.5rem;
+}
+.st-bill-total-label {
+    color: #2c5530;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+.st-bill-total-value {
+    color: #2c5530;
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+.st-bill-note {
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.8rem;
+    margin-top: 1rem;
+    font-style: italic;
 }
 
 .st-loading-container {
@@ -278,7 +356,7 @@ const componentStyles = `
 }
 `;
 
-// --- Loader Component ---
+// Loader Component
 const Loader = () => (
     <div className="st-loading-container">
         <div className="st-loader">
@@ -290,144 +368,561 @@ const Loader = () => (
     </div>
 );
 
+// Payment Modal Component
+const PaymentModal = ({ onClose, discount, onPaymentSuccess }) => {
+    const [loading, setLoading] = useState(false);
+    const [paymentData, setPaymentData] = useState(null);
+    const [error, setError] = useState(null);
 
-// --- Payment & Submission Modal Component ---
-const PaymentSubmissionModal = ({ onClose, onSubmit }) => {
-    const [paymentDetails, setPaymentDetails] = useState({ cardNumber: '', expiry: '', cvv: '' });
-    const [paperFile, setPaperFile] = useState(null);
+    useEffect(() => {
+        fetchPaymentDetails();
+    }, []);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (paymentDetails.cardNumber && paymentDetails.expiry && paymentDetails.cvv && paperFile) {
-            onSubmit(paperFile.name);
-        } else {
-            alert("Please fill all fields and upload your paper.");
+    const fetchPaymentDetails = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const token = localStorage.getItem('token');
+            
+            if (!token) {
+                setError('Authentication token not found. Please log in again.');
+                return;
+            }
+
+            console.log('Fetching payment details...');
+            
+            const response = await fetch('https://it-con-backend.onrender.com/api/payments/create-payment', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('Response status:', response.status);
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Server response error:', errorText);
+                throw new Error(`Server error: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            console.log('Payment data received:', data);
+            
+            if (data.success) {
+                setPaymentData(data);
+            } else {
+                setError(data.message || 'Failed to create payment order');
+            }
+        } catch (err) {
+            console.error('Payment details fetch error:', err);
+            setError(err.message || 'Network error. Please check your connection and try again.');
+        } finally {
+            setLoading(false);
         }
     };
+
+    const handlePayment = async () => {
+        if (!paymentData) return;
+
+        try {
+            setLoading(true);
+            setError(null);
+
+            // Check if Razorpay is already loaded
+            if (window.Razorpay) {
+                initializeRazorpay();
+                return;
+            }
+
+            // Load Razorpay script
+            const script = document.createElement('script');
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            script.async = true;
+            
+            script.onload = () => {
+                console.log('Razorpay script loaded successfully');
+                initializeRazorpay();
+            };
+            
+            script.onerror = () => {
+                setError('Failed to load payment gateway. Please try again.');
+                setLoading(false);
+            };
+            
+            document.body.appendChild(script);
+        } catch (err) {
+            console.error('Razorpay initialization error:', err);
+            setError('Failed to initialize payment gateway');
+            setLoading(false);
+        }
+    };
+
+    const initializeRazorpay = () => {
+        try {
+            if (!window.Razorpay) {
+                throw new Error('Razorpay not loaded');
+            }
+
+            const options = {
+                key: paymentData.keyId,
+                amount: paymentData.amount,
+                currency: paymentData.currency,
+                name: 'IT Conference',
+                description: 'Conference Registration Payment',
+                order_id: paymentData.orderId,
+                handler: async function (response) {
+                    console.log('Payment response:', response);
+                    await verifyPayment(response);
+                },
+                prefill: {
+                    name: paymentData.name,
+                    email: paymentData.email,
+                    contact: paymentData.contact
+                },
+                theme: {
+                    color: '#F97316'
+                },
+                modal: {
+                    ondismiss: function() {
+                        console.log('Payment modal closed');
+                        setLoading(false);
+                    }
+                }
+            };
+
+            console.log('Razorpay options:', options);
+            
+            const rzp = new window.Razorpay(options);
+            rzp.open();
+            setLoading(false);
+        } catch (err) {
+            console.error('Razorpay instance creation error:', err);
+            setError('Failed to create payment instance: ' + err.message);
+            setLoading(false);
+        }
+    };
+
+    const verifyPayment = async (response) => {
+        try {
+            setLoading(true);
+            const token = localStorage.getItem('token');
+            
+            console.log('Verifying payment...', response);
+
+            const verifyResponse = await fetch('https://it-con-backend.onrender.com/api/payments/verify-payment', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_signature: response.razorpay_signature
+                })
+            });
+
+            const verifyData = await verifyResponse.json();
+            console.log('Verification response:', verifyData);
+            
+            if (verifyData.success) {
+                console.log('Payment verified successfully, calling onPaymentSuccess callback');
+                // Call the success callback to update parent component state
+                onPaymentSuccess();
+                
+                // Close the modal after a brief delay to show success
+                setTimeout(() => {
+                    onClose();
+                }, 1500);
+                
+                // Show success message
+                alert('🎉 Payment successful! Your registration is now complete.');
+            } else {
+                console.error('Payment verification failed:', verifyData.message);
+                alert('❌ Payment verification failed: ' + (verifyData.message || 'Unknown error'));
+                setLoading(false);
+            }
+        } catch (err) {
+            console.error('Payment verification error:', err);
+            alert('❌ Payment verification failed. Please contact support.');
+            setLoading(false);
+        }
+    };
+
+    const calculateAmount = () => {
+        if (!paymentData) return { baseAmount: 100, finalAmount: discount ? 80 : 100 };
+        
+        const baseAmount = paymentData.convertedAmount || 100;
+        const finalAmount = discount ? baseAmount * 0.8 : baseAmount;
+        return { baseAmount, finalAmount };
+    };
+
+    const { baseAmount, finalAmount } = calculateAmount();
 
     return (
         <div className="st-modal-overlay" onClick={onClose}>
             <div className="st-modal-content" onClick={(e) => e.stopPropagation()}>
-                <h3 className="st-modal-title">Submission Gateway</h3>
-                <form onSubmit={handleSubmit} className="st-modal-form">
-                    <div>
-                        <label htmlFor="cardNumber" className="st-form-label">Card Details</label>
-                        <div className="st-payment-grid">
-                            <input type="text" id="cardNumber" placeholder="Card Number" className="st-form-input" required onChange={(e) => setPaymentDetails({...paymentDetails, cardNumber: e.target.value})} />
-                            <input type="text" id="expiry" placeholder="MM/YY" className="st-form-input" required onChange={(e) => setPaymentDetails({...paymentDetails, expiry: e.target.value})} />
-                            <input type="text" id="cvv" placeholder="CVV" className="st-form-input" required onChange={(e) => setPaymentDetails({...paymentDetails, cvv: e.target.value})} />
+                <h3 className="st-modal-title">Payment Gateway</h3>
+                
+                {loading && !paymentData && (
+                    <div className="st-loading-container" style={{ minHeight: '200px', padding: '2rem' }}>
+                        <div className="st-loader">
+                            <div className="st-loader-dot"></div>
+                            <div className="st-loader-dot"></div>
+                            <div className="st-loader-dot"></div>
+                        </div>
+                        <p className="st-loading-text">Loading payment details...</p>
+                    </div>
+                )}
+
+                {error && (
+                    <div style={{ 
+                        background: '#fee2e2', 
+                        border: '1px solid #fecaca', 
+                        borderRadius: '8px', 
+                        padding: '1rem', 
+                        marginBottom: '1rem',
+                        color: '#dc2626'
+                    }}>
+                        <strong>Error:</strong> {error}
+                        <div style={{ marginTop: '0.5rem' }}>
+                            <button 
+                                onClick={fetchPaymentDetails}
+                                style={{
+                                    padding: '0.5rem 1rem',
+                                    background: '#dc2626',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    marginRight: '0.5rem'
+                                }}
+                            >
+                                Retry
+                            </button>
+                            <button 
+                                onClick={onClose}
+                                style={{
+                                    padding: '0.5rem 1rem',
+                                    background: 'transparent',
+                                    color: '#dc2626',
+                                    border: '1px solid #dc2626',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Cancel
+                            </button>
                         </div>
                     </div>
-                    <div>
-                        <label htmlFor="paperFile" className="st-form-label">Upload Full Paper (PDF)</label>
-                        <input type="file" id="paperFile" accept=".pdf" className="st-form-input" required onChange={(e) => setPaperFile(e.target.files[0])} />
+                )}
+
+                {paymentData && (
+                    <>
+                        <div className="st-bill-container">
+                            <div className="st-bill-header">
+                                <h4 className="st-bill-title">Payment Invoice</h4>
+                                <p className="st-bill-subtitle">IT Conference Registration</p>
+                            </div>
+                            
+                            <div className="st-bill-details">
+                                <div className="st-bill-row">
+                                    <span className="st-bill-label">Conference Fee:</span>
+                                    <span className="st-bill-value">
+                                        {paymentData.currency === 'INR' ? '₹' : '$'}{baseAmount.toFixed(2)}
+                                    </span>
+                                </div>
+                                
+                                {discount && (
+                                    <div className="st-bill-row">
+                                        <span className="st-bill-label">Discount (20%):</span>
+                                        <span className="st-bill-value" style={{ color: 'green' }}>
+                                            -{paymentData.currency === 'INR' ? '₹' : '$'}{(baseAmount * 0.2).toFixed(2)}
+                                        </span>
+                                    </div>
+                                )}
+                                
+                                <hr className="st-bill-divider" />
+                                
+                                <div className="st-bill-total">
+                                    <span className="st-bill-total-label">Total Amount:</span>
+                                    <span className="st-bill-total-value">
+                                        {paymentData.currency === 'INR' ? '₹' : '$'}{finalAmount.toFixed(2)} {paymentData.currency}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <p className="st-bill-note">
+                                Secure payment processed by Razorpay
+                            </p>
+                        </div>
+
+                        <button 
+                            onClick={handlePayment}
+                            disabled={loading}
+                            className="st-modal-submit-btn"
+                            style={{ marginTop: '1rem' }}
+                        >
+                            {loading ? 'Processing...' : `Pay ${paymentData.currency === 'INR' ? '₹' : '$'}${finalAmount.toFixed(2)}`}
+                        </button>
+
+                        <p style={{ 
+                            textAlign: 'center', 
+                            fontSize: '0.8rem', 
+                            color: '#6c757d', 
+                            marginTop: '1rem' 
+                        }}>
+                            You will be redirected to Razorpay for secure payment
+                        </p>
+                    </>
+                )}
+
+                {!loading && !error && !paymentData && (
+                    <div style={{ textAlign: 'center', padding: '2rem' }}>
+                        <p>Unable to load payment details.</p>
+                        <button 
+                            onClick={fetchPaymentDetails}
+                            className="st-modal-submit-btn"
+                            style={{ marginTop: '1rem' }}
+                        >
+                            Try Again
+                        </button>
                     </div>
-                    <button type="submit" className="st-modal-submit-btn">Submit & Pay</button>
-                </form>
+                )}
+
+                <button 
+                    onClick={onClose}
+                    style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        marginTop: '1rem',
+                        background: 'transparent',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '0.5rem',
+                        cursor: 'pointer',
+                        color: '#6b7280'
+                    }}
+                    disabled={loading}
+                >
+                    Cancel
+                </button>
             </div>
         </div>
     );
 };
 
-
-// --- Main Status Tracker Component ---
+// Main Status Tracker Component
 const SubmissionStatusTracker = () => {
-    const [submissionData, setSubmissionData] = useState(null);
+    const [statusData, setStatusData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const navigate = useNavigate();
+
+    const fetchStatusData = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            setError("Please log in to view your submission status.");
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const response = await fetch("https://it-con-backend.onrender.com/api/users/me", {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (!response.ok) {
+                throw new Error("Could not fetch submission status. Please try again.");
+            }
+
+            const data = await response.json();
+            console.log('Fetched status data:', data);
+            setStatusData({
+                abstractStatus: data.abstractStatus,
+                paperStatus: data.paperStatus,
+                paymentStatus: data.paymentStatus,
+                discount: data.discount
+            });
+
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchStatus = async () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                setError("Please log in to view your submission status.");
-                setLoading(false);
-                return;
-            }
-
-            try {
-                // Simulate API call delay
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                const response = await fetch("https://it-con-backend.onrender.com/api/users/me", {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-
-                if (!response.ok) {
-                    if(response.status === 404) {
-                         setSubmissionData({ abstractStatus: 'No Data' });
-                    } else {
-                        throw new Error("Could not fetch submission status. Please try again.");
-                    }
-                } else {
-                    const data = await response.json();
-                    setSubmissionData(data);
-                }
-
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchStatus();
+        fetchStatusData();
     }, []);
 
-    const handleModalSubmit = async (fileName) => {
-        console.log(`Paper submitted: ${fileName}`);
-        setSubmissionData(prev => ({ ...prev, paymentStatus: 'paid', paperStatus: 'submitted' }));
-        setIsModalOpen(false);
+    const handlePaymentSuccess = () => {
+        console.log('Payment success callback called, refreshing status data...');
+        // Refresh the status data to get the updated payment status
+        setLoading(true);
+        setTimeout(() => {
+            fetchStatusData();
+        }, 1000);
     };
     
     const stages = [
         { id: 0, title: 'Abstract Submission' },
-        { id: 1, title: 'Under Review' },
-        { id: 2, title: 'Selection Announcement' },
-        { id: 3, title: 'Full Paper & Payment' },
-        { id: 4, title: 'Conference Registration Complete' }
+        { id: 1, title: 'Abstract Review' },
+        { id: 2, title: 'Paper Submission' },
+        { id: 3, title: 'Paper Review' },
+        { id: 4, title: 'Payment' },
+        { id: 5, title: 'Registration Complete' }
     ];
 
     const getStatusStep = () => {
-        if (!submissionData || submissionData.abstractStatus === 'No Data') return 0;
-        if (submissionData.abstractStatus === 'under review' || submissionData.abstractStatus === 'pending') return 1;
-        if (submissionData.abstractStatus === 'rejected') return 2;
-        if (submissionData.abstractStatus === 'approved') {
-             if (submissionData.paperStatus === 'submitted' && submissionData.paymentStatus === 'paid') {
-                return 4; // Corresponds to the 5th stage (index 4)
-            }
-            return 3; // Corresponds to Full Paper & Payment stage
-        }
+        if (!statusData) return 0;
+        
+        const { abstractStatus, paperStatus, paymentStatus } = statusData;
+
+        console.log('Calculating status step:', { abstractStatus, paperStatus, paymentStatus });
+
+        // Stage 0: No abstract submitted
+        if (abstractStatus === "No Abstract") return 0;
+
+        // Stage 1: Abstract submitted and under review
+        if (abstractStatus === "Under Review") return 1;
+
+        // Stage 1 (Rejected): Abstract rejected - stop here
+        if (abstractStatus === "Rejected") return 1;
+
+        // Stage 2: Abstract approved, no paper submitted
+        if (abstractStatus === "Approved" && (paperStatus === "No Paper" || !paperStatus)) return 2;
+
+        // Stage 3: Paper submitted and under various statuses
+        if (paperStatus === "Submitted" || paperStatus === "Under Review" || paperStatus === "Correction") return 3;
+
+        // Stage 3 (Rejected): Paper rejected - stop here
+        if (paperStatus === "Rejected") return 3;
+
+        // Stage 4: Paper approved, payment pending
+        if (paperStatus === "Approved" && paymentStatus === "unpaid") return 4;
+
+        // Stage 5: Paper approved, payment completed - FINAL STAGE
+        if ((paperStatus === "Approved" || paperStatus === "Submitted") && paymentStatus === "paid") return 5;
+
         return 0;
     };
     
     const currentStatusIndex = getStatusStep();
-    const isRejected = submissionData?.abstractStatus === 'rejected';
+    const isAbstractRejected = statusData?.abstractStatus === 'Rejected';
+    const isPaperRejected = statusData?.paperStatus === 'Rejected';
 
     const getStatusDescription = (index) => {
-        if (currentStatusIndex === 0 && index === 0) {
-            return "You have not submitted an abstract yet. Please complete your registration to begin.";
+        if (!statusData) {
+             if (index === 0) return "Submit your abstract to begin the review process.";
+             return "";
         }
-        
+
+        const { abstractStatus, paperStatus, paymentStatus } = statusData;
+
         switch(index) {
-            case 0: return "Your abstract has been successfully received and is awaiting review.";
-            case 1: return "Our committee is carefully reviewing your submission.";
-            case 2: return isRejected ? `Unfortunately, your abstract was not selected. Reason: ${submissionData?.rejectedReason || 'Not provided.'}` : "Congratulations! Your abstract has been accepted.";
-            case 3: return "Please complete your registration by submitting your final paper and payment.";
-            case 4: return "Your registration is complete. We look forward to seeing you!";
-            default: return "";
+            case 0: 
+                return abstractStatus === "No Abstract" 
+                    ? "Submit your abstract to begin the review process."
+                    : "Your abstract has been successfully submitted.";
+                    
+            case 1: 
+                if (isAbstractRejected) {
+                    return "Unfortunately, your abstract was not accepted. Please check your email for feedback.";
+                }
+                if (abstractStatus === "Under Review") {
+                    return "Our committee is currently reviewing your abstract submission.";
+                }
+                return "Abstract review completed.";
+                
+            case 2: 
+                if (isAbstractRejected) {
+                    return "This step is unavailable as your abstract was not accepted.";
+                }
+                if (paperStatus === "No Paper" || !paperStatus) {
+                    return "Congratulations! Your abstract has been accepted. Please submit your full paper.";
+                }
+                return "Ready for paper submission.";
+                
+            case 3: 
+                if (isAbstractRejected) {
+                    return "This step is unavailable as your abstract was not accepted.";
+                }
+                if (isPaperRejected) {
+                    return "Unfortunately, your paper was not accepted. Please check your email for feedback.";
+                }
+                if (paperStatus === "Submitted" || paperStatus === "Under Review") {
+                    return "Your paper has been submitted and is under review by our committee.";
+                }
+                if (paperStatus === "Correction") {
+                    return "Corrections are required for your paper. Please check your email for details.";
+                }
+                if (paperStatus === "Approved") {
+                    return "Your paper has been approved! Please proceed to payment.";
+                }
+                return "Paper review in progress.";
+                
+            case 4: 
+                if (isAbstractRejected || isPaperRejected) {
+                    return "This step is unavailable as your submission was not accepted.";
+                }
+                if (paymentStatus === "unpaid") {
+                    return "Your paper has been approved! Please complete the payment to finalize your registration.";
+                }
+                return "Payment processing...";
+                
+            case 5: 
+                return "Congratulations! Your registration is complete! We look forward to seeing you at the conference!";
+                
+            default: 
+                return "";
         }
     };
-    
+
     const getStatusIcon = (index) => {
-        if (index < currentStatusIndex) return <FaCheckCircle className="status-icon completed" />;
+        if (index < currentStatusIndex) return <CheckCircle className="status-icon completed" />;
         if (index === currentStatusIndex) {
-             if (isRejected) return <FaTimesCircle className="status-icon rejected" />;
-            return <FaHourglassHalf className="status-icon active" />;
+            if ((isAbstractRejected && index === 1) || (isPaperRejected && index === 3)) {
+                return <XCircle className="status-icon rejected" />;
+            }
+            return <Hourglass className="status-icon active" />;
         }
         return <div className="status-icon pending" />;
-    }
+    };
+
+    const showActionButton = (index) => {
+        if (!statusData) return false;
+        
+        const { abstractStatus, paperStatus, paymentStatus } = statusData;
+
+        // Show paper submission button at stage 2 - redirects to /paper-submission
+        if (index === 2 && abstractStatus === "Approved" && (paperStatus === "No Paper" || !paperStatus)) {
+            return true;
+        }
+
+        // Show payment button at stage 4 - opens payment modal
+        if (index === 4 && paperStatus === "Approved" && paymentStatus === "unpaid") {
+            return true;
+        }
+
+        return false;
+    };
+
+    const getButtonText = (index) => {
+        if (index === 2) return 'Submit Paper';
+        if (index === 4) return 'Complete Payment';
+        return 'Continue';
+    };
+
+    const handleActionButtonClick = (stageIndex) => {
+        if (stageIndex === 2) {
+            navigate('/paper-submission');
+        } else if (stageIndex === 4) {
+            setIsPaymentModalOpen(true);
+        }
+    };
 
     if (loading) {
         return (
@@ -438,7 +933,12 @@ const SubmissionStatusTracker = () => {
         );
     }
     if (error) {
-        return <div className="st-error-message">{error}</div>;
+        return (
+            <React.Fragment>
+                <style>{componentStyles}</style>
+                <div className="st-error-message">{error}</div>
+            </React.Fragment>
+        );
     }
     
     return (
@@ -448,7 +948,7 @@ const SubmissionStatusTracker = () => {
                 <div className="st-container">
                     <header className="st-header">
                         <h1>Submission Status</h1>
-                        <p>Track the progress of your paper submission from review to final acceptance.</p>
+                        <p>Track the progress of your paper submission from abstract review to final acceptance.</p>
                     </header>
 
                     <div className="st-timeline">
@@ -458,7 +958,8 @@ const SubmissionStatusTracker = () => {
                                 className={`st-timeline-item 
                                     ${index < currentStatusIndex ? 'completed' : ''} 
                                     ${index === currentStatusIndex ? 'active' : ''}
-                                    ${isRejected && index === 2 ? 'rejected' : ''}`
+                                    ${(isAbstractRejected && index === 1) ? 'rejected' : ''}
+                                    ${(isPaperRejected && index === 3) ? 'rejected' : ''}`
                                 }
                             >
                                 <div className="st-timeline-connector">
@@ -469,12 +970,13 @@ const SubmissionStatusTracker = () => {
                                 <div className="st-timeline-content">
                                     <h3 className="st-item-title">{stage.title}</h3>
                                     <p className="st-item-description">{getStatusDescription(index)}</p>
-                                    {index === 2 && currentStatusIndex === 2 && !isRejected && (
+                                    
+                                    {showActionButton(index) && (
                                         <button 
-                                            onClick={() => setIsModalOpen(true)} 
+                                            onClick={() => handleActionButtonClick(index)}
                                             className="st-gateway-btn"
                                         >
-                                            Proceed to Gateway
+                                            {getButtonText(index)}
                                         </button>
                                     )}
                                 </div>
@@ -482,7 +984,14 @@ const SubmissionStatusTracker = () => {
                         ))}
                     </div>
                 </div>
-                {isModalOpen && <PaymentSubmissionModal onClose={() => setIsModalOpen(false)} onSubmit={handleModalSubmit} />}
+                
+                {isPaymentModalOpen && (
+                    <PaymentModal 
+                        onClose={() => setIsPaymentModalOpen(false)}
+                        discount={statusData?.discount}
+                        onPaymentSuccess={handlePaymentSuccess}
+                    />
+                )}
             </main>
         </React.Fragment>
     );
