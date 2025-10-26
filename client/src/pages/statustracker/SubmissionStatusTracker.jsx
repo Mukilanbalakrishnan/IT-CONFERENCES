@@ -369,7 +369,7 @@ const Loader = () => (
 );
 
 // Payment Modal Component
-const PaymentModal = ({ onClose, discount }) => {
+const PaymentModal = ({ onClose, discount, onPaymentSuccess }) => {
     const [loading, setLoading] = useState(false);
     const [paymentData, setPaymentData] = useState(null);
     const [error, setError] = useState(null);
@@ -391,7 +391,6 @@ const PaymentModal = ({ onClose, discount }) => {
 
             console.log('Fetching payment details...');
             
-            // CORRECT ENDPOINT - with /api/payment prefix
             const response = await fetch('https://it-con-backend.onrender.com/api/payments/create-payment', {
                 method: 'POST',
                 headers: {
@@ -468,7 +467,7 @@ const PaymentModal = ({ onClose, discount }) => {
 
             const options = {
                 key: paymentData.keyId,
-                amount: paymentData.amount, // Already in paise from backend (10000 = ₹100)
+                amount: paymentData.amount,
                 currency: paymentData.currency,
                 name: 'IT Conference',
                 description: 'Conference Registration Payment',
@@ -512,7 +511,6 @@ const PaymentModal = ({ onClose, discount }) => {
             
             console.log('Verifying payment...', response);
 
-            // CORRECT VERIFICATION ENDPOINT
             const verifyResponse = await fetch('https://it-con-backend.onrender.com/api/payments/verify-payment', {
                 method: 'POST',
                 headers: {
@@ -530,11 +528,19 @@ const PaymentModal = ({ onClose, discount }) => {
             console.log('Verification response:', verifyData);
             
             if (verifyData.success) {
+                console.log('Payment verified successfully, calling onPaymentSuccess callback');
+                // Call the success callback to update parent component state
+                onPaymentSuccess();
+                
+                // Close the modal after a brief delay to show success
+                setTimeout(() => {
+                    onClose();
+                }, 1500);
+                
+                // Show success message
                 alert('🎉 Payment successful! Your registration is now complete.');
-                onClose();
-                // Refresh the page to update status
-                setTimeout(() => window.location.reload(), 1000);
             } else {
+                console.error('Payment verification failed:', verifyData.message);
                 alert('❌ Payment verification failed: ' + (verifyData.message || 'Unknown error'));
                 setLoading(false);
             }
@@ -548,7 +554,6 @@ const PaymentModal = ({ onClose, discount }) => {
     const calculateAmount = () => {
         if (!paymentData) return { baseAmount: 100, finalAmount: discount ? 80 : 100 };
         
-        // Use convertedAmount from backend which is in actual currency units
         const baseAmount = paymentData.convertedAmount || 100;
         const finalAmount = discount ? baseAmount * 0.8 : baseAmount;
         return { baseAmount, finalAmount };
@@ -708,7 +713,7 @@ const PaymentModal = ({ onClose, discount }) => {
     );
 };
 
-// Main Status Tracker Component (keep the same as before)
+// Main Status Tracker Component
 const SubmissionStatusTracker = () => {
     const [statusData, setStatusData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -716,42 +721,51 @@ const SubmissionStatusTracker = () => {
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const navigate = useNavigate();
 
+    const fetchStatusData = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            setError("Please log in to view your submission status.");
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const response = await fetch("https://it-con-backend.onrender.com/api/users/me", {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (!response.ok) {
+                throw new Error("Could not fetch submission status. Please try again.");
+            }
+
+            const data = await response.json();
+            console.log('Fetched status data:', data);
+            setStatusData({
+                abstractStatus: data.abstractStatus,
+                paperStatus: data.paperStatus,
+                paymentStatus: data.paymentStatus,
+                discount: data.discount
+            });
+
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchStatusData = async () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                setError("Please log in to view your submission status.");
-                setLoading(false);
-                return;
-            }
-
-            try {
-                const response = await fetch("https://it-con-backend.onrender.com/api/users/me", {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-
-                if (!response.ok) {
-                    throw new Error("Could not fetch submission status. Please try again.");
-                }
-
-                const data = await response.json();
-                console.log('Fetched data:', data);
-                setStatusData({
-                    abstractStatus: data.abstractStatus,
-                    paperStatus: data.paperStatus,
-                    paymentStatus: data.paymentStatus,
-                    discount: data.discount
-                });
-
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchStatusData();
     }, []);
+
+    const handlePaymentSuccess = () => {
+        console.log('Payment success callback called, refreshing status data...');
+        // Refresh the status data to get the updated payment status
+        setLoading(true);
+        setTimeout(() => {
+            fetchStatusData();
+        }, 1000);
+    };
     
     const stages = [
         { id: 0, title: 'Abstract Submission' },
@@ -791,10 +805,7 @@ const SubmissionStatusTracker = () => {
         if (paperStatus === "Approved" && paymentStatus === "unpaid") return 4;
 
         // Stage 5: Paper approved, payment completed - FINAL STAGE
-        if (paperStatus === "Approved" && paymentStatus === "paid") return 5;
-
-        // Fallback: if abstract is approved but paper status is unexpected, assume stage 2
-        if (abstractStatus === "Approved") return 2;
+        if ((paperStatus === "Approved" || paperStatus === "Submitted") && paymentStatus === "paid") return 5;
 
         return 0;
     };
@@ -978,6 +989,7 @@ const SubmissionStatusTracker = () => {
                     <PaymentModal 
                         onClose={() => setIsPaymentModalOpen(false)}
                         discount={statusData?.discount}
+                        onPaymentSuccess={handlePaymentSuccess}
                     />
                 )}
             </main>
