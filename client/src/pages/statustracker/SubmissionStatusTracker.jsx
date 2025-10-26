@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { FaCheckCircle, FaTimesCircle, FaHourglassHalf } from 'react-icons/fa';
+import { CheckCircle, XCircle, Hourglass } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-// This component includes its own styles for a self-contained setup.
 const componentStyles = `
 /* --- Base Page Styles --- */
 .st-page {
@@ -96,7 +96,6 @@ const componentStyles = `
     border-color: var(--brand-red);
 }
 
-
 .status-icon {
     font-size: 1.5rem;
 }
@@ -110,7 +109,6 @@ const componentStyles = `
     background-color: var(--surface-dark);
     border-radius: 50%;
 }
-
 
 .st-timeline-content {
     padding-bottom: 2.5rem;
@@ -290,55 +288,86 @@ const Loader = () => (
     </div>
 );
 
-
-// --- Payment & Submission Modal Component ---
-const PaymentSubmissionModal = ({ onClose, onSubmit }) => {
+// --- Payment Modal Component ---
+const PaymentModal = ({ onClose, onSubmit, discount }) => {
     const [paymentDetails, setPaymentDetails] = useState({ cardNumber: '', expiry: '', cvv: '' });
-    const [paperFile, setPaperFile] = useState(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (paymentDetails.cardNumber && paymentDetails.expiry && paymentDetails.cvv && paperFile) {
-            onSubmit(paperFile.name);
-        } else {
-            alert("Please fill all fields and upload your paper.");
+        
+        if (!paymentDetails.cardNumber || !paymentDetails.expiry || !paymentDetails.cvv) {
+            alert("Please fill all payment fields.");
+            return;
         }
+
+        onSubmit();
+    };
+
+    const calculateAmount = () => {
+        const baseAmount = 100;
+        return discount ? baseAmount * 0.8 : baseAmount;
     };
 
     return (
         <div className="st-modal-overlay" onClick={onClose}>
             <div className="st-modal-content" onClick={(e) => e.stopPropagation()}>
-                <h3 className="st-modal-title">Submission Gateway</h3>
+                <h3 className="st-modal-title">Payment Gateway</h3>
+                
+                <div style={{ marginBottom: '1rem', padding: '1rem', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
+                    <strong>Payment Amount: ${calculateAmount()}</strong>
+                    {discount && <span style={{ color: 'green', marginLeft: '0.5rem' }}>(20% discount applied!)</span>}
+                </div>
+
                 <form onSubmit={handleSubmit} className="st-modal-form">
                     <div>
                         <label htmlFor="cardNumber" className="st-form-label">Card Details</label>
                         <div className="st-payment-grid">
-                            <input type="text" id="cardNumber" placeholder="Card Number" className="st-form-input" required onChange={(e) => setPaymentDetails({...paymentDetails, cardNumber: e.target.value})} />
-                            <input type="text" id="expiry" placeholder="MM/YY" className="st-form-input" required onChange={(e) => setPaymentDetails({...paymentDetails, expiry: e.target.value})} />
-                            <input type="text" id="cvv" placeholder="CVV" className="st-form-input" required onChange={(e) => setPaymentDetails({...paymentDetails, cvv: e.target.value})} />
+                            <input 
+                                type="text" 
+                                id="cardNumber" 
+                                placeholder="Card Number" 
+                                className="st-form-input" 
+                                required 
+                                onChange={(e) => setPaymentDetails({...paymentDetails, cardNumber: e.target.value})} 
+                            />
+                            <input 
+                                type="text" 
+                                id="expiry" 
+                                placeholder="MM/YY" 
+                                className="st-form-input" 
+                                required 
+                                onChange={(e) => setPaymentDetails({...paymentDetails, expiry: e.target.value})} 
+                            />
+                            <input 
+                                type="text" 
+                                id="cvv" 
+                                placeholder="CVV" 
+                                className="st-form-input" 
+                                required 
+                                onChange={(e) => setPaymentDetails({...paymentDetails, cvv: e.target.value})} 
+                            />
                         </div>
                     </div>
-                    <div>
-                        <label htmlFor="paperFile" className="st-form-label">Upload Full Paper (PDF)</label>
-                        <input type="file" id="paperFile" accept=".pdf" className="st-form-input" required onChange={(e) => setPaperFile(e.target.files[0])} />
-                    </div>
-                    <button type="submit" className="st-modal-submit-btn">Submit & Pay</button>
+
+                    <button type="submit" className="st-modal-submit-btn">
+                        Pay ${calculateAmount()}
+                    </button>
                 </form>
             </div>
         </div>
     );
 };
 
-
 // --- Main Status Tracker Component ---
 const SubmissionStatusTracker = () => {
-    const [submissionData, setSubmissionData] = useState(null);
+    const [statusData, setStatusData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchStatus = async () => {
+        const fetchStatusData = async () => {
             const token = localStorage.getItem('token');
             if (!token) {
                 setError("Please log in to view your submission status.");
@@ -347,23 +376,22 @@ const SubmissionStatusTracker = () => {
             }
 
             try {
-                // Simulate API call delay
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
                 const response = await fetch("https://it-con-backend.onrender.com/api/users/me", {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
                 if (!response.ok) {
-                    if(response.status === 404) {
-                         setSubmissionData({ abstractStatus: 'No Data' });
-                    } else {
-                        throw new Error("Could not fetch submission status. Please try again.");
-                    }
-                } else {
-                    const data = await response.json();
-                    setSubmissionData(data);
+                    throw new Error("Could not fetch submission status. Please try again.");
                 }
+
+                const data = await response.json();
+                console.log('Fetched data:', data);
+                setStatusData({
+                    abstractStatus: data.abstractStatus,
+                    paperStatus: data.paperStatus,
+                    paymentStatus: data.paymentStatus,
+                    discount: data.discount
+                });
 
             } catch (err) {
                 setError(err.message);
@@ -372,62 +400,187 @@ const SubmissionStatusTracker = () => {
             }
         };
 
-        fetchStatus();
+        fetchStatusData();
     }, []);
-
-    const handleModalSubmit = async (fileName) => {
-        console.log(`Paper submitted: ${fileName}`);
-        setSubmissionData(prev => ({ ...prev, paymentStatus: 'paid', paperStatus: 'submitted' }));
-        setIsModalOpen(false);
-    };
     
     const stages = [
         { id: 0, title: 'Abstract Submission' },
-        { id: 1, title: 'Under Review' },
-        { id: 2, title: 'Selection Announcement' },
-        { id: 3, title: 'Full Paper & Payment' },
-        { id: 4, title: 'Conference Registration Complete' }
+        { id: 1, title: 'Abstract Review' },
+        { id: 2, title: 'Paper Submission' },
+        { id: 3, title: 'Paper Review' },
+        { id: 4, title: 'Payment' },
+        { id: 5, title: 'Registration Complete' }
     ];
 
     const getStatusStep = () => {
-        if (!submissionData || submissionData.abstractStatus === 'No Data') return 0;
-        if (submissionData.abstractStatus === 'under review' || submissionData.abstractStatus === 'pending') return 1;
-        if (submissionData.abstractStatus === 'rejected') return 2;
-        if (submissionData.abstractStatus === 'approved') {
-             if (submissionData.paperStatus === 'submitted' && submissionData.paymentStatus === 'paid') {
-                return 4; // Corresponds to the 5th stage (index 4)
-            }
-            return 3; // Corresponds to Full Paper & Payment stage
-        }
+        if (!statusData) return 0;
+        
+        const { abstractStatus, paperStatus, paymentStatus } = statusData;
+
+        console.log('Calculating status step:', { abstractStatus, paperStatus, paymentStatus });
+
+        // Stage 0: No abstract submitted
+        if (abstractStatus === "No Abstract") return 0;
+
+        // Stage 1: Abstract submitted and under review
+        if (abstractStatus === "Under Review") return 1;
+
+        // Stage 1 (Rejected): Abstract rejected - stop here
+        if (abstractStatus === "Rejected") return 1;
+
+        // Stage 2: Abstract approved, no paper submitted
+        if (abstractStatus === "Approved" && (paperStatus === "No Paper" || !paperStatus)) return 2;
+
+        // Stage 3: Paper submitted and under various statuses
+        if (paperStatus === "Submitted" || paperStatus === "Under Review" || paperStatus === "Correction") return 3;
+
+        // Stage 3 (Rejected): Paper rejected - stop here
+        if (paperStatus === "Rejected") return 3;
+
+        // Stage 4: Paper approved, payment pending
+        if (paperStatus === "Approved" && paymentStatus === "unpaid") return 4;
+
+        // Stage 5: Paper approved, payment completed - FINAL STAGE
+        if (paperStatus === "Approved" && paymentStatus === "paid") return 5;
+
+        // Fallback: if abstract is approved but paper status is unexpected, assume stage 2
+        if (abstractStatus === "Approved") return 2;
+
         return 0;
     };
     
     const currentStatusIndex = getStatusStep();
-    const isRejected = submissionData?.abstractStatus === 'rejected';
+    const isAbstractRejected = statusData?.abstractStatus === 'Rejected';
+    const isPaperRejected = statusData?.paperStatus === 'Rejected';
+
+    console.log('Current status index:', currentStatusIndex);
 
     const getStatusDescription = (index) => {
-        if (currentStatusIndex === 0 && index === 0) {
-            return "You have not submitted an abstract yet. Please complete your registration to begin.";
+        if (!statusData) {
+             if (index === 0) return "Submit your abstract to begin the review process.";
+             return "";
         }
-        
+
+        const { abstractStatus, paperStatus, paymentStatus } = statusData;
+
         switch(index) {
-            case 0: return "Your abstract has been successfully received and is awaiting review.";
-            case 1: return "Our committee is carefully reviewing your submission.";
-            case 2: return isRejected ? `Unfortunately, your abstract was not selected. Reason: ${submissionData?.rejectedReason || 'Not provided.'}` : "Congratulations! Your abstract has been accepted.";
-            case 3: return "Please complete your registration by submitting your final paper and payment.";
-            case 4: return "Your registration is complete. We look forward to seeing you!";
-            default: return "";
+            case 0: 
+                return abstractStatus === "No Abstract" 
+                    ? "Submit your abstract to begin the review process."
+                    : "Your abstract has been successfully submitted.";
+                    
+            case 1: 
+                if (isAbstractRejected) {
+                    return "Unfortunately, your abstract was not accepted. Please check your email for feedback.";
+                }
+                if (abstractStatus === "Under Review") {
+                    return "Our committee is currently reviewing your abstract submission.";
+                }
+                return "Abstract review completed.";
+                
+            case 2: 
+                if (isAbstractRejected) {
+                    return "This step is unavailable as your abstract was not accepted.";
+                }
+                if (paperStatus === "No Paper" || !paperStatus) {
+                    return "Congratulations! Your abstract has been accepted. Please submit your full paper.";
+                }
+                return "Ready for paper submission.";
+                
+            case 3: 
+                if (isAbstractRejected) {
+                    return "This step is unavailable as your abstract was not accepted.";
+                }
+                if (isPaperRejected) {
+                    return "Unfortunately, your paper was not accepted. Please check your email for feedback.";
+                }
+                if (paperStatus === "Submitted" || paperStatus === "Under Review") {
+                    return "Your paper has been submitted and is under review by our committee.";
+                }
+                if (paperStatus === "Correction") {
+                    return "Corrections are required for your paper. Please check your email for details.";
+                }
+                if (paperStatus === "Approved") {
+                    return "Your paper has been approved! Please proceed to payment.";
+                }
+                return "Paper review in progress.";
+                
+            case 4: 
+                if (isAbstractRejected || isPaperRejected) {
+                    return "This step is unavailable as your submission was not accepted.";
+                }
+                if (paymentStatus === "unpaid") {
+                    return "Your paper has been approved! Please complete the payment to finalize your registration.";
+                }
+                return "Payment processing...";
+                
+            case 5: 
+                return "Congratulations! Your registration is complete! We look forward to seeing you at the conference!";
+                
+            default: 
+                return "";
         }
     };
-    
+
     const getStatusIcon = (index) => {
-        if (index < currentStatusIndex) return <FaCheckCircle className="status-icon completed" />;
+        if (index < currentStatusIndex) return <CheckCircle className="status-icon completed" />;
         if (index === currentStatusIndex) {
-             if (isRejected) return <FaTimesCircle className="status-icon rejected" />;
-            return <FaHourglassHalf className="status-icon active" />;
+            if ((isAbstractRejected && index === 1) || (isPaperRejected && index === 3)) {
+                return <XCircle className="status-icon rejected" />;
+            }
+            return <Hourglass className="status-icon active" />;
         }
         return <div className="status-icon pending" />;
-    }
+    };
+
+    const showActionButton = (index) => {
+        if (!statusData) return false;
+        
+        const { abstractStatus, paperStatus, paymentStatus } = statusData;
+
+        // Show paper submission button at stage 2 - redirects to /paper-submission
+        if (index === 2 && abstractStatus === "Approved" && (paperStatus === "No Paper" || !paperStatus)) {
+            return true;
+        }
+
+        // Show payment button at stage 4 - opens payment modal
+        if (index === 4 && paperStatus === "Approved" && paymentStatus === "unpaid") {
+            return true;
+        }
+
+        return false;
+    };
+
+    const getButtonText = (index) => {
+        if (index === 2) return 'Submit Paper';
+        if (index === 4) return 'Complete Payment';
+        return 'Continue';
+    };
+
+    const handleActionButtonClick = (stageIndex) => {
+        if (stageIndex === 2) {
+            // Redirect to paper submission page
+            navigate('/paper-submission');
+        } else if (stageIndex === 4) {
+            // Open payment modal
+            setIsPaymentModalOpen(true);
+        }
+    };
+
+    const handlePaymentSubmit = async () => {
+        console.log('Payment submitted');
+        
+        // Update local state
+        setStatusData(prev => ({ 
+            ...prev, 
+            paymentStatus: 'paid'
+        }));
+        
+        setIsPaymentModalOpen(false);
+        
+        // Here you would make actual API call for payment
+        // await fetch('/api/process-payment', { method: 'POST', body: paymentData });
+    };
 
     if (loading) {
         return (
@@ -438,7 +591,12 @@ const SubmissionStatusTracker = () => {
         );
     }
     if (error) {
-        return <div className="st-error-message">{error}</div>;
+        return (
+            <React.Fragment>
+                <style>{componentStyles}</style>
+                <div className="st-error-message">{error}</div>
+            </React.Fragment>
+        );
     }
     
     return (
@@ -448,7 +606,7 @@ const SubmissionStatusTracker = () => {
                 <div className="st-container">
                     <header className="st-header">
                         <h1>Submission Status</h1>
-                        <p>Track the progress of your paper submission from review to final acceptance.</p>
+                        <p>Track the progress of your paper submission from abstract review to final acceptance.</p>
                     </header>
 
                     <div className="st-timeline">
@@ -458,7 +616,8 @@ const SubmissionStatusTracker = () => {
                                 className={`st-timeline-item 
                                     ${index < currentStatusIndex ? 'completed' : ''} 
                                     ${index === currentStatusIndex ? 'active' : ''}
-                                    ${isRejected && index === 2 ? 'rejected' : ''}`
+                                    ${(isAbstractRejected && index === 1) ? 'rejected' : ''}
+                                    ${(isPaperRejected && index === 3) ? 'rejected' : ''}`
                                 }
                             >
                                 <div className="st-timeline-connector">
@@ -469,12 +628,13 @@ const SubmissionStatusTracker = () => {
                                 <div className="st-timeline-content">
                                     <h3 className="st-item-title">{stage.title}</h3>
                                     <p className="st-item-description">{getStatusDescription(index)}</p>
-                                    {index === 2 && currentStatusIndex === 2 && !isRejected && (
+                                    
+                                    {showActionButton(index) && (
                                         <button 
-                                            onClick={() => setIsModalOpen(true)} 
+                                            onClick={() => handleActionButtonClick(index)}
                                             className="st-gateway-btn"
                                         >
-                                            Proceed to Gateway
+                                            {getButtonText(index)}
                                         </button>
                                     )}
                                 </div>
@@ -482,7 +642,14 @@ const SubmissionStatusTracker = () => {
                         ))}
                     </div>
                 </div>
-                {isModalOpen && <PaymentSubmissionModal onClose={() => setIsModalOpen(false)} onSubmit={handleModalSubmit} />}
+                
+                {isPaymentModalOpen && (
+                    <PaymentModal 
+                        onClose={() => setIsPaymentModalOpen(false)}
+                        onSubmit={handlePaymentSubmit}
+                        discount={statusData?.discount}
+                    />
+                )}
             </main>
         </React.Fragment>
     );
