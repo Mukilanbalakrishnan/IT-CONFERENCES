@@ -893,7 +893,7 @@ function SignInForm({ onSwitch, onClose, onLoginSuccess }) {
 
     try {
       const { data } = await axios.post(
-        `${base_url}/signin`,
+        `${base_url}/users/signin`,
         { username, password },
         { withCredentials: true, timeout: 30000 }
       );
@@ -939,10 +939,11 @@ function SignInForm({ onSwitch, onClose, onLoginSuccess }) {
 
     try {
       const { data } = await axios.post(
-        `${base_url}/forgot-password`,
+        `${base_url}/users/forgot-password`,
         { email: email.trim().toLowerCase() },
         { headers: { "Content-Type": "application/json" } }
       );
+      console.log(data);
 
       toast.dismiss(loadingToast);
       toast.success(data.message || "OTP sent successfully!");
@@ -970,7 +971,7 @@ function SignInForm({ onSwitch, onClose, onLoginSuccess }) {
 
     try {
       const { data } = await axios.post(
-        `${base_url}/verify-otp`,
+        `${base_url}/users/verify-otp`,
         {
           email: email.trim().toLowerCase(),
           otp,
@@ -1009,7 +1010,7 @@ function SignInForm({ onSwitch, onClose, onLoginSuccess }) {
 
     try {
       const { data } = await axios.post(
-        `${base_url}/reset-password`,
+        `${base_url}/users/reset-password`,
         {
           email: email.trim().toLowerCase(),
           newPassword,
