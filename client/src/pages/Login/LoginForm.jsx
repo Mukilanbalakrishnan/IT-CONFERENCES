@@ -721,15 +721,28 @@ function RegistrationForm({ onSwitch, onClose }) {
     return "";
   };
 
-  const validatePassword = (pwd) => {
-    if (!pwd) return "";
-    
-    if (!isPasswordValid) {
-      return "Password does not meet requirements";
-    }
-    
-    return "";
-  };
+  // This function is "pure" and uses the new password value directly
+const validatePassword = (pwd) => {
+    // If the password is empty, don't show an error
+    // (the "required" check will handle it on submit)
+    if (!pwd) return ""; 
+
+    // Perform all validation checks on the 'pwd' argument
+    const isValid = 
+        pwd.length >= 8 &&
+        /[A-Z]/.test(pwd) &&
+        /[a-z]/.test(pwd) &&
+        /[0-9]/.test(pwd) &&
+        /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
+
+    // Return an error only if the password is NOT valid
+    if (!isValid) {
+      return "Password does not meet requirements";
+    }
+    
+    // If it's valid, return an empty string (no error)
+    return "";
+};
 
   const handleMobileNumberChange = (value) => {
     const cleanedValue = value.replace(/\D/g, '');

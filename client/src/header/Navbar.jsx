@@ -117,7 +117,7 @@ const Navbar = ({ user, onLogout, onOpenLogin }) => {
                                 </div>
                             </div>
                         ) : (
-                            <button onClick={handleSubmitPaper} className="login-btn">SUBMIT A PAPER</button>
+                            <button onClick={handleSubmitPaper} className="login-btn">SUBMIT PAPER</button>
                         )}
                         <HiOutlineMenuAlt3 className="mobile-menu-button" onClick={() => setSideMenu(true)} />
                     </div>

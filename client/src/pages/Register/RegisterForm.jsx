@@ -598,7 +598,7 @@ const TermsModal = ({ onAccept, onDecline, onClose }) => (
                             </div>
                             <h3 className="modal-title">Registration Submitted!</h3>
                             <p className="modal-description">Thank you for registering. Review the submitted data:</p>
-                            <pre className="modal-data-preview">{JSON.stringify(submittedData, null, 2)}</pre>
+                            {/* <pre className="modal-data-preview">{JSON.stringify(submittedData, null, 2)}</pre> */}
                         </div>
                     </div>
                 )}
