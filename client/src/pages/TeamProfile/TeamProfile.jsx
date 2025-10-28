@@ -3,6 +3,7 @@ import './TeamProfile.css';
 import { FaUser, FaFileAlt, FaCreditCard, FaEnvelope, FaPhone, FaUsers, FaGlobe } from 'react-icons/fa';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import base_url from '../../config';
 
 // --- ✅ New Loader Component ---
 const Loader = () => (
@@ -29,7 +30,7 @@ const TeamProfile = () => {
         const token = localStorage.getItem('token');
         if (!token) throw new Error('Authentication token not found. Please log in.');
 
-        const response = await axios.get('https://it-con-backend.onrender.com/api/users/me', {
+        const response = await axios.get(`${base_url}/users/me`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 

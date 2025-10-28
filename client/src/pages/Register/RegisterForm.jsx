@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import base_url from '../../config';
 
 
 const componentStyles = `
@@ -351,7 +352,7 @@ const RegistrationForm = () => {
 
     try {
       const response = await axios.post(
-        "https://it-con-backend.onrender.com/api/register",
+        `${base_url}/register`,
         finalData,
         { headers: { Authorization: `Bearer ${token}`} }
       );
@@ -598,7 +599,7 @@ const TermsModal = ({ onAccept, onDecline, onClose }) => (
                             </div>
                             <h3 className="modal-title">Registration Submitted!</h3>
                             <p className="modal-description">Thank you for registering. Review the submitted data:</p>
-                            <pre className="modal-data-preview">{JSON.stringify(submittedData, null, 2)}</pre>
+                            {/* <pre className="modal-data-preview">{JSON.stringify(submittedData, null, 2)}</pre> */}
                         </div>
                     </div>
                 )}

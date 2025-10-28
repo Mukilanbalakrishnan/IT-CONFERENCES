@@ -21,23 +21,43 @@ const locations = {
     { name: "Erode Junction (ED)", description: "Approx. 20 km away", icon: "🚆", mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3912.0835629973135!2d77.72321881114524!3d11.328602788809217!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba96f132da794ef%3A0x34213a37eae28736!2sErode%20Junction!5e0!3m2!1sen!2sin!4v1755101010034!5m2!1sen!2sin" }
   ],
   visit: [
-    { name: "Ardhanareeswarar Temple", description: "A historic Hindu temple located atop a hill.", icon: "🏛", mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3910.688888888889!2d77.89166666666667!3d11.375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba9640f00000001%3A0x8f2d3f7a3b0a4d3a!2sArdhanareeswarar%20Temple!5e0!3m2!1sen!2sin!4v1678887214141!5m2!1sen!2sin" },
-    { name: "Kailasanathar Temple", description: "An ancient temple known for its Dravidian architecture.", icon: "🏰", mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3910.688888888889!2d77.89166666666667!3d11.375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba9640f00000001%3A0x8f2d3f7a3b0a4d3a!2sKailasanathar%20Temple!5e0!3m2!1sen!2sin!4v1678887247147!5m2!1sen!2sin" },
-    { name: "Sankagiri Fort", description: "A historical fort with panoramic views.", icon: "⛰", mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3908.888888888889!2d77.88333333333333!3d11.483333333333334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba94df000000001%3A0x8f2d3f7a3b0a4d3a!2sSankagiri%20Fort!5e0!3m2!1sen!2sin!4v1678887280180!5m2!1sen!2sin" },
-    {
-  name: "Mettur Dam",
-  description: "An engineering marvel & scenic dam over the Cauvery, surrounded by hills and reservoir", 
-  icon: "💧",
-  mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3904.3456789012345!2d77.79999999999998!3d11.800000000000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3babfxxxxxxx%3A0xyyyyyyyyyyyy!2sMettur%20Dam!5e0!3m2!1sen!2sin!4vLAST_UPDATED_TIMESTAMP!5m2!1sen!2sin"
-},
-{
-  name: "Kurumbapatti Zoological Park",
-  description: "Zoo and park in natural surroundings, good for wildlife & nature walk, ~10 km from Salem", 
-  icon: "🐾",
-  mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3905.1234567890123!2d78.15789012345678!3d11.672345678901234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3babfzzzzzzzzzzz%3A0xwwwwwwwwwwwww!2sKurumbapatti%20Zoological%20Park!5e0!3m2!1sen!2sin!4vLAST_UPDATED_TIMESTAMP!5m2!1sen!2sin"
-}
-
-  ]
+  {
+    name: "Kolli Hills",
+    description: "Beautiful viewpoints, waterfalls, trekking spots, and the famous Arappaleeswarar Temple. Located around 40 km from Tiruchengode (~1.5 to 2 hrs).",
+    icon: "⛰️",
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3920.812280!2d78.321!3d11.267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3baa8b3b0b000001%3A0x8f2d3f7a3b0a4d3a!2sKolli%20Hills!5e0!3m2!1sen!2sin!4v1678887210000!5m2!1sen!2sin"
+  },
+  {
+    name: "Yercaud",
+    description: "Scenic hill station known for coffee plantations, Yercaud Lake, and nature trails. About 95 km from Tiruchengode (~2.5 to 3 hrs).",
+    icon: "🌿",
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3922.000000!2d78.204!3d11.775!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3babf94b0b000001%3A0x8f2d3f7a3b0a4d3a!2sYercaud!5e0!3m2!1sen!2sin!4v1678887220000!5m2!1sen!2sin"
+  },
+  {
+    name: "Valparai",
+    description: "Hill station famous for tea estates, wildlife sanctuaries, and waterfalls. Around 110 km from Tiruchengode (~3 to 3.5 hrs).",
+    icon: "🌄",
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3922.345678!2d76.951!3d10.326!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3baaf00000000001%3A0x8f2d3f7a3b0a4d3a!2sValparai!5e0!3m2!1sen!2sin!4v1678887230000!5m2!1sen!2sin"
+  },
+  {
+    name: "Kodaikanal",
+    description: "Known as the 'Princess of Hill Stations', featuring lakes, waterfalls, and trekking trails. Approximately 120 km from Tiruchengode (~3.5 to 4 hrs).",
+    icon: "🏞️",
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3921.999999!2d77.489!3d10.238!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3baaf123456789ab%3A0x8f2d3f7a3b0a4d3a!2sKodaikanal!5e0!3m2!1sen!2sin!4v1678887240000!5m2!1sen!2sin"
+  },
+  {
+    name: "Coonoor",
+    description: "Peaceful hill station with tea gardens, Sim’s Park, and Dolphin’s Nose viewpoint. Around 140 km from Tiruchengode (~4 hrs).",
+    icon: "🍃",
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3920.345678!2d76.822!3d11.353!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba99e0000000001%3A0x8f2d3f7a3b0a4d3a!2sCoonoor!5e0!3m2!1sen!2sin!4v1678887250000!5m2!1sen!2sin"
+  },
+  {
+    name: "Ooty (Udhagamandalam)",
+    description: "Famous for its botanical gardens, Ooty Lake, and the Nilgiri Mountain Railway. About 160 km from Tiruchengode (~4.5 to 5 hrs).",
+    icon: "🚞",
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3920.567890!2d76.695!3d11.406!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba98a0000000001%3A0x8f2d3f7a3b0a4d3a!2sOoty!5e0!3m2!1sen!2sin!4v1678887260000!5m2!1sen!2sin"
+  }
+]
 };
 
 const Map = () => {

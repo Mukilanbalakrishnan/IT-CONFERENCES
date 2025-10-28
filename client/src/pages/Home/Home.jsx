@@ -100,7 +100,7 @@
 //         <p className="hero-date">March 26th Thursday & 27th Friday, 2026</p>
 //         <div className="hero-buttons">
 //           <button onClick={handleSubmitPaperClick} className="btn btn-primary">
-//             Submit a Paper
+//             Submit Paper
 //           </button>
 //           <button onClick={handleViewwTracks} className="btn btn-secondary">View Tracks</button>
 //         </div>
@@ -368,7 +368,7 @@ const Hero = ({ user, onOpenLogin }) => {
         <p className="hero-date">March 26th Thursday & 27th Friday, 2026</p>
         <div className="hero-buttons">
           <button onClick={handleSubmitPaperClick} className="btn btn-primary">
-            Submit a Paper
+            Submit Paper
           </button>
           {/* ✅ FIXED: Corrected typo in function name 'handleViewwTracks' -> 'handleViewTracks' */}
           <button onClick={handleViewTracks} className="btn btn-secondary">View Tracks</button>

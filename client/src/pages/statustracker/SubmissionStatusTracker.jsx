@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Hourglass } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import base_url from '../../config';
 
 const componentStyles = `
 /* --- Base Page Styles --- */
@@ -391,7 +392,7 @@ const PaymentModal = ({ onClose, discount, onPaymentSuccess }) => {
 
             console.log('Fetching payment details...');
             
-            const response = await fetch('https://it-con-backend.onrender.com/api/payments/create-payment', {
+            const response = await fetch(`${base_url}/payments/create-payment`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -511,7 +512,7 @@ const PaymentModal = ({ onClose, discount, onPaymentSuccess }) => {
             
             console.log('Verifying payment...', response);
 
-            const verifyResponse = await fetch('https://it-con-backend.onrender.com/api/payments/verify-payment', {
+            const verifyResponse = await fetch(`${base_url}/payments/verify-payment`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -730,7 +731,7 @@ const SubmissionStatusTracker = () => {
         }
 
         try {
-            const response = await fetch("https://it-con-backend.onrender.com/api/users/me", {
+            const response = await fetch(`${base_url}/users/me`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 

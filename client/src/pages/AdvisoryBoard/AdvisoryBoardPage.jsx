@@ -31,7 +31,7 @@ const AdvisoryBoardPage = () => {
         name: 'Dr M Iyapparaja', 
         role: 'HoD & Professor', 
         department: 'Department of Smart computing', 
-        institution: 'Vellore Institute of Technology' 
+        institution: 'Vellore Institute of Technology,Vellore' 
     },
     { 
         name: 'Dr. Rijo Jackson Tom', 
@@ -49,19 +49,19 @@ const AdvisoryBoardPage = () => {
         name: 'Dr. W. Wilfred Godfrey', 
         role: 'Associate Professor', 
         department: 'Department of Electronics and Communication Engineering', 
-        institution: 'Indian Institute of Technology and Management, Gwalior-474015' 
+        institution: 'Indian Institute of Technology and Management, Gwalior' 
     },
     { 
         name: 'Dr. S. Janakiraman', 
         role: 'Associate Professor', 
         department: 'Department of Banking Technology, School of Management', 
-        institution: 'Pondicherry University, Pondicherry - 605014' 
+        institution: 'Pondicherry University, Pondicherry'
     },
     { 
         name: 'Dr. P.Damodharan', 
         role: 'Associate Professor', 
         department: 'Department of Electronics and Communication Engineering', 
-        institution: 'Indian Institute of Information Technology, Design & Manufacturing (IIITD&M), Kancheepuram, Tamil Nadu' 
+        institution: 'Indian Institute of Information Technology, Design & Manufacturing (IIITD&M), Kancheepuram' 
     },
     { 
         name: 'Dr. Vijayakumar Krishnasamy', 
@@ -73,13 +73,13 @@ const AdvisoryBoardPage = () => {
         name: 'Dr.N.P. Subramanian', 
         role: 'Associate Professor', 
         department: 'Department of EEE', 
-        institution: 'Puducherry Technological University' 
+        institution: 'Puducherry Technological University,Pondicherry' 
     },
     { 
         name: 'Dr. Bharatiraja C', 
         role: 'Professor', 
         department: 'Faculty of Engineering & Technology', 
-        institution: 'SRM Institute of Science and Technology' 
+        institution: 'SRM Institute of Science and Technology,Chennai' 
     },
     { 
     name: 'Prof.P Somasundaram', 
