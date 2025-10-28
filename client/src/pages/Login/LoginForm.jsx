@@ -836,7 +836,7 @@ const validatePassword = (pwd) => {
       };
 
       const { data } = await axios.post(
-        `${base_url}/signup`,
+        `${base_url}/users/signup`,
         requestData,
         { 
           withCredentials: true,
