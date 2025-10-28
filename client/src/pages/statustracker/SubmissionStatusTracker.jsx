@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, XCircle, Hourglass } from 'lucide-react';
+import { CheckCircle, XCircle, Hourglass, Receipt, Building, Lock, Ticket } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const componentStyles = `
@@ -158,6 +158,27 @@ const componentStyles = `
     cursor: not-allowed;
 }
 
+.st-ticket-btn {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    background-color: var(--brand-blue-primary);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.st-ticket-btn:hover {
+    background-color: var(--brand-blue-dark);
+    transform: translateY(-2px);
+}
+
 /* --- Modal Styles --- */
 .st-modal-overlay {
     position: fixed;
@@ -173,9 +194,12 @@ const componentStyles = `
 .st-modal-content {
     background-color: white;
     border-radius: 1rem;
-    max-width: 28rem;
+    max-width: 500px;
     width: 100%;
-    padding: 2rem;
+    padding: 1rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-top: 4px solid var(--brand-orange);
 }
 .st-modal-title {
     font-size: 1.5rem;
@@ -183,125 +207,390 @@ const componentStyles = `
     margin-bottom: 1.5rem;
     color: var(--brand-blue-dark);
     text-align: center;
-}
-.st-modal-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-}
-.st-form-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: var(--text-primary);
-}
-.st-form-input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid var(--surface-dark);
-    border-radius: 0.5rem;
-    box-sizing: border-box;
-}
-.st-payment-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 0.75rem;
-}
-.st-modal-submit-btn {
-    width: 100%;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 0.5rem;
-    border: none;
-    cursor: pointer;
-    background-color: var(--brand-orange);
-    color: white;
-    transition: background-color 0.2s;
-}
-.st-modal-submit-btn:hover {
-    background-color: var(--brand-orange-dark);
-}
-.st-modal-submit-btn:disabled {
-    background-color: #a0aec0;
-    cursor: not-allowed;
+    padding: 0.5rem 1rem;
 }
 
-/* Bill Styles */
+/* Updated Bill Styles */
 .st-bill-container {
-    background: #f8f9fa;
+    background: var(--surface-light);
     border-radius: 12px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    border: 2px solid #e9ecef;
+    border: 1px solid var(--surface-dark);
 }
+
 .st-bill-header {
     text-align: center;
     margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px dashed #dee2e6;
 }
+
+.st-bill-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--brand-blue-primary);
+}
+
 .st-bill-title {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    color: #2c5530;
-    margin: 0 0 0.5rem 0;
+    color: var(--brand-blue-dark);
+    margin: 0 0 0.25rem 0;
 }
+
 .st-bill-subtitle {
-    color: #6c757d;
+    color: var(--text-secondary);
     font-size: 0.9rem;
     margin: 0;
+    font-weight: 500;
 }
+
+.st-bill-section {
+    margin-bottom: 1.5rem;
+}
+
+.st-bill-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--surface-dark);
+}
+
 .st-bill-details {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
 }
+
 .st-bill-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 0;
 }
+
+.st-bill-row.discount {
+    background: #f0fdf4;
+    margin: 0 -0.5rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+
 .st-bill-label {
-    color: #495057;
+    color: var(--text-secondary);
     font-weight: 500;
+    font-size: 0.95rem;
 }
+
 .st-bill-value {
-    color: #212529;
+    color: var(--text-primary);
     font-weight: 600;
+    font-size: 1rem;
 }
-.st-bill-divider {
-    border: none;
-    border-top: 2px dashed #dee2e6;
-    margin: 1rem 0;
+
+.st-bill-value.discount {
+    color: #059669;
 }
-.st-bill-total {
+
+.st-discount-badge {
+    background: #dcfce7;
+    color: #166534;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid #bbf7d0;
+}
+
+/* Accommodation Toggle */
+.st-accommodation-toggle {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0 0 0;
-    border-top: 2px solid #dee2e6;
-    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: var(--white);
+    border-radius: 8px;
+    border: 1px solid var(--surface-dark);
 }
-.st-bill-total-label {
-    color: #2c5530;
-    font-weight: 700;
-    font-size: 1.1rem;
+
+.st-accommodation-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 }
-.st-bill-total-value {
-    color: #2c5530;
-    font-weight: 700;
-    font-size: 1.3rem;
+.st-accommodation-info label {
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    cursor: pointer;
 }
-.st-bill-note {
-    text-align: center;
-    color: #6c757d;
-    font-size: 0.8rem;
-    margin-top: 1rem;
+
+.st-accommodation-rate {
+    font-weight: 600;
+    color: var(--brand-orange-dark);
+    font-size: 1rem;
+}
+
+.st-accommodation-note {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
     font-style: italic;
 }
 
+.st-toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.st-toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.st-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--surface-dark);
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.st-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .st-toggle-slider {
+    background-color: var(--brand-orange);
+}
+
+input:checked + .st-toggle-slider:before {
+    transform: translateX(22px);
+}
+
+/* Total Section */
+.st-bill-total-section {
+    margin-top: 1.5rem;
+}
+
+.st-bill-divider {
+    border: none;
+    border-top: 1px solid var(--surface-dark);
+    margin: 1.5rem 0;
+}
+
+.st-bill-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0.5rem;
+}
+
+.st-bill-total-label {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+.st-bill-total-value {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--brand-blue-dark);
+}
+
+/* Footer */
+.st-bill-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.st-bill-note {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.st-bill-note.accommodation {
+    color: #92400e;
+    background: #fef3c7;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #fde68a;
+}
+
+.st-secure-badge {
+    font-size: 1rem;
+}
+
+/* Button Styles */
+.st-modal-submit-btn {
+    width: 100%;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: var(--brand-orange);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.st-modal-submit-btn:hover:not(:disabled) {
+    background-color: var(--brand-orange-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.st-modal-submit-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.st-modal-cancel-btn {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    margin-top: 0.75rem;
+    background: transparent;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.st-modal-cancel-btn:hover:not(:disabled) {
+    background: var(--surface-light);
+    color: var(--text-primary);
+}
+
+.st-payment-note {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+/* Success Styles */
+.st-success-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.st-success-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: pulse 1.5s infinite;
+    color: var(--brand-orange);
+}
+
+.st-success-title {
+    color: var(--brand-blue-dark);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.st-success-message {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+.st-success-btn {
+    padding: 0.75rem 2rem;
+    background-color: var(--brand-orange);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.st-success-btn:hover {
+    transform: translateY(-2px);
+    background-color: var(--brand-orange-dark);
+}
+
+/* Error Styles */
+.st-error-banner {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #dc2626;
+}
+
+.st-error-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.st-retry-btn {
+    padding: 0.5rem 1rem;
+    background: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.st-cancel-btn {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    color: #dc2626;
+    border: 1px solid #dc2626;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.st-payment-fallback {
+    text-align: center;
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+/* Loader Styles */
 .st-loading-container {
     display: flex;
     flex-direction: column;
@@ -354,7 +643,77 @@ const componentStyles = `
         transform: translateY(-10px);
     }
 }
+
+/* Responsive Design */
+@media (max-width: 640px) {
+    .st-modal-content {
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+    
+    .st-bill-container {
+        padding: 1rem;
+    }
+    
+    .st-accommodation-toggle {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    .st-accommodation-info {
+        text-align: center;
+    }
+    
+    .st-bill-total-group {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .st-bill-total-value {
+        font-size: 1.3rem;
+    }
+}
 `;
+
+// Utility Functions
+const fetchWithTimeout = async (url, options, timeout = 15000) => {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    
+    try {
+        const response = await fetch(url, {
+            ...options,
+            signal: controller.signal
+        });
+        clearTimeout(id);
+        return response;
+    } catch (error) {
+        clearTimeout(id);
+        throw error;
+    }
+};
+
+const retryApiCall = async (apiCall, maxRetries = 3, delay = 1000) => {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            return await apiCall();
+        } catch (error) {
+            if (attempt === maxRetries) throw error;
+            await new Promise(resolve => setTimeout(resolve, delay * attempt));
+        }
+    }
+};
+
+// Format currency with commas
+const formatCurrency = (amount, currency = 'INR') => {
+    const formattedAmount = new Intl.NumberFormat('en-IN', {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2
+    }).format(amount);
+    
+    return currency === 'INR' ? `₹${formattedAmount}` : `$${formattedAmount}`;
+};
 
 // Loader Component
 const Loader = () => (
@@ -368,346 +727,434 @@ const Loader = () => (
     </div>
 );
 
+// API Functions
+const createOrder = async (payload = {}) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        throw new Error('Authentication token not found. Please log in again.');
+    }
+
+    try {
+        const response = await fetchWithTimeout(
+            'https://it-con-backend.onrender.com/api/payments/create-payment',
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            },
+            15000
+        );
+
+        if (!response.ok) {
+            let errorMessage = `HTTP error! status: ${response.status}`;
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.message || errorMessage;
+            } catch {
+                const errorText = await response.text();
+                errorMessage = errorText || errorMessage;
+            }
+            throw new Error(errorMessage);
+        }
+
+        const data = await response.json();
+        return { data };
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            throw new Error('Request timeout. Please check your internet connection and try again.');
+        }
+        throw error;
+    }
+};
+
+const verifyPayment = async (paymentData) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        throw new Error('Authentication token not found. Please log in again.');
+    }
+
+    try {
+        const response = await fetchWithTimeout(
+            'https://it-con-backend.onrender.com/api/payments/verify-payment',
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(paymentData)
+            },
+            15000
+        );
+
+        if (!response.ok) {
+            let errorMessage = `HTTP error! status: ${response.status}`;
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.message || errorMessage;
+            } catch {
+                const errorText = await response.text();
+                errorMessage = errorText || errorMessage;
+            }
+            throw new Error(errorMessage);
+        }
+
+        const data = await response.json();
+        return { data };
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            throw new Error('Request timeout. Please check your internet connection and try again.');
+        }
+        throw error;
+    }
+};
+
+const completePayment = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        throw new Error('Authentication token not found. Please log in again.');
+    }
+
+    try {
+        const response = await fetchWithTimeout(
+            'https://it-con-backend.onrender.com/api/payments/complete-payment',
+            {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json'
+                }
+            },
+            10000
+        );
+        
+        if (!response.ok) {
+            let errorMessage = `HTTP error! status: ${response.status}`;
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.message || errorMessage;
+            } catch {
+                const errorText = await response.text();
+                errorMessage = errorText || errorMessage;
+            }
+            throw new Error(errorMessage);
+        }
+
+        const data = await response.json();
+        return { data };
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            throw new Error('Request timeout. Please check your internet connection and try again.');
+        }
+        throw error;
+    }
+};
+
 // Payment Modal Component
-const PaymentModal = ({ onClose, discount, onPaymentSuccess }) => {
-    const [loading, setLoading] = useState(false);
+const PaymentModal = ({ onClose, discount, onPaymentSuccess, user }) => {
+    const [loading, setLoading] = useState(true);
     const [paymentData, setPaymentData] = useState(null);
     const [error, setError] = useState(null);
-
-    useEffect(() => {
-        fetchPaymentDetails();
-    }, []);
+    const [paymentSuccess, setPaymentSuccess] = useState(false);
+    const [needsAccommodation, setNeedsAccommodation] = useState(false);
 
     const fetchPaymentDetails = async () => {
         try {
             setLoading(true);
             setError(null);
-            const token = localStorage.getItem('token');
-            
-            if (!token) {
-                setError('Authentication token not found. Please log in again.');
-                return;
-            }
-
-            console.log('Fetching payment details...');
-            
-            const response = await fetch('https://it-con-backend.onrender.com/api/payments/create-payment', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            console.log('Response status:', response.status);
-            
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Server response error:', errorText);
-                throw new Error(`Server error: ${response.status} ${response.statusText}`);
-            }
-
-            const data = await response.json();
-            console.log('Payment data received:', data);
-            
-            if (data.success) {
-                setPaymentData(data);
+            const result = await retryApiCall(() => createOrder({ accommodation: needsAccommodation }));
+            if (result.data.success) {
+                setPaymentData(result.data);
             } else {
-                setError(data.message || 'Failed to create payment order');
+                setError(result.data.message || 'Failed to create payment order');
             }
         } catch (err) {
-            console.error('Payment details fetch error:', err);
             setError(err.message || 'Network error. Please check your connection and try again.');
         } finally {
             setLoading(false);
         }
     };
 
-    const handlePayment = async () => {
-        if (!paymentData) return;
+    useEffect(() => {
+        fetchPaymentDetails();
+    }, []);
 
-        try {
-            setLoading(true);
-            setError(null);
-
-            // Check if Razorpay is already loaded
-            if (window.Razorpay) {
-                initializeRazorpay();
-                return;
-            }
-
-            // Load Razorpay script
-            const script = document.createElement('script');
-            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-            script.async = true;
-            
-            script.onload = () => {
-                console.log('Razorpay script loaded successfully');
-                initializeRazorpay();
-            };
-            
-            script.onerror = () => {
-                setError('Failed to load payment gateway. Please try again.');
-                setLoading(false);
-            };
-            
-            document.body.appendChild(script);
-        } catch (err) {
-            console.error('Razorpay initialization error:', err);
-            setError('Failed to initialize payment gateway');
-            setLoading(false);
+    // Re-fetch order details if accommodation changes
+    useEffect(() => {
+        if (paymentData) {
+            fetchPaymentDetails();
         }
-    };
+    }, [needsAccommodation]);
 
-    const initializeRazorpay = () => {
+    const handlePayment = async () => {
+        setLoading(true);
+        setError(null);
+
         try {
-            if (!window.Razorpay) {
-                throw new Error('Razorpay not loaded');
-            }
+            const { keyId, orderId, currency } = paymentData;
+            const finalAmount = calculateAmount().finalAmount;
 
             const options = {
-                key: paymentData.keyId,
-                amount: paymentData.amount,
-                currency: paymentData.currency,
-                name: 'IT Conference',
-                description: 'Conference Registration Payment',
-                order_id: paymentData.orderId,
+                key: keyId,
+                amount: (finalAmount * 100),
+                currency,
+                name: "IT Conference",
+                description: "Conference Registration Payment",
+                order_id: orderId,
                 handler: async function (response) {
-                    console.log('Payment response:', response);
-                    await verifyPayment(response);
+                    try {
+                        setLoading(true);
+                        const verifyRes = await retryApiCall(() => 
+                            verifyPayment({
+                                paymentMethod: "razorpay",
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature,
+                            })
+                        );
+                        
+                        if (verifyRes.data.success) {
+                            const completeRes = await retryApiCall(() => completePayment());
+                            setPaymentSuccess(true);
+                            onPaymentSuccess();
+                        } else {
+                            const errorMsg = verifyRes.data.message || "Payment verification failed";
+                            setError(`❌ ${errorMsg}. Please contact support.`);
+                        }
+                    } catch (err) {
+                        setError(`❌ Payment verification failed: ${err.message}`);
+                    } finally {
+                        setLoading(false);
+                    }
                 },
                 prefill: {
-                    name: paymentData.name,
-                    email: paymentData.email,
-                    contact: paymentData.contact
+                    name: user?.name || "",
+                    email: user?.email || "",
+                    contact: user?.mobileno || "",
                 },
-                theme: {
-                    color: '#F97316'
-                },
+                theme: { color: "#1e3a8a" },
                 modal: {
                     ondismiss: function() {
-                        console.log('Payment modal closed');
-                        setLoading(false);
+                        if (!paymentSuccess) {
+                            setLoading(false);
+                        }
                     }
                 }
             };
 
-            console.log('Razorpay options:', options);
-            
+            // Load Razorpay if not loaded
+            if (!window.Razorpay) {
+                await new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+                    script.async = true;
+                    script.onload = resolve;
+                    script.onerror = () => reject(new Error('Failed to load Razorpay SDK'));
+                    document.body.appendChild(script);
+                });
+            }
+
             const rzp = new window.Razorpay(options);
             rzp.open();
-            setLoading(false);
-        } catch (err) {
-            console.error('Razorpay instance creation error:', err);
-            setError('Failed to create payment instance: ' + err.message);
-            setLoading(false);
-        }
-    };
 
-    const verifyPayment = async (response) => {
-        try {
-            setLoading(true);
-            const token = localStorage.getItem('token');
-            
-            console.log('Verifying payment...', response);
-
-            const verifyResponse = await fetch('https://it-con-backend.onrender.com/api/payments/verify-payment', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    razorpay_order_id: response.razorpay_order_id,
-                    razorpay_payment_id: response.razorpay_payment_id,
-                    razorpay_signature: response.razorpay_signature
-                })
+            rzp.on("payment.failed", function (response) {
+                const errorDescription = response.error?.description || 'Unknown error';
+                setError(`❌ Payment failed: ${errorDescription}`);
+                setLoading(false);
             });
 
-            const verifyData = await verifyResponse.json();
-            console.log('Verification response:', verifyData);
-            
-            if (verifyData.success) {
-                console.log('Payment verified successfully, calling onPaymentSuccess callback');
-                // Call the success callback to update parent component state
-                onPaymentSuccess();
-                
-                // Close the modal after a brief delay to show success
-                setTimeout(() => {
-                    onClose();
-                }, 1500);
-                
-                // Show success message
-                alert('🎉 Payment successful! Your registration is now complete.');
-            } else {
-                console.error('Payment verification failed:', verifyData.message);
-                alert('❌ Payment verification failed: ' + (verifyData.message || 'Unknown error'));
-                setLoading(false);
-            }
         } catch (err) {
-            console.error('Payment verification error:', err);
-            alert('❌ Payment verification failed. Please contact support.');
+            setError(err.message || "❌ Order creation failed. Please try again.");
             setLoading(false);
         }
     };
 
     const calculateAmount = () => {
-        if (!paymentData) return { baseAmount: 100, finalAmount: discount ? 80 : 100 };
+        if (!paymentData) return { baseAmount: 0, finalAmount: 0 }; 
         
-        const baseAmount = paymentData.convertedAmount || 100;
+        const baseAmount = paymentData.amount || 0;
         const finalAmount = discount ? baseAmount * 0.8 : baseAmount;
         return { baseAmount, finalAmount };
     };
 
     const { baseAmount, finalAmount } = calculateAmount();
 
+    // Improved Bill Component
+    const BillDetails = () => (
+        <div className="st-bill-container">
+            {/* Header */}
+            <div className="st-bill-header">
+                <div className="st-bill-icon"><Receipt size={40} /></div>
+                <h4 className="st-bill-title">Payment Invoice</h4>
+                <p className="st-bill-subtitle">IT Conference Registration</p>
+            </div>
+            
+            {/* Conference Fee Section */}
+            <div className="st-bill-section">
+                <h5 className="st-bill-section-title">Conference Registration</h5>
+                <div className="st-bill-details">
+                    <div className="st-bill-row">
+                        <span className="st-bill-label">Conference Fee</span>
+                        <span className="st-bill-value">
+                            {formatCurrency(baseAmount, paymentData?.currency)}
+                        </span>
+                    </div>
+                    
+                    {discount && (
+                        <div className="st-bill-row discount">
+                            <span className="st-bill-label">
+                                <span className="st-discount-badge">Early Bird Discount (20%)</span>
+                            </span>
+                            <span className="st-bill-value discount">
+                                -{formatCurrency(baseAmount * 0.2, paymentData?.currency)}
+                            </span>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Accommodation Section */}
+            <div className="st-bill-section">
+                <h5 className="st-bill-section-title"><Building size={18} /> Accommodation (Optional)</h5>
+                
+                <div className="st-accommodation-toggle">
+                    <div className="st-accommodation-info">
+                        <label htmlFor="accommodation-toggle">Add On-Campus Accommodation</label>
+                        <span className="st-accommodation-note">
+                            (Payable at Office - ₹350 per day)
+                        </span>
+                    </div>
+                    <label className="st-toggle-switch">
+                        <input 
+                            type="checkbox" 
+                            id="accommodation-toggle"
+                            checked={needsAccommodation}
+                            onChange={(e) => setNeedsAccommodation(e.target.checked)}
+                        />
+                        <span className="st-toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            {/* Total Section */}
+            <div className="st-bill-total-section">
+                <div className="st-bill-divider"></div>
+                
+                <div className="st-bill-total-row">
+                    <div className="st-bill-total-label">Online Payment Total</div>
+                    <div className="st-bill-total-value">
+                        {formatCurrency(finalAmount, paymentData?.currency)} {paymentData?.currency}
+                    </div>
+                </div>
+            </div>
+
+            {/* Footer Notes */}
+            <div className="st-bill-footer">
+                <p className="st-bill-note">
+                    <Lock size={12} className="st-secure-badge" />
+                    Secure payment processed by Razorpay
+                </p>
+                {needsAccommodation && (
+                    <p className="st-bill-note accommodation">
+                        💡 Accommodation charges are separate and payable in cash at our office during the Conference.
+                    </p>
+                )}
+            </div>
+        </div>
+    );
+
+    // Success UI Component
+    const SuccessUI = () => (
+        <div className="st-success-container">
+            <div className="st-success-icon"><CheckCircle size={60} /></div>
+            <h3 className="st-success-title">Payment Successful!</h3>
+            <p className="st-success-message">
+                Your conference registration payment has been processed successfully. 
+                {needsAccommodation && (
+                    <><br /><strong>Please visit our office to coordinate accommodation details and make payment in cash.</strong></>
+                )}
+            </p>
+            <button 
+                onClick={onClose}
+                className="st-success-btn"
+            >
+                Close
+            </button>
+        </div>
+    );
+
+    // Payment Form UI Component
+    const PaymentFormUI = () => (
+        <>
+            {loading && !paymentData && (
+                <div className="st-loading-container" style={{ minHeight: '200px', padding: '2rem' }}>
+                    <div className="st-loader">
+                        <div className="st-loader-dot"></div>
+                        <div className="st-loader-dot"></div>
+                        <div className="st-loader-dot"></div>
+                    </div>
+                    <p className="st-loading-text">Loading payment details...</p>
+                </div>
+            )}
+
+            {error && (
+                <div className="st-error-banner">
+                    <strong>Payment Error:</strong> {error}
+                    <div className="st-error-actions">
+                        <button 
+                            onClick={fetchPaymentDetails}
+                            disabled={loading}
+                            className="st-retry-btn"
+                        >
+                            Retry
+                        </button>
+                        <button 
+                            onClick={onClose}
+                            className="st-cancel-btn"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {paymentData && <BillDetails />}
+
+            {paymentData && (
+                <>
+                    <button 
+                        onClick={handlePayment}
+                        disabled={loading}
+                        className="st-modal-submit-btn"
+                    >
+                        {loading ? 'Processing...' : `Pay ${formatCurrency(finalAmount, paymentData.currency)} Online`}
+                    </button>
+                </>
+            )}
+
+            <button 
+                onClick={onClose}
+                className="st-modal-cancel-btn"
+                disabled={loading}
+            >
+                Cancel
+            </button>
+        </>
+    );
+
     return (
         <div className="st-modal-overlay" onClick={onClose}>
             <div className="st-modal-content" onClick={(e) => e.stopPropagation()}>
-                <h3 className="st-modal-title">Payment Gateway</h3>
+                <h3 className="st-modal-title">
+                    {paymentSuccess ? 'Payment Successful!' : 'Conference Registration Payment'}
+                </h3>
                 
-                {loading && !paymentData && (
-                    <div className="st-loading-container" style={{ minHeight: '200px', padding: '2rem' }}>
-                        <div className="st-loader">
-                            <div className="st-loader-dot"></div>
-                            <div className="st-loader-dot"></div>
-                            <div className="st-loader-dot"></div>
-                        </div>
-                        <p className="st-loading-text">Loading payment details...</p>
-                    </div>
-                )}
-
-                {error && (
-                    <div style={{ 
-                        background: '#fee2e2', 
-                        border: '1px solid #fecaca', 
-                        borderRadius: '8px', 
-                        padding: '1rem', 
-                        marginBottom: '1rem',
-                        color: '#dc2626'
-                    }}>
-                        <strong>Error:</strong> {error}
-                        <div style={{ marginTop: '0.5rem' }}>
-                            <button 
-                                onClick={fetchPaymentDetails}
-                                style={{
-                                    padding: '0.5rem 1rem',
-                                    background: '#dc2626',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer',
-                                    marginRight: '0.5rem'
-                                }}
-                            >
-                                Retry
-                            </button>
-                            <button 
-                                onClick={onClose}
-                                style={{
-                                    padding: '0.5rem 1rem',
-                                    background: 'transparent',
-                                    color: '#dc2626',
-                                    border: '1px solid #dc2626',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                )}
-
-                {paymentData && (
-                    <>
-                        <div className="st-bill-container">
-                            <div className="st-bill-header">
-                                <h4 className="st-bill-title">Payment Invoice</h4>
-                                <p className="st-bill-subtitle">IT Conference Registration</p>
-                            </div>
-                            
-                            <div className="st-bill-details">
-                                <div className="st-bill-row">
-                                    <span className="st-bill-label">Conference Fee:</span>
-                                    <span className="st-bill-value">
-                                        {paymentData.currency === 'INR' ? '₹' : '$'}{baseAmount.toFixed(2)}
-                                    </span>
-                                </div>
-                                
-                                {discount && (
-                                    <div className="st-bill-row">
-                                        <span className="st-bill-label">Discount (20%):</span>
-                                        <span className="st-bill-value" style={{ color: 'green' }}>
-                                            -{paymentData.currency === 'INR' ? '₹' : '$'}{(baseAmount * 0.2).toFixed(2)}
-                                        </span>
-                                    </div>
-                                )}
-                                
-                                <hr className="st-bill-divider" />
-                                
-                                <div className="st-bill-total">
-                                    <span className="st-bill-total-label">Total Amount:</span>
-                                    <span className="st-bill-total-value">
-                                        {paymentData.currency === 'INR' ? '₹' : '$'}{finalAmount.toFixed(2)} {paymentData.currency}
-                                    </span>
-                                </div>
-                            </div>
-                            
-                            <p className="st-bill-note">
-                                Secure payment processed by Razorpay
-                            </p>
-                        </div>
-
-                        <button 
-                            onClick={handlePayment}
-                            disabled={loading}
-                            className="st-modal-submit-btn"
-                            style={{ marginTop: '1rem' }}
-                        >
-                            {loading ? 'Processing...' : `Pay ${paymentData.currency === 'INR' ? '₹' : '$'}${finalAmount.toFixed(2)}`}
-                        </button>
-
-                        <p style={{ 
-                            textAlign: 'center', 
-                            fontSize: '0.8rem', 
-                            color: '#6c757d', 
-                            marginTop: '1rem' 
-                        }}>
-                            You will be redirected to Razorpay for secure payment
-                        </p>
-                    </>
-                )}
-
-                {!loading && !error && !paymentData && (
-                    <div style={{ textAlign: 'center', padding: '2rem' }}>
-                        <p>Unable to load payment details.</p>
-                        <button 
-                            onClick={fetchPaymentDetails}
-                            className="st-modal-submit-btn"
-                            style={{ marginTop: '1rem' }}
-                        >
-                            Try Again
-                        </button>
-                    </div>
-                )}
-
-                <button 
-                    onClick={onClose}
-                    style={{
-                        width: '100%',
-                        padding: '0.75rem',
-                        marginTop: '1rem',
-                        background: 'transparent',
-                        border: '1px solid #d1d5db',
-                        borderRadius: '0.5rem',
-                        cursor: 'pointer',
-                        color: '#6b7280'
-                    }}
-                    disabled={loading}
-                >
-                    Cancel
-                </button>
+                {paymentSuccess ? <SuccessUI /> : <PaymentFormUI />}
             </div>
         </div>
     );
@@ -719,6 +1166,8 @@ const SubmissionStatusTracker = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
     const fetchStatusData = async () => {
@@ -730,25 +1179,36 @@ const SubmissionStatusTracker = () => {
         }
 
         try {
-            const response = await fetch("https://it-con-backend.onrender.com/api/users/me", {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+            const response = await fetchWithTimeout(
+                "https://it-con-backend.onrender.com/api/users/me",
+                {
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                },
+                10000
+            );
 
             if (!response.ok) {
-                throw new Error("Could not fetch submission status. Please try again.");
+                throw new Error(`Could not fetch submission status. Server returned ${response.status}`);
             }
 
             const data = await response.json();
-            console.log('Fetched status data:', data);
             setStatusData({
                 abstractStatus: data.abstractStatus,
                 paperStatus: data.paperStatus,
                 paymentStatus: data.paymentStatus,
                 discount: data.discount
             });
+            setUser(data);
 
         } catch (err) {
-            setError(err.message);
+            if (err.name === 'AbortError') {
+                setError('Request timeout. Please check your internet connection and try again.');
+            } else {
+                setError(err.message);
+            }
         } finally {
             setLoading(false);
         }
@@ -756,15 +1216,18 @@ const SubmissionStatusTracker = () => {
 
     useEffect(() => {
         fetchStatusData();
-    }, []);
+    }, [refreshTrigger]);
 
     const handlePaymentSuccess = () => {
-        console.log('Payment success callback called, refreshing status data...');
-        // Refresh the status data to get the updated payment status
-        setLoading(true);
+        setIsPaymentModalOpen(false);
+        setRefreshTrigger(prev => prev + 1);
         setTimeout(() => {
             fetchStatusData();
         }, 1000);
+    };
+
+    const handleTicketClick = () => {
+        navigate('/ticket');
     };
     
     const stages = [
@@ -781,101 +1244,57 @@ const SubmissionStatusTracker = () => {
         
         const { abstractStatus, paperStatus, paymentStatus } = statusData;
 
-        console.log('Calculating status step:', { abstractStatus, paperStatus, paymentStatus });
-
-        // Stage 0: No abstract submitted
-        if (abstractStatus === "No Abstract") return 0;
-
-        // Stage 1: Abstract submitted and under review
-        if (abstractStatus === "Under Review") return 1;
-
-        // Stage 1 (Rejected): Abstract rejected - stop here
-        if (abstractStatus === "Rejected") return 1;
-
-        // Stage 2: Abstract approved, no paper submitted
-        if (abstractStatus === "Approved" && (paperStatus === "No Paper" || !paperStatus)) return 2;
-
-        // Stage 3: Paper submitted and under various statuses
-        if (paperStatus === "Submitted" || paperStatus === "Under Review" || paperStatus === "Correction") return 3;
-
-        // Stage 3 (Rejected): Paper rejected - stop here
-        if (paperStatus === "Rejected") return 3;
-
-        // Stage 4: Paper approved, payment pending
-        if (paperStatus === "Approved" && paymentStatus === "unpaid") return 4;
-
-        // Stage 5: Paper approved, payment completed - FINAL STAGE
-        if ((paperStatus === "Approved" || paperStatus === "Submitted") && paymentStatus === "paid") return 5;
+        if (abstractStatus === "no abstract") return 0;
+        if (abstractStatus === "submitted") return 1;
+        if (abstractStatus === "rejected") return 1;
+        if (abstractStatus === "approved" && (paperStatus === "no paper" || !paperStatus)) return 2;
+        if (paperStatus === "submitted" || paperStatus === "correction required") return 3;
+        if (paperStatus === "rejected") return 3;
+        if (paperStatus === "approved" && paymentStatus === "unpaid") return 4;
+        if ((paperStatus === "approved" || paperStatus === "submitted") && paymentStatus === "paid") return 5;
 
         return 0;
     };
     
     const currentStatusIndex = getStatusStep();
-    const isAbstractRejected = statusData?.abstractStatus === 'Rejected';
-    const isPaperRejected = statusData?.paperStatus === 'Rejected';
+    const isAbstractRejected = statusData?.abstractStatus === 'rejected';
+    const isPaperRejected = statusData?.paperStatus === 'rejected';
+    const isRegistrationComplete = currentStatusIndex === 5;
 
     const getStatusDescription = (index) => {
         if (!statusData) {
-             if (index === 0) return "Submit your abstract to begin the review process.";
-             return "";
+            if (index === 0) return "Submit your abstract to begin the review process.";
+            return "";
         }
 
         const { abstractStatus, paperStatus, paymentStatus } = statusData;
 
         switch(index) {
             case 0: 
-                return abstractStatus === "No Abstract" 
+                return abstractStatus === "no abstract" 
                     ? "Submit your abstract to begin the review process."
                     : "Your abstract has been successfully submitted.";
-                    
             case 1: 
-                if (isAbstractRejected) {
-                    return "Unfortunately, your abstract was not accepted. Please check your email for feedback.";
-                }
-                if (abstractStatus === "Under Review") {
-                    return "Our committee is currently reviewing your abstract submission.";
-                }
+                if (isAbstractRejected) return "Unfortunately, your abstract was not accepted. Please check your email for feedback.";
+                if (abstractStatus === "submitted") return "Our committee is currently reviewing your abstract submission.";
                 return "Abstract review completed.";
-                
             case 2: 
-                if (isAbstractRejected) {
-                    return "This step is unavailable as your abstract was not accepted.";
-                }
-                if (paperStatus === "No Paper" || !paperStatus) {
-                    return "Congratulations! Your abstract has been accepted. Please submit your full paper.";
-                }
+                if (isAbstractRejected) return "This step is unavailable as your abstract was not accepted.";
+                if (paperStatus === "no paper" || !paperStatus) return "Congratulations! Your abstract has been accepted. Please submit your full paper.";
                 return "Ready for paper submission.";
-                
             case 3: 
-                if (isAbstractRejected) {
-                    return "This step is unavailable as your abstract was not accepted.";
-                }
-                if (isPaperRejected) {
-                    return "Unfortunately, your paper was not accepted. Please check your email for feedback.";
-                }
-                if (paperStatus === "Submitted" || paperStatus === "Under Review") {
-                    return "Your paper has been submitted and is under review by our committee.";
-                }
-                if (paperStatus === "Correction") {
-                    return "Corrections are required for your paper. Please check your email for details.";
-                }
-                if (paperStatus === "Approved") {
-                    return "Your paper has been approved! Please proceed to payment.";
-                }
+                if (isAbstractRejected) return "This step is unavailable as your abstract was not accepted.";
+                if (isPaperRejected) return "Unfortunately, your paper was not accepted. Please check your email for feedback.";
+                if (paperStatus === "submitted") return "Your paper has been submitted and is under review by our committee.";
+                if (paperStatus === "correction required") return "Corrections are required for your paper. Please check your email for details.";
+                if (paperStatus === "approved") return "Your paper has been approved! Please proceed to payment.";
                 return "Paper review in progress.";
-                
             case 4: 
-                if (isAbstractRejected || isPaperRejected) {
-                    return "This step is unavailable as your submission was not accepted.";
-                }
-                if (paymentStatus === "unpaid") {
-                    return "Your paper has been approved! Please complete the payment to finalize your registration.";
-                }
+                if (isAbstractRejected || isPaperRejected) return "This step is unavailable as your submission was not accepted.";
+                if (paymentStatus === "unpaid") return "Your paper has been approved! Please complete the payment to finalize your registration.";
                 return "Payment processing...";
-                
             case 5: 
                 return "Congratulations! Your registration is complete! We look forward to seeing you at the conference!";
-                
             default: 
                 return "";
         }
@@ -894,19 +1313,9 @@ const SubmissionStatusTracker = () => {
 
     const showActionButton = (index) => {
         if (!statusData) return false;
-        
         const { abstractStatus, paperStatus, paymentStatus } = statusData;
-
-        // Show paper submission button at stage 2 - redirects to /paper-submission
-        if (index === 2 && abstractStatus === "Approved" && (paperStatus === "No Paper" || !paperStatus)) {
-            return true;
-        }
-
-        // Show payment button at stage 4 - opens payment modal
-        if (index === 4 && paperStatus === "Approved" && paymentStatus === "unpaid") {
-            return true;
-        }
-
+        if (index === 2 && abstractStatus === "approved" && (paperStatus === "no paper" || !paperStatus)) return true;
+        if (index === 4 && paperStatus === "approved" && paymentStatus === "unpaid") return true;
         return false;
     };
 
@@ -924,22 +1333,8 @@ const SubmissionStatusTracker = () => {
         }
     };
 
-    if (loading) {
-        return (
-            <React.Fragment>
-                <style>{componentStyles}</style>
-                <main className="st-page"><Loader /></main>
-            </React.Fragment>
-        );
-    }
-    if (error) {
-        return (
-            <React.Fragment>
-                <style>{componentStyles}</style>
-                <div className="st-error-message">{error}</div>
-            </React.Fragment>
-        );
-    }
+    if (loading) return <React.Fragment><style>{componentStyles}</style><main className="st-page"><Loader /></main></React.Fragment>;
+    if (error) return <React.Fragment><style>{componentStyles}</style><div className="st-error-message">{error}</div></React.Fragment>;
     
     return (
         <React.Fragment>
@@ -979,6 +1374,16 @@ const SubmissionStatusTracker = () => {
                                             {getButtonText(index)}
                                         </button>
                                     )}
+
+                                    {isRegistrationComplete && index === 5 && (
+                                        <button 
+                                            onClick={handleTicketClick}
+                                            className="st-ticket-btn"
+                                        >
+                                            <Ticket size={18} />
+                                            View Your Ticket
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         ))}
@@ -990,6 +1395,7 @@ const SubmissionStatusTracker = () => {
                         onClose={() => setIsPaymentModalOpen(false)}
                         discount={statusData?.discount}
                         onPaymentSuccess={handlePaymentSuccess}
+                        user={user}
                     />
                 )}
             </main>
