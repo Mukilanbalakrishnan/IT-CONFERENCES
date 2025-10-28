@@ -1,7 +1,7 @@
 // import React, { useState } from "react";
 // import { ToastContainer, toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
-// import { useNavigate } from "react-router-dom"; 
+// import { useNavigate } from "react-router-dom";
 // import axios from "axios";
 
 // const BackArrowIcon = () => (
@@ -222,14 +222,19 @@
 //     e.preventDefault();
 //     setLoading(true);
 //     setError("");
+//     const loadingToast = toast.loading("Signing in..."); // Add toast
 
 //     try {
 //       const { data } = await axios.post(
-//         "https://it-con-backend.onrender.com/api/users/signin",
+//         "base_url/signin",
 //         { username, password },
-//         { withCredentials: true }
+//         { 
+//           withCredentials: true,
+//           timeout: 30000 // Add timeout
+//         }
 //       );
 
+//       toast.dismiss(loadingToast); // Dismiss toast
 //       localStorage.setItem("token", data.token);
 //       localStorage.setItem("user", JSON.stringify(data));
 //       onLoginSuccess(data);
@@ -241,13 +246,27 @@
 //       }, 1500);
 
 //     } catch (err) {
-//       const msg = err.response?.data?.message || "Sign in failed";
-//       setError(msg);
-//       toast.error(msg + " ❌");
+//       toast.dismiss(loadingToast); // Dismiss toast on error
+      
+//       // Add detailed error handling
+//       if (err.code === 'ECONNABORTED') {
+//         const msg = "Server took too long to respond. Please try again.";
+//         setError(msg);
+//         toast.error(msg + " ❌");
+//       } else if (err.response) {
+//         const msg = err.response?.data?.message || "Sign in failed";
+//         setError(msg);
+//         toast.error(msg + " ❌");
+//       } else {
+//         const msg = "An unexpected error occurred.";
+//         setError(msg);
+//         toast.error(msg + " ❌");
+//       }
 //     } finally {
 //       setLoading(false);
 //     }
 //   };
+
 
 //   const handleRequestOtp = async (e) => {
 //     e.preventDefault();
@@ -257,17 +276,39 @@
 //     }
 
 //     setLoading(true);
+//     const loadingToast = toast.loading("Sending OTP request..."); // Add toast
+
 //     try {
-//       await axios.post("https://it-con-backend.onrender.com/api/users/forgot-password", { email });
+//       // Add config object
+//       await axios.post(
+//         "base_url/forgot-password", 
+//         { email },
+//         { 
+//           withCredentials: true, // Add credentials
+//           timeout: 30000 // Add timeout
+//         }
+//       );
+      
+//       toast.dismiss(loadingToast); // Dismiss toast
 //       toast.success("OTP sent to your email");
 //       setMode("forgot-reset");
 //     } catch (err) {
-//       const msg = err.response?.data?.message || "Failed to send OTP";
-//       toast.error(msg);
+//       toast.dismiss(loadingToast); // Dismiss toast on error
+      
+//       // Add detailed error handling
+//       if (err.code === 'ECONNABORTED') {
+//         toast.error("Server took too long to respond. Please try again.");
+//       } else if (err.response) {
+//         const msg = err.response?.data?.message || "Failed to send OTP";
+//         toast.error(msg);
+//       } else {
+//         toast.error("An unexpected error occurred. Please try again.");
+//       }
 //     } finally {
 //       setLoading(false);
 //     }
 //   };
+// console.log(email);
 
 //   const handleResetPassword = async (e) => {
 //     e.preventDefault();
@@ -283,20 +324,36 @@
 //     }
 
 //     setLoading(true);
+//     const loadingToast = toast.loading("Resetting password..."); // Add toast
+
 //     try {
-//       await axios.post("https://it-con-backend.onrender.com/api/users/reset-password", {
+//       // Add config object
+//       await axios.post("base_url/reset-password", {
 //         email,
 //         otp,
 //         newPassword
+//       }, {
+//         withCredentials: true, // Add credentials
+//         timeout: 30000 // Add timeout
 //       });
       
+//       toast.dismiss(loadingToast); // Dismiss toast
 //       toast.success("Password reset successfully");
 //       // Reset and go back to sign in
 //       resetFormStates();
 //       setMode("signin");
 //     } catch (err) {
-//       const msg = err.response?.data?.message || "Failed to reset password";
-//       toast.error(msg);
+//       toast.dismiss(loadingToast); // Dismiss toast on error
+
+//       // Add detailed error handling
+//       if (err.code === 'ECONNABORTED') {
+//         toast.error("Server took too long to respond. Please try again.");
+//       } else if (err.response) {
+//         const msg = err.response?.data?.message || "Failed to reset password";
+//         toast.error(msg);
+//       } else {
+//         toast.error("An unexpected error occurred. Please try again.");
+//       }
 //     } finally {
 //       setLoading(false);
 //     }
@@ -492,6 +549,25 @@
 //         {/* Forgot Password - Reset */}
 //         {mode === "forgot-reset" && (
 //           <form onSubmit={handleResetPassword}>
+//             {/* ADDED: Read-only email field for user confidence */}
+//             <div style={styles.inputGroup}>
+//               <label style={styles.inputLabel} htmlFor="reset-email">
+//                 Email Address
+//               </label>
+//               <input
+//                 id="reset-email"
+//                 type="email"
+//                 style={{
+//                   ...styles.input, 
+//                   backgroundColor: "#f4f4f4", // A light grey background
+//                   color: "#777" // A dimmer text color
+//                 }}
+//                 value={email}
+//                 readOnly
+//                 disabled
+//               />
+//             </div>
+            
 //             <div style={styles.inputGroup}>
 //               <label style={styles.inputLabel} htmlFor="otp">
 //                 OTP Code
@@ -599,13 +675,16 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import base_url from "../../config";
 
+// --- Icon Component ---
 const BackArrowIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M19 12H5M12 19l-7-7 7-7"/>
   </svg>
 );
 
+// --- Inline Styles Object ---
 const styles = {
   overlay: {
     position: "fixed",
@@ -642,8 +721,8 @@ const styles = {
     textAlign: "center",
     lineHeight: "1.3",
   },
-  inputGroup: { 
-    marginBottom: "clamp(12px, 3vw, 16px)" 
+  inputGroup: {  
+    marginBottom: "clamp(12px, 3vw, 16px)"  
   },
   inputLabel: {
     display: "block",
@@ -664,8 +743,12 @@ const styles = {
     boxSizing: "border-box",
     minHeight: "44px", // Better touch targets on mobile
   },
-  passwordWrapper: { 
-    position: "relative" 
+  inputDisabled: {
+    backgroundColor: "#f4f4f4", // A light grey background
+    color: "#777" // A dimmer text color
+  },
+  passwordWrapper: {  
+    position: "relative"  
   },
   toggleBtn: {
     position: "absolute",
@@ -701,20 +784,6 @@ const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-  },
-  secondaryBtn: {
-    width: "100%",
-    padding: "clamp(12px, 3vw, 14px) 16px",
-    borderRadius: "10px",
-    border: "1px solid var(--surface-dark)",
-    background: "transparent",
-    color: "var(--text-primary)",
-    fontWeight: 600,
-    cursor: "pointer",
-    fontSize: "clamp(0.9rem, 2.5vw, 0.95rem)",
-    marginTop: "10px",
-    transition: "all 0.2s ease",
-    minHeight: "48px",
   },
   backButton: {
     position: "absolute",
@@ -785,8 +854,9 @@ const styles = {
   }
 };
 
+// --- Main Component ---
 function SignInForm({ onSwitch, onClose, onLoginSuccess }) {
-  const [mode, setMode] = useState("signin"); // "signin", "forgot-request", "forgot-reset"
+  const [mode, setMode] = useState("signin"); // "signin", "forgot-request", "verify-otp", "forgot-reset"
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -800,7 +870,7 @@ function SignInForm({ onSwitch, onClose, onLoginSuccess }) {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Reset all states when switching modes
+  // Reset all states
   const resetFormStates = () => {
     setUsername("");
     setPassword("");
@@ -814,23 +884,21 @@ function SignInForm({ onSwitch, onClose, onLoginSuccess }) {
     setError("");
   };
 
+  // -------------------- STEP 0: SIGN IN --------------------
   const handleSignIn = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    const loadingToast = toast.loading("Signing in..."); // Add toast
+    const loadingToast = toast.loading("Signing in...");
 
     try {
       const { data } = await axios.post(
-        "https://it-con-backend.onrender.com/api/users/signin",
+        `${base_url}/signin`,
         { username, password },
-        { 
-          withCredentials: true,
-          timeout: 30000 // Add timeout
-        }
+        { withCredentials: true, timeout: 30000 }
       );
 
-      toast.dismiss(loadingToast); // Dismiss toast
+      toast.dismiss(loadingToast);
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data));
       onLoginSuccess(data);
@@ -842,28 +910,23 @@ function SignInForm({ onSwitch, onClose, onLoginSuccess }) {
       }, 1500);
 
     } catch (err) {
-      toast.dismiss(loadingToast); // Dismiss toast on error
-      
-      // Add detailed error handling
+      toast.dismiss(loadingToast);
+      let msg;
       if (err.code === 'ECONNABORTED') {
-        const msg = "Server took too long to respond. Please try again.";
-        setError(msg);
-        toast.error(msg + " ❌");
+        msg = "Server took too long to respond. Please try again.";
       } else if (err.response) {
-        const msg = err.response?.data?.message || "Sign in failed";
-        setError(msg);
-        toast.error(msg + " ❌");
+        msg = err.response?.data?.message || "Sign in failed";
       } else {
-        const msg = "An unexpected error occurred.";
-        setError(msg);
-        toast.error(msg + " ❌");
+        msg = "An unexpected error occurred.";
       }
+      setError(msg);
+      toast.error(msg + " ❌");
     } finally {
       setLoading(false);
     }
   };
 
-
+  // -------------------- STEP 1: REQUEST OTP --------------------
   const handleRequestOtp = async (e) => {
     e.preventDefault();
     if (!email) {
@@ -872,43 +935,65 @@ function SignInForm({ onSwitch, onClose, onLoginSuccess }) {
     }
 
     setLoading(true);
-    const loadingToast = toast.loading("Sending OTP request..."); // Add toast
+    const loadingToast = toast.loading("Sending OTP...");
 
     try {
-      // Add config object
-      await axios.post(
-        "https://it-con-backend.onrender.com/api/users/forgot-password", 
-        { email },
-        { 
-          withCredentials: true, // Add credentials
-          timeout: 30000 // Add timeout
-        }
+      const { data } = await axios.post(
+        `${base_url}/forgot-password`,
+        { email: email.trim().toLowerCase() },
+        { headers: { "Content-Type": "application/json" } }
       );
-      
-      toast.dismiss(loadingToast); // Dismiss toast
-      toast.success("OTP sent to your email");
-      setMode("forgot-reset");
+
+      toast.dismiss(loadingToast);
+      toast.success(data.message || "OTP sent successfully!");
+      setMode("verify-otp"); // Go to OTP verification page
+
     } catch (err) {
-      toast.dismiss(loadingToast); // Dismiss toast on error
-      
-      // Add detailed error handling
-      if (err.code === 'ECONNABORTED') {
-        toast.error("Server took too long to respond. Please try again.");
-      } else if (err.response) {
-        const msg = err.response?.data?.message || "Failed to send OTP";
-        toast.error(msg);
-      } else {
-        toast.error("An unexpected error occurred. Please try again.");
-      }
+      toast.dismiss(loadingToast);
+      toast.error(err.response?.data?.message || "Failed to send OTP");
     } finally {
       setLoading(false);
     }
   };
-console.log(email);
 
+  // -------------------- STEP 2: VERIFY OTP --------------------
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+
+    if (!otp || otp.length !== 6) {
+      toast.error("Please enter a valid 6-digit OTP");
+      return;
+    }
+
+    setLoading(true);
+    const loadingToast = toast.loading("Verifying OTP...");
+
+    try {
+      const { data } = await axios.post(
+        `${base_url}/verify-otp`,
+        {
+          email: email.trim().toLowerCase(),
+          otp,
+        },
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      toast.dismiss(loadingToast);
+      toast.success(data.message || "OTP verified successfully!");
+      setMode("forgot-reset"); // Proceed to password reset step
+
+    } catch (err) {
+      toast.dismiss(loadingToast);
+      toast.error(err.response?.data?.message || "Invalid OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // -------------------- STEP 3: RESET PASSWORD --------------------
   const handleResetPassword = async (e) => {
     e.preventDefault();
-    
+
     if (newPassword !== confirmPassword) {
       toast.error("Passwords do not match");
       return;
@@ -920,40 +1005,32 @@ console.log(email);
     }
 
     setLoading(true);
-    const loadingToast = toast.loading("Resetting password..."); // Add toast
+    const loadingToast = toast.loading("Resetting password...");
 
     try {
-      // Add config object
-      await axios.post("https://it-con-backend.onrender.com/api/users/reset-password", {
-        email,
-        otp,
-        newPassword
-      }, {
-        withCredentials: true, // Add credentials
-        timeout: 30000 // Add timeout
-      });
-      
-      toast.dismiss(loadingToast); // Dismiss toast
-      toast.success("Password reset successfully");
-      // Reset and go back to sign in
+      const { data } = await axios.post(
+        `${base_url}/reset-password`,
+        {
+          email: email.trim().toLowerCase(),
+          newPassword,
+        },
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      toast.dismiss(loadingToast);
+      toast.success(data.message || "Password reset successful!");
       resetFormStates();
       setMode("signin");
-    } catch (err) {
-      toast.dismiss(loadingToast); // Dismiss toast on error
 
-      // Add detailed error handling
-      if (err.code === 'ECONNABORTED') {
-        toast.error("Server took too long to respond. Please try again.");
-      } else if (err.response) {
-        const msg = err.response?.data?.message || "Failed to reset password";
-        toast.error(msg);
-      } else {
-        toast.error("An unexpected error occurred. Please try again.");
-      }
+    } catch (err) {
+      toast.dismiss(loadingToast);
+      toast.error(err.response?.data?.message || "Failed to reset password");
     } finally {
       setLoading(false);
     }
   };
+
+  // --- Helper Functions ---
 
   const handleBackToSignIn = () => {
     resetFormStates();
@@ -969,6 +1046,8 @@ console.log(email);
     switch (mode) {
       case "forgot-request":
         return "Reset Password";
+      case "verify-otp":
+        return "Verify Your Identity";
       case "forgot-reset":
         return "Set New Password";
       default:
@@ -979,9 +1058,11 @@ console.log(email);
   const getStepIndicator = () => {
     switch (mode) {
       case "forgot-request":
-        return "Step 1 of 2 - Enter your email to receive OTP";
+        return "Step 1 of 3 - Enter your email to receive an OTP";
+      case "verify-otp":
+        return "Step 2 of 3 - Enter the OTP sent to your email";
       case "forgot-reset":
-        return "Step 2 of 2 - Enter OTP and new password";
+        return "Step 3 of 3 - Create a new password";
       default:
         return null;
     }
@@ -994,7 +1075,6 @@ console.log(email);
         onClose?.();
       }
     };
-
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   }, [onClose]);
@@ -1002,17 +1082,12 @@ console.log(email);
   return (
     <div style={styles.overlay}>
       <div style={styles.card}>
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          style={styles.closeButton}
-          aria-label="Close"
-        >
+        <button onClick={onClose} style={styles.closeButton} aria-label="Close">
           &times;
         </button>
 
         {/* Back Button - Show when not in signin mode */}
-        {(mode === "forgot-request" || mode === "forgot-reset") && (
+        {(mode === "forgot-request" || mode === "verify-otp" || mode === "forgot-reset") && (
           <button
             onClick={handleBackToSignIn}
             style={styles.backButton}
@@ -1029,7 +1104,7 @@ console.log(email);
           <div style={styles.stepIndicator}>{getStepIndicator()}</div>
         )}
 
-        {/* Sign In Form */}
+        {/* -------------------- Sign In Form -------------------- */}
         {mode === "signin" && (
           <form onSubmit={handleSignIn}>
             <div style={styles.inputGroup}>
@@ -1112,7 +1187,7 @@ console.log(email);
           </form>
         )}
 
-        {/* Forgot Password - Request OTP */}
+        {/* -------------------- Forgot Password - Request OTP -------------------- */}
         {mode === "forgot-request" && (
           <form onSubmit={handleRequestOtp}>
             <div style={styles.inputGroup}>
@@ -1142,10 +1217,9 @@ console.log(email);
           </form>
         )}
 
-        {/* Forgot Password - Reset */}
-        {mode === "forgot-reset" && (
-          <form onSubmit={handleResetPassword}>
-            {/* ADDED: Read-only email field for user confidence */}
+        {/* -------------------- NEW: Verify OTP Form -------------------- */}
+        {mode === "verify-otp" && (
+          <form onSubmit={handleVerifyOtp}>
             <div style={styles.inputGroup}>
               <label style={styles.inputLabel} htmlFor="reset-email">
                 Email Address
@@ -1153,11 +1227,7 @@ console.log(email);
               <input
                 id="reset-email"
                 type="email"
-                style={{
-                  ...styles.input, 
-                  backgroundColor: "#f4f4f4", // A light grey background
-                  color: "#777" // A dimmer text color
-                }}
+                style={{...styles.input, ...styles.inputDisabled}}
                 value={email}
                 readOnly
                 disabled
@@ -1183,6 +1253,34 @@ console.log(email);
               />
             </div>
 
+            <button 
+              type="submit" 
+              style={styles.primaryBtn} 
+              disabled={loading}
+              aria-busy={loading}
+            >
+              {loading ? "Verifying..." : "Verify OTP"}
+            </button>
+          </form>
+        )}
+
+        {/* -------------------- Forgot Password - Reset -------------------- */}
+        {mode === "forgot-reset" && (
+          <form onSubmit={handleResetPassword}>
+            <div style={styles.inputGroup}>
+              <label style={styles.inputLabel} htmlFor="reset-email">
+                Email Address
+              </label>
+              <input
+                id="reset-email"
+                type="email"
+                style={{...styles.input, ...styles.inputDisabled}}
+                value={email}
+                readOnly
+                disabled
+              />
+            </div>
+            
             <div style={styles.inputGroup}>
               <label style={styles.inputLabel} htmlFor="new-password">
                 New Password

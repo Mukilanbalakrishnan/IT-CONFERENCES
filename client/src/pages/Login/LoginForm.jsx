@@ -836,7 +836,7 @@ const validatePassword = (pwd) => {
       };
 
       const { data } = await axios.post(
-        "https://it-con-backend.onrender.com/api/users/signup",
+        `${base_url}/signup`,
         requestData,
         { 
           withCredentials: true,

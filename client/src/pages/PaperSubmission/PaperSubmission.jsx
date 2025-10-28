@@ -5,6 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './PaperSubmission.css';
 import { FaFileUpload, FaCheckCircle, FaTimes, FaClock, FaChartBar } from 'react-icons/fa';
+import base_url from '../../config';
 
 const PaperSubmission = () => {
     const [paperFile, setPaperFile] = useState(null);
@@ -82,7 +83,7 @@ const PaperSubmission = () => {
 
         try {
             await axios.post(
-                'https://it-con-backend.onrender.com/api/register/paper', 
+                `${base_url}/register/paper`, 
                 formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',

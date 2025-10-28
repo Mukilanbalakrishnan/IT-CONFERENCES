@@ -3,14 +3,14 @@ import './Researchandreview.css';
 
 const Researchandreview = () => {
     const boardMembers = [
-        { name: 'Dr.R. Poornima', role: 'Assistant Professor', affiliation: 'Electronics and Communication Engineering, KSR College of Engineering, Tiruchengode, Tamilnadu India' },
-        { name: 'Mr.R. Veeramani', role: 'Assistant Professor', affiliation: 'Electronics and Communication Engineering, KSR College of Engineering, Tiruchengode, Tamilnadu India' },
-        { name: 'Dr.M. Vijayakumar', role: 'Assistant Professor', affiliation: 'Electrical and Electronics Engineering, KSR College of Engineering, Tiruchengode, Tamilnadu India' },
-        { name: 'Dr.M. Ramasamy', role: 'Associate Professor', affiliation: 'Electrical and Electronics Engineering, KSR College of Engineering, Tiruchengode, Tamilnadu India' },
+        { name: 'Dr.R. Poornima', role: 'Assistant Professor', affiliation: 'Electronics and Communication Engineering, K.S.R College of Engineering, Tiruchengode, Tamilnadu India' },
+        { name: 'Mr.R. Veeramani', role: 'Assistant Professor', affiliation: 'Electronics and Communication Engineering, K.S.R College of Engineering, Tiruchengode, Tamilnadu India' },
+        { name: 'Dr.M. Vijayakumar', role: 'Assistant Professor', affiliation: 'Electrical and Electronics Engineering, K.S.R College of Engineering, Tiruchengode, Tamilnadu India' },
+        { name: 'Dr.M. Ramasamy', role: 'Associate Professor', affiliation: 'Electrical and Electronics Engineering, K.S.R College of Engineering, Tiruchengode, Tamilnadu India' },
         { name: 'Dr. Zuraidah Harith', role: 'Associate Professor', affiliation: 'Faculty of Engineering and Quantity Surveying, INTI International University, Malaysia' },
         { name: 'Ts. Dr. Siti Sarah Maidin', role: 'Professor', affiliation: 'Faculty of Data Science and Information Technology (FDSIT), INTI International University, Malaysia' },
         { name: 'Ts. Dr. Jeya Gopi Raman', role: 'Professor', affiliation: 'Faculty of Engineering & Quantity Surveying, INTI International University, Malaysia' },
-        { name: 'Mr.B.B. Sangameswaran', role: 'Assistant Professor', affiliation: 'Biomedical Engineering, KSR College of Engineering, Tiruchengode, Tamilnadu India' }
+        { name: 'Mr.B.B. Sangameswaran', role: 'Assistant Professor', affiliation: 'Biomedical Engineering, K.S.R College of Engineering, Tiruchengode, Tamilnadu India' }
     ];
 
     const sectionRef = useRef(null);

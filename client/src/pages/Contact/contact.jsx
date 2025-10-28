@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Map from '../Home/Map';
 import './contact.css';
+import base_url from '../../config';
 
 const ContactUsPreview = ({ onOpenLogin = () => {} }) => {
 
@@ -83,7 +84,7 @@ const ContactUsPreview = ({ onOpenLogin = () => {} }) => {
     }
 
     try {
-      const response = await fetch("https://it-con-backend.onrender.com/api/enquiries", {
+      const response = await fetch(`${base_url}/enquiries`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`, // ✅ Bearer token

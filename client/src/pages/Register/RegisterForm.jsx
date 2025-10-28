@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import base_url from '../../config';
 
 
 const componentStyles = `
@@ -351,7 +352,7 @@ const RegistrationForm = () => {
 
     try {
       const response = await axios.post(
-        "https://it-con-backend.onrender.com/api/register",
+        `${base_url}/register`,
         finalData,
         { headers: { Authorization: `Bearer ${token}`} }
       );
