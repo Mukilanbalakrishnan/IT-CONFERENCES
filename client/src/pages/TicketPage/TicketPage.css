@@ -1,0 +1,248 @@
+/* --- Animation Keyframes --- */
+@keyframes bounce-animation {
+    from { transform: translateY(0); }
+    to { transform: translateY(-12px); }
+}
+
+/* --- Loader Styles --- */
+.loader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 1rem;
+    min-height: 60vh;
+}
+.loader-dots {
+    display: flex;
+    gap: 0.75rem;
+}
+.loader-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: var(--brand-orange);
+    animation: bounce-animation 0.6s infinite alternate;
+}
+.loader-dot:nth-child(2) { animation-delay: 0.2s; }
+.loader-dot:nth-child(3) { animation-delay: 0.4s; }
+.loader-text {
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+.profile-page-error {
+    text-align: center; padding: 4rem; font-size: 1.2rem;
+    color: var(--brand-red);
+}
+
+/* --- Page Layout --- */
+.ticket-page-container {
+    background: var(--surface-light);
+    padding: 2rem var(--gutter) 4rem;
+    font-family: 'Poppins', sans-serif;
+}
+/* Re-using header style from profile page */
+.tp-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--surface-dark);
+    padding-bottom: 2rem;
+}
+.tp-header h1 {
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    color: var(--brand-blue-dark);
+    margin: 0 0 0.5rem 0;
+}
+.tp-header p {
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
+    color: var(--text-secondary);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* --- Ticket Styling --- */
+.ticket-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--surface-dark);
+    overflow: hidden;
+}
+
+/* --- Ticket Header --- */
+.ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--brand-blue-dark);
+    color: var(--white);
+    padding: 2rem;
+}
+.ticket-user-info h2 {
+    color: var(--white);
+    font-size: 2rem;
+    margin: 0;
+}
+.ticket-user-info p {
+    color: var(--white);
+    opacity: 0.8;
+    font-size: 1.1rem;
+    margin: 0.25rem 0 0;
+}
+.ticket-user-id {
+    text-align: right;
+    border: 2px dashed var(--brand-orange);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+}
+.ticket-user-id span {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+.ticket-user-id strong {
+    font-size: 1.5rem;
+    display: block;
+    color: var(--brand-orange);
+}
+
+/* --- Ticket Body --- */
+.ticket-body {
+    display: flex;
+    justify-content: space-between;
+    padding: 2.5rem 2rem;
+}
+.ticket-main-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+.ticket-info-row {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+.ticket-info-row svg {
+    font-size: 1.8rem;
+    color: var(--brand-blue-primary);
+    flex-shrink: 0;
+}
+.ticket-info-row span {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    display: block;
+    margin: 0;
+}
+.ticket-info-row p {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    margin: 0;
+}
+
+.ticket-qr-code {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem 0 2rem;
+    border-left: 2px dashed var(--surface-dark);
+}
+.ticket-qr-code svg {
+    font-size: 120px;
+    color: var(--text-primary);
+}
+.ticket-qr-code p {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+/* --- Ticket Footer --- */
+.ticket-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--surface-light);
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--surface-dark);
+}
+.ticket-payment-status {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.ticket-payment-status svg {
+    font-size: 1.5rem;
+}
+.ticket-payment-status span {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    display: block;
+    margin: 0;
+}
+.ticket-payment-status p {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+}
+.ticket-transaction {
+    text-align: right;
+}
+.ticket-transaction span {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+.ticket-transaction p {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* Payment Status Colors */
+.ticket-payment-status.approved { color: var(--brand-green, #2E7D32); }
+.ticket-payment-status.rejected { color: var(--brand-red); }
+.ticket-payment-status.pending { color: var(--brand-orange); }
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .ticket-body {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    .ticket-qr-code {
+        padding: 2rem 0 0;
+        border-left: none;
+        border-top: 2px dashed var(--surface-dark);
+        flex-direction: row;
+        gap: 1.5rem;
+        justify-content: flex-start;
+    }
+    .ticket-qr-code svg {
+        font-size: 80px;
+    }
+    .ticket-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+    .ticket-transaction {
+        text-align: left;
+    }
+}
+@media (max-width: 500px) {
+    .ticket-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+    .ticket-user-id {
+        text-align: left;
+    }
+}

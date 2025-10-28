@@ -17,6 +17,7 @@ import FeeStructure from '../pages/FeeStructure/FeeStructure';
 import TeamProfile from '../pages/TeamProfile/TeamProfile';
 import PaperSubmission from '../pages/PaperSubmission/PaperSubmission';
 import ScrollToTop from '../scrolltop/ScrollToTop';
+import TicketPage from '../pages/TicketPage/TicketPage';
 
 // Import Layout & Auth Components
 import Navbar from '../header/Navbar';
@@ -154,6 +155,7 @@ const AppLayout = () => {
                     <Route path="/feestructure" element={<FeeStructure onOpenLogin={handleOpenLogin} />} />
                     <Route path="/team" element={<TeamProfile />} />
                     <Route path="/paper-submission" element={<PaperSubmission />} />
+                    <Route path="/ticket" element={<TicketPage />} />
                 </Routes>
             </main>
             <Footer />
