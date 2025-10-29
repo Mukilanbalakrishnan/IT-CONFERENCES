@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './TicketPage.css';
 import {
-    FaTicketAlt, FaUser, FaIdCard, FaCalendarAlt,
-    FaBuilding, FaEnvelope
+    FaTicketAlt, FaIdCard, FaCalendarAlt,
+    FaBuilding, FaEnvelope, FaDownload
 } from 'react-icons/fa';
 import axios from 'axios';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 // Simple Online QR Code with black color
 const OnlineQRCode = ({ value, size = 160 }) => {
@@ -18,6 +20,7 @@ const OnlineQRCode = ({ value, size = 160 }) => {
                 className="qr-image"
                 width={size}
                 height={size}
+                crossOrigin="anonymous" 
                 onError={(e) => {
                     e.target.src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(value)}&format=png&color=000000`;
                 }}
@@ -39,11 +42,25 @@ const Loader = () => (
     </div>
 );
 
+// Function to generate owner ID like ic6850
+const generateOwnerId = () => {
+    const prefix = 'ic';
+    const randomNum = Math.floor(Math.random() * 9000) + 1000;
+    return `${prefix}${randomNum}`;
+};
+
 // Main Ticket Page Component
 const TicketPage = () => {
     const [profileData, setProfileData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [ownerId, setOwnerId] = useState('');
+    
+    // State for download button
+    const [isDownloading, setIsDownloading] = useState(false);
+    
+    // Ref for the ticket element
+    const ticketRef = useRef(null);
 
     useEffect(() => {
         const fetchProfileData = async () => {
@@ -57,6 +74,7 @@ const TicketPage = () => {
 
                 if (!response.data) throw new Error('No profile data found in the API response.');
                 setProfileData(response.data);
+                setOwnerId(generateOwnerId());
             } catch (err) {
                 setError(err.response?.data?.message || err.message || 'Failed to fetch profile data.');
             } finally {
@@ -67,33 +85,49 @@ const TicketPage = () => {
         fetchProfileData();
     }, []);
 
+    // PDF Download Function
+    const handleDownloadPdf = async () => {
+        const element = ticketRef.current;
+        if (!element) return;
+
+        setIsDownloading(true);
+
+        try {
+            const canvas = await html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            });
+
+            const imgData = canvas.toDataURL('image/png');
+            
+            const pdf = new jsPDF({
+                orientation: 'landscape',
+                unit: 'mm',
+                format: 'a4'
+            });
+
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save('conference-ticket.pdf');
+
+        } catch (err) {
+            console.error("Error generating PDF:", err);
+            setError("Could not download ticket. Please try again.");
+        } finally {
+            setIsDownloading(false);
+        }
+    };
+
     if (isLoading) return <Loader />;
     if (error) return <div className="profile-page-error">Error: {error}</div>;
 
-    // --- NEW LOGIC START ---
-    // Based on your status cases, the ticket should only show after payment is complete (case 5)
-    // We assume 'paid' is the status after case 4 is resolved.
-    const isRegistrationComplete = profileData.paymentStatus === 'paid';
-
-    if (!isRegistrationComplete) {
-        return (
-            <main className="ticket-page-container">
-                <header className="tp-header">
-                    <h1>Ticket Not Ready</h1>
-                    <p style={{ color: '#6b7280', fontSize: '1rem', maxWidth: '450px', margin: '0 auto' }}>
-                        Your registration is not yet complete. 
-                        Please finish all submission steps and payment to view your ticket.
-                    </p>
-                </header>
-            </main>
-        );
-    }
-    // --- NEW LOGIC END ---
-
-    // If registration IS complete, create QR data and render the ticket:
+    // Create simple QR code data
     const qrData = JSON.stringify({
         id: profileData.userId || profileData._id,
-        name: profileData.name,
+        ownerId: ownerId,
         event: "IT Conference 2024",
         type: "attendee"
     });
@@ -103,28 +137,41 @@ const TicketPage = () => {
             <header className="tp-header">
                 <h1>Your Conference Ticket</h1>
                 <p>This is your official pass. Please have it ready for scanning.</p>
+                
+                {/* Download Button */}
+                <button 
+                    className="download-btn"
+                    onClick={handleDownloadPdf} 
+                    disabled={isDownloading}
+                >
+                    {isDownloading ? 'Downloading...' : (
+                        <>
+                            <FaDownload /> Download Ticket (PDF)
+                        </>
+                    )}
+                </button>
             </header>
 
-            <div className="ticket-wrapper">
+            {/* Ticket wrapper with ref for PDF generation */}
+            <div className="ticket-wrapper" ref={ticketRef}>
                 {/* Ticket Body */}
                 <div className="ticket-body">
                     <div className="ticket-body-header">
                         <div className="ticket-brand">
                             <FaTicketAlt />
-                            <h3>CONFERENCE PASS</h3>
+                            <h3>IT CONFERENCE PASS</h3>
                         </div>
                         <h1 className="ticket-title">DIGITAL ACCESS PASS</h1>
                     </div>
 
                     <div className="ticket-main-content">
                         <div className="primary-info">
-                            
                             <div className="primary-info-item">
                                 <span className="ticket-label">
-                                    <FaUser />
-                                    PARTICIPANT ID
+                                    <FaIdCard />
+                                    OWNER ID
                                 </span>
-                                <p className="ticket-value-large">IC6850</p>
+                                <p className="ticket-value-large">{ownerId}</p>
                             </div>
 
                             <div className="primary-info-item">
@@ -137,7 +184,7 @@ const TicketPage = () => {
                             <div className="primary-info-item">
                                 <span className="ticket-label">
                                     <FaIdCard />
-                                    UNIQUE ID 
+                                    UNIQUE ID
                                 </span>
                                 <p className="ticket-value-mono">{profileData.userId || profileData._id}</p>
                             </div>
@@ -203,7 +250,7 @@ const TicketPage = () => {
                         <div className="conference-info">
                             <div className="stub-detail">
                                 <span className="ticket-label">CONFERENCE</span>
-                                <p className="ticket-value-mono">s3conference 2026</p>
+                                <p className="ticket-value-mono">IT Conference 2024</p>
                             </div>
                         </div>
                     </div>
