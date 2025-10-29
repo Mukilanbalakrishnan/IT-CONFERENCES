@@ -1,155 +1,195 @@
 import React, { useState, useEffect } from 'react';
-import './TicketPage.css'; // We will create this new CSS file next
+import './TicketPage.css';
 import {
-    FaQrcode, FaCheckCircle, FaClock, FaTimesCircle, 
-    FaDesktop, FaChalkboardTeacher, FaRegBuilding 
+    FaTicketAlt, FaUser, FaIdCard, FaCalendarAlt,
+    FaBuilding, FaEnvelope
 } from 'react-icons/fa';
 import axios from 'axios';
-import base_url from '../../config';
 
-// --- Loader Component (Copied from previous step) ---
-const Loader = () => (
-    <div className="loader-container">
-        <div className="loader-dots">
-            <div className="loader-dot"></div>
-            <div className="loader-dot"></div>
-            <div className="loader-dot"></div>
-        </div>
-        <p className="loader-text">Loading Your Ticket...</p>
+// Simple Online QR Code with black color
+const OnlineQRCode = ({ value, size = 160 }) => {
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(value)}&format=png&margin=10&color=000000&bgcolor=ffffff`;
+  
+  return (
+    <div className="online-qr-code">
+      <img 
+        src={qrUrl} 
+        alt="QR Code" 
+        className="qr-image"
+        width={size}
+        height={size}
+        onError={(e) => {
+          e.target.src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(value)}&format=png&color=000000`;
+        }}
+      />
+      <p className="qr-scan-text">SCAN FOR ENTRY</p>
     </div>
+  );
+};
+
+// Loader Component
+const Loader = () => (
+  <div className="loader-container">
+    <div className="loader-dots">
+      <div className="loader-dot"></div>
+      <div className="loader-dot"></div>
+      <div className="loader-dot"></div>
+    </div>
+    <p className="loader-text">Loading Your Ticket...</p>
+  </div>
 );
 
-// --- Main Ticket Page Component ---
+// Main Ticket Page Component
 const TicketPage = () => {
-    const [profileData, setProfileData] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
+  const [profileData, setProfileData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchProfileData = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                if (!token) throw new Error('Authentication token not found. Please log in.');
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('Authentication token not found. Please log in.');
 
-                const response = await axios.get(`${base_url}/users/me`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+        const response = await axios.get('https://it-con-backend.onrender.com/api/users/me', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
 
-                if (!response.data) throw new Error('No profile data found in the API response.');
-                setProfileData(response.data);
-            } catch (err) {
-                setError(err.response?.data?.message || err.message || 'Failed to fetch profile data.');
-            } finally {
-                // Added a small delay to make loader visible
-                setTimeout(() => setIsLoading(false), 1000);
-            }
-        };
+        if (!response.data) throw new Error('No profile data found in the API response.');
+        setProfileData(response.data);
+      } catch (err) {
+        setError(err.response?.data?.message || err.message || 'Failed to fetch profile data.');
+      } finally {
+        setTimeout(() => setIsLoading(false), 1000);
+      }
+    };
 
-        fetchProfileData();
-    }, []);
+    fetchProfileData();
+  }, []);
 
-    if (isLoading) return <Loader />;
-    if (error) return <div className="profile-page-error">Error: {error}</div>;
+  if (isLoading) return <Loader />;
+  if (error) return <div className="profile-page-error">Error: {error}</div>;
 
-    // --- Process Data for Ticket ---
-    
-    // Placeholder for track - add 'track' to your API response
-    const track = profileData.track || 'AI & Machine Learning';
-    
-    // Enhanced payment details
-    let paymentInfo;
-    if (profileData.paymentStatus === 'approved') {
-        paymentInfo = {
-            status: 'Approved',
-            icon: <FaCheckCircle />,
-            className: 'approved',
-            // Placeholder - add 'transactionId' to your API
-            transactionId: profileData.transactionId || 'PAY-123XYZ456' 
-        };
-    } else if (profileData.paymentStatus === 'rejected') {
-        paymentInfo = {
-            status: 'Rejected',
-            icon: <FaTimesCircle />,
-            className: 'rejected',
-            transactionId: 'N/A'
-        };
-    } else {
-        paymentInfo = {
-            status: 'Pending',
-            icon: <FaClock />,
-            className: 'pending',
-            transactionId: 'N/A'
-        };
-    }
+  // Create simple QR code data
+  const qrData = JSON.stringify({
+    id: profileData.userId || profileData._id,
+    name: profileData.name,
+    event: "IT Conference 2024",
+    type: "attendee"
+  });
 
-    return (
-        <main className="ticket-page-container">
-            <header className="tp-header">
-                <h1>Your Conference Ticket</h1>
-                <p>This is your official pass. Please have it ready for scanning.</p>
-            </header>
+  return (
+    <main className="ticket-page-container">
+      <header className="tp-header">
+        <h1>Your Conference Ticket</h1>
+        <p>This is your official pass. Please have it ready for scanning.</p>
+      </header>
 
-            <div className="ticket-wrapper">
-                {/* --- Ticket Header --- */}
-                <div className="ticket-header">
-                    <div className="ticket-user-info">
-                        <h2>{profileData.name}</h2>
-                        <p>{profileData.participants[0]?.designation}</p>
-                    </div>
-                    <div className="ticket-user-id">
-                        <span>Unique ID</span>
-                        <strong>{profileData.userId}</strong>
-                    </div>
-                </div>
-
-                {/* --- Ticket Body --- */}
-                <div className="ticket-body">
-                    <div className="ticket-main-details">
-                        <div className="ticket-info-row">
-                            <FaChalkboardTeacher />
-                            <div>
-                                <span>Selected Track</span>
-                                <p>{track}</p>
-                            </div>
-                        </div>
-                        <div className="ticket-info-row">
-                            <FaDesktop />
-                            <div>
-                                <span>Presentation Mode</span>
-                                <p>{profileData.presentationMode}</p>
-                            </div>
-                        </div>
-                        <div className="ticket-info-row">
-                            <FaRegBuilding />
-                            <div>
-                                <span>Organisation</span>
-                                <p>{profileData.participants[0]?.organisation}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="ticket-qr-code">
-                        <FaQrcode />
-                        <p>Scan for Entry</p>
-                    </div>
-                </div>
-
-                {/* --- Ticket Footer (Payment) --- */}
-                <div className="ticket-footer">
-                    <div className={`ticket-payment-status ${paymentInfo.className}`}>
-                        {paymentInfo.icon}
-                        <div>
-                            <span>Payment Status</span>
-                            <p>{paymentInfo.status}</p>
-                        </div>
-                    </div>
-                    <div className="ticket-transaction">
-                        <span>Transaction ID</span>
-                        <p>{paymentInfo.transactionId}</p>
-                    </div>
-                </div>
+      <div className="ticket-wrapper">
+        {/* Ticket Body */}
+        <div className="ticket-body">
+          <div className="ticket-body-header">
+            <div className="ticket-brand">
+              <FaTicketAlt />
+              <h3>CONFERENCE PASS</h3>
             </div>
-        </main>
-    );
+            <h1 className="ticket-title">DIGITAL ACCESS PASS</h1>
+          </div>
+
+          <div className="ticket-main-content">
+            <div className="primary-info">
+              <div className="primary-info-item">
+                <span className="ticket-label">
+                  <FaUser />
+                  PARTICIPANT NAME
+                </span>
+                <p className="ticket-value-large">{profileData.name}</p>
+              </div>
+
+              <div className="primary-info-item">
+                <span className="ticket-label">
+                  SELECTED TRACK
+                </span>
+                <p className="ticket-value-large">{profileData.track || 'Track 1'}</p>
+              </div>
+
+              <div className="primary-info-item">
+                <span className="ticket-label">
+                  <FaIdCard />
+                  UNIQUE ID
+                </span>
+                <p className="ticket-value-mono">{profileData.userId || profileData._id}</p>
+              </div>
+
+              <div className="primary-info-item">
+                <span className="ticket-label">
+                  <FaEnvelope />
+                  EMAIL ADDRESS
+                </span>
+                <p className="ticket-value">{profileData.email}</p>
+              </div>
+            </div>
+
+            <div className="detail-grid-section">
+              <div className="detail-grid">
+                <div className="detail-item">
+                  <span className="ticket-label">
+                    <FaCalendarAlt />
+                    PRESENTATION MODE
+                  </span>
+                  <p className="ticket-value">{profileData.presentationMode || 'offline'}</p>
+                </div>
+                <div className="detail-item">
+                  <span className="ticket-label">
+                    <FaBuilding />
+                    ORGANISATION
+                  </span>
+                  <p className="ticket-value">{profileData.participants?.[0]?.organisation || 'KSR'}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="ticket-body-footer">
+            <div className="transaction-info">
+              <span className="ticket-label">TRANSACTION ID</span>
+              <p className="ticket-value-mono">N/A</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="ticket-divider">
+          <div className="divider-notch top-notch"></div>
+          <div className="divider-notch bottom-notch"></div>
+        </div>
+
+        {/* Ticket Stub with Online QR Code */}
+        <div className="ticket-stub">
+          <div className="stub-content">
+            <div className="stub-header">
+              <div className="stub-status">
+                VALID ENTRY PASS
+              </div>
+            </div>
+
+            {/* Online QR Code */}
+            <OnlineQRCode 
+              value={qrData}
+              size={160}
+            />
+            
+            <div className="conference-info">
+              <div className="stub-detail">
+                <span className="ticket-label">CONFERENCE</span>
+                <p className="ticket-value-mono">s3conference 2026</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
 };
 
 export default TicketPage;

@@ -1,3 +1,3 @@
-const base_url = "https://it-con-backend.onrender.com/api";
+const base_url = "http://s3conference.ksrce.ac.in/api";
 
 export default base_url;

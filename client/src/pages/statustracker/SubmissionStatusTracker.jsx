@@ -555,7 +555,7 @@ const PaymentModal = ({ onClose, discount, onPaymentSuccess }) => {
     const calculateAmount = () => {
         if (!paymentData) return { baseAmount: 100, finalAmount: discount ? 80 : 100 };
         
-        const baseAmount = paymentData.convertedAmount || 100;
+        const baseAmount = paymentData.convertedAmount || (paymentData.amount / 100) || 100;
         const finalAmount = discount ? baseAmount * 0.8 : baseAmount;
         return { baseAmount, finalAmount };
     };
@@ -741,14 +741,17 @@ const SubmissionStatusTracker = () => {
 
             const data = await response.json();
             console.log('Fetched status data:', data);
+            
+            // Ensure we have proper default values
             setStatusData({
-                abstractStatus: data.abstractStatus,
-                paperStatus: data.paperStatus,
-                paymentStatus: data.paymentStatus,
-                discount: data.discount
+                abstractStatus: data.abstractStatus || 'no abstract',
+                paperStatus: data.paperStatus || 'no paper',
+                paymentStatus: data.paymentStatus || 'unpaid',
+                discount: data.discount || false
             });
 
         } catch (err) {
+            console.error('Error fetching status:', err);
             setError(err.message);
         } finally {
             setLoading(false);
@@ -785,35 +788,35 @@ const SubmissionStatusTracker = () => {
         console.log('Calculating status step:', { abstractStatus, paperStatus, paymentStatus });
 
         // Stage 0: No abstract submitted
-        if (abstractStatus === "No Abstract") return 0;
+        if (abstractStatus === "no abstract" || !abstractStatus) return 0;
 
         // Stage 1: Abstract submitted and under review
-        if (abstractStatus === "Under Review") return 1;
+        if (abstractStatus === "submitted") return 1;
 
         // Stage 1 (Rejected): Abstract rejected - stop here
-        if (abstractStatus === "Rejected") return 1;
+        if (abstractStatus === "rejected") return 1;
 
         // Stage 2: Abstract approved, no paper submitted
-        if (abstractStatus === "Approved" && (paperStatus === "No Paper" || !paperStatus)) return 2;
+        if (abstractStatus === "approved" && (paperStatus === "no paper" || !paperStatus)) return 2;
 
         // Stage 3: Paper submitted and under various statuses
-        if (paperStatus === "Submitted" || paperStatus === "Under Review" || paperStatus === "Correction") return 3;
+        if (paperStatus === "submitted" || paperStatus === "correction") return 3;
 
         // Stage 3 (Rejected): Paper rejected - stop here
-        if (paperStatus === "Rejected") return 3;
+        if (paperStatus === "rejected") return 3;
 
         // Stage 4: Paper approved, payment pending
-        if (paperStatus === "Approved" && paymentStatus === "unpaid") return 4;
+        if ((paperStatus === "approved" || paperStatus === "submitted") && paymentStatus === "unpaid") return 4;
 
         // Stage 5: Paper approved, payment completed - FINAL STAGE
-        if ((paperStatus === "Approved" || paperStatus === "Submitted") && paymentStatus === "paid") return 5;
+        if ((paperStatus === "approved" || paperStatus === "submitted") && paymentStatus === "paid") return 5;
 
         return 0;
     };
     
     const currentStatusIndex = getStatusStep();
-    const isAbstractRejected = statusData?.abstractStatus === 'Rejected';
-    const isPaperRejected = statusData?.paperStatus === 'Rejected';
+    const isAbstractRejected = statusData?.abstractStatus === 'rejected';
+    const isPaperRejected = statusData?.paperStatus === 'rejected';
 
     const getStatusDescription = (index) => {
         if (!statusData) {
@@ -825,7 +828,7 @@ const SubmissionStatusTracker = () => {
 
         switch(index) {
             case 0: 
-                return abstractStatus === "No Abstract" 
+                return abstractStatus === "no abstract" 
                     ? "Submit your abstract to begin the review process."
                     : "Your abstract has been successfully submitted.";
                     
@@ -833,7 +836,7 @@ const SubmissionStatusTracker = () => {
                 if (isAbstractRejected) {
                     return "Unfortunately, your abstract was not accepted. Please check your email for feedback.";
                 }
-                if (abstractStatus === "Under Review") {
+                if (abstractStatus === "submitted") {
                     return "Our committee is currently reviewing your abstract submission.";
                 }
                 return "Abstract review completed.";
@@ -842,7 +845,7 @@ const SubmissionStatusTracker = () => {
                 if (isAbstractRejected) {
                     return "This step is unavailable as your abstract was not accepted.";
                 }
-                if (paperStatus === "No Paper" || !paperStatus) {
+                if (paperStatus === "no paper" || !paperStatus) {
                     return "Congratulations! Your abstract has been accepted. Please submit your full paper.";
                 }
                 return "Ready for paper submission.";
@@ -854,13 +857,13 @@ const SubmissionStatusTracker = () => {
                 if (isPaperRejected) {
                     return "Unfortunately, your paper was not accepted. Please check your email for feedback.";
                 }
-                if (paperStatus === "Submitted" || paperStatus === "Under Review") {
+                if (paperStatus === "submitted") {
                     return "Your paper has been submitted and is under review by our committee.";
                 }
-                if (paperStatus === "Correction") {
+                if (paperStatus === "correction") {
                     return "Corrections are required for your paper. Please check your email for details.";
                 }
-                if (paperStatus === "Approved") {
+                if (paperStatus === "approved") {
                     return "Your paper has been approved! Please proceed to payment.";
                 }
                 return "Paper review in progress.";
@@ -875,7 +878,7 @@ const SubmissionStatusTracker = () => {
                 return "Payment processing...";
                 
             case 5: 
-                return "Congratulations! Your registration is complete! We look forward to seeing you at the conference!";
+                return "Congratulations! Your registration is complete! Click the button below to view your conference ticket.";
                 
             default: 
                 return "";
@@ -899,12 +902,17 @@ const SubmissionStatusTracker = () => {
         const { abstractStatus, paperStatus, paymentStatus } = statusData;
 
         // Show paper submission button at stage 2 - redirects to /paper-submission
-        if (index === 2 && abstractStatus === "Approved" && (paperStatus === "No Paper" || !paperStatus)) {
+        if (index === 2 && abstractStatus === "approved" && (paperStatus === "no paper" || !paperStatus)) {
             return true;
         }
 
         // Show payment button at stage 4 - opens payment modal
-        if (index === 4 && paperStatus === "Approved" && paymentStatus === "unpaid") {
+        if (index === 4 && (paperStatus === "approved" || paperStatus === "submitted") && paymentStatus === "unpaid") {
+            return true;
+        }
+
+        // Show ticket button at stage 5 - redirects to /ticket
+        if (index === 5 && paymentStatus === "paid") {
             return true;
         }
 
@@ -914,6 +922,7 @@ const SubmissionStatusTracker = () => {
     const getButtonText = (index) => {
         if (index === 2) return 'Submit Paper';
         if (index === 4) return 'Complete Payment';
+        if (index === 5) return 'View Conference Ticket';
         return 'Continue';
     };
 
@@ -922,6 +931,8 @@ const SubmissionStatusTracker = () => {
             navigate('/paper-submission');
         } else if (stageIndex === 4) {
             setIsPaymentModalOpen(true);
+        } else if (stageIndex === 5) {
+            navigate('/ticket');
         }
     };
 
