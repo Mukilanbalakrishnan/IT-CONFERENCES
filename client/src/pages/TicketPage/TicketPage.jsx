@@ -42,11 +42,11 @@ const Loader = () => (
     </div>
 );
 
-// Function to generate owner ID like ic6850
-const generateOwnerId = () => {
-    const prefix = 'ic';
-    const randomNum = Math.floor(Math.random() * 9000) + 1000;
-    return `${prefix}${randomNum}`;
+// Function to extract numeric part from userId like "IC6850" -> "6850"
+const extractNumericUserId = (userId) => {
+    if (!userId) return '';
+    // Remove non-numeric characters and return
+    return userId.replace(/\D/g, '');
 };
 
 // Main Ticket Page Component
@@ -54,7 +54,6 @@ const TicketPage = () => {
     const [profileData, setProfileData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [ownerId, setOwnerId] = useState('');
     
     // State for download button
     const [isDownloading, setIsDownloading] = useState(false);
@@ -74,7 +73,6 @@ const TicketPage = () => {
 
                 if (!response.data) throw new Error('No profile data found in the API response.');
                 setProfileData(response.data);
-                setOwnerId(generateOwnerId());
             } catch (err) {
                 setError(err.response?.data?.message || err.message || 'Failed to fetch profile data.');
             } finally {
@@ -124,10 +122,14 @@ const TicketPage = () => {
     if (isLoading) return <Loader />;
     if (error) return <div className="profile-page-error">Error: {error}</div>;
 
+    // Get the actual user ID from profile data
+    const actualUserId = profileData?.userId || '';
+    const numericUserId = extractNumericUserId(actualUserId);
+
     // Create simple QR code data
     const qrData = JSON.stringify({
         id: profileData.userId || profileData._id,
-        ownerId: ownerId,
+        numericUserId: numericUserId,
         event: "IT Conference 2024",
         type: "attendee"
     });
@@ -166,12 +168,16 @@ const TicketPage = () => {
 
                     <div className="ticket-main-content">
                         <div className="primary-info">
-                            <div className="primary-info-item">
+                            {/* Display the actual User ID prominently */}
+                            <div className="primary-info-item user-id-highlight">
                                 <span className="ticket-label">
                                     <FaIdCard />
-                                    OWNER ID
+                                    USER ID
                                 </span>
-                                <p className="ticket-value-large">{ownerId}</p>
+                                <p className="ticket-value-large user-id-number">{numericUserId}</p>
+                                {actualUserId && (
+                                    <p className="ticket-value-small">Full ID: {actualUserId}</p>
+                                )}
                             </div>
 
                             <div className="primary-info-item">
@@ -186,7 +192,7 @@ const TicketPage = () => {
                                     <FaIdCard />
                                     UNIQUE ID
                                 </span>
-                                <p className="ticket-value-mono">{profileData.userId || profileData._id}</p>
+                                <p className="ticket-value-mono">{profileData._id}</p>
                             </div>
 
                             <div className="primary-info-item">
