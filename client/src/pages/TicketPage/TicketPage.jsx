@@ -70,7 +70,27 @@ const TicketPage = () => {
     if (isLoading) return <Loader />;
     if (error) return <div className="profile-page-error">Error: {error}</div>;
 
-    // Create simple QR code data
+    // --- NEW LOGIC START ---
+    // Based on your status cases, the ticket should only show after payment is complete (case 5)
+    // We assume 'paid' is the status after case 4 is resolved.
+    const isRegistrationComplete = profileData.paymentStatus === 'paid';
+
+    if (!isRegistrationComplete) {
+        return (
+            <main className="ticket-page-container">
+                <header className="tp-header">
+                    <h1>Ticket Not Ready</h1>
+                    <p style={{ color: '#6b7280', fontSize: '1rem', maxWidth: '450px', margin: '0 auto' }}>
+                        Your registration is not yet complete. 
+                        Please finish all submission steps and payment to view your ticket.
+                    </p>
+                </header>
+            </main>
+        );
+    }
+    // --- NEW LOGIC END ---
+
+    // If registration IS complete, create QR data and render the ticket:
     const qrData = JSON.stringify({
         id: profileData.userId || profileData._id,
         name: profileData.name,
@@ -104,7 +124,6 @@ const TicketPage = () => {
                                     <FaUser />
                                     PARTICIPANT ID
                                 </span>
-                                {/* This still shows the hardcoded string "IC6850" */}
                                 <p className="ticket-value-large">IC6850</p>
                             </div>
 
@@ -115,14 +134,11 @@ const TicketPage = () => {
                                 <p className="ticket-value-large">{profileData.track || 'Track 1'}</p>
                             </div>
 
-                            {/* --- THIS BLOCK IS UPDATED --- */}
                             <div className="primary-info-item">
                                 <span className="ticket-label">
                                     <FaIdCard />
-                                    {/* Label updated */}
                                     UNIQUE ID 
                                 </span>
-                                {/* Value updated from profileData.name */}
                                 <p className="ticket-value-mono">{profileData.userId || profileData._id}</p>
                             </div>
 
@@ -143,7 +159,6 @@ const TicketPage = () => {
                                         PRESENTATION MODE
                                     </span>
                                     <p className="ticket-value">{profileData.presentationMode || 'offline'}</p>
-
                                 </div>
                                 <div className="detail-item">
                                     <span className="ticket-label">
