@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, XCircle, Hourglass, Receipt, Building, Lock, Ticket } from 'lucide-react';
+import { CheckCircle, XCircle, Hourglass, Receipt, Building, Lock, Ticket, AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const componentStyles = `
@@ -342,6 +342,32 @@ const componentStyles = `
     font-style: italic;
 }
 
+/* --- Added accommodation messages --- */
+.st-accommodation-message {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+.st-accommodation-message.selected {
+    background-color: #f0fdf4; /* green-50 */
+    color: #15803d; /* green-700 */
+    border: 1px solid #bbf7d0; /* green-200 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.st-accommodation-message.not-selected {
+    background-color: #f8fafc; /* slate-50 */
+    color: #475569; /* slate-600 */
+    border: 1px solid #e2e8f0; /* slate-200 */
+}
+/* --- End added messages --- */
+
+
 .st-toggle-switch {
     position: relative;
     display: inline-block;
@@ -387,6 +413,12 @@ input:checked + .st-toggle-slider {
 input:checked + .st-toggle-slider:before {
     transform: translateX(22px);
 }
+
+input:disabled + .st-toggle-slider {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
 
 /* Total Section */
 .st-bill-total-section {
@@ -436,11 +468,17 @@ input:checked + .st-toggle-slider:before {
 }
 
 .st-bill-note.accommodation {
-    color: #92400e;
-    background: #fef3c7;
+    color: #92400e; /* amber-800 */
+    background: #fef3c7; /* amber-100 */
     padding: 0.75rem;
     border-radius: 8px;
-    border: 1px solid #fde68a;
+    border: 1px solid #fde68a; /* amber-200 */
+    font-style: normal;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 .st-secure-badge {
@@ -499,6 +537,19 @@ input:checked + .st-toggle-slider:before {
     padding: 0.75rem;
     background: #f8f9fa;
     border-radius: 8px;
+}
+/* --- Added styles for confirmation text --- */
+.st-payment-note.confirmation {
+    color: #4b5563;
+    font-weight: 500;
+}
+.st-payment-note .confirm-yes {
+    font-weight: 700;
+    color: #166534;
+}
+.st-payment-note .confirm-no {
+    font-weight: 700;
+    color: #991b1b;
 }
 
 /* Success Styles */
@@ -680,7 +731,7 @@ input:checked + .st-toggle-slider:before {
 const fetchWithTimeout = async (url, options, timeout = 15000) => {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
-    
+
     try {
         const response = await fetch(url, {
             ...options,
@@ -711,7 +762,7 @@ const formatCurrency = (amount, currency = 'INR') => {
         maximumFractionDigits: 2,
         minimumFractionDigits: 2
     }).format(amount);
-    
+
     return currency === 'INR' ? `₹${formattedAmount}` : `$${formattedAmount}`;
 };
 
@@ -855,52 +906,6 @@ const completePayment = async () => {
     }
 };
 
-// API function to update accommodation preference
-const updateAccommodationPreference = async (needsAccommodation) => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        throw new Error('Authentication token not found. Please log in again.');
-    }
-
-    try {
-        const response = await fetchWithTimeout(
-            'https://it-con-backend.onrender.com/api/users/accommodation', // <-- UPDATED URL
-            {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    needsAccommodation: needsAccommodation
-                })
-            },
-            10000
-        );
-
-        if (!response.ok) {
-            let errorMessage = `HTTP error! status: ${response.status}`;
-            try {
-                const errorData = await response.json();
-                errorMessage = errorData.message || errorMessage;
-            } catch {
-                const errorText = await response.text();
-                errorMessage = errorText || errorMessage;
-            }
-            throw new Error(errorMessage);
-        }
-
-        const data = await response.json();
-        return { data };
-    } catch (error) {
-        if (error.name === 'AbortError') {
-            throw new Error('Request timeout. Please check your internet connection and try again.');
-        }
-        throw error;
-    }
-};
-
 // Payment Modal Component
 const PaymentModal = ({ onClose, discount, onPaymentSuccess, user }) => {
     const [loading, setLoading] = useState(true);
@@ -908,17 +913,17 @@ const PaymentModal = ({ onClose, discount, onPaymentSuccess, user }) => {
     const [error, setError] = useState(null);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     
-    // Initialize state from the user prop
-    const [needsAccommodation, setNeedsAccommodation] = useState(user?.needsAccommodation || false);
-    
-    const [updatingAccommodation, setUpdatingAccommodation] = useState(false);
+    // --- NEW states for accommodation ---
+    const [needsAccommodation, setNeedsAccommodation] = useState(false);
+    const [isToggleLoading, setIsToggleLoading] = useState(false);
+    // --- End new states ---
 
-    // Pass accommodation state directly to the API
-    const fetchPaymentDetails = async (accommodationStatus) => {
+    const fetchPaymentDetails = async () => {
         try {
+            // This function now relies on the `needsAccommodation` state
             setLoading(true);
             setError(null);
-            const result = await retryApiCall(() => createOrder({ accommodation: accommodationStatus }));
+            const result = await retryApiCall(() => createOrder({ accommodation: needsAccommodation }));
             if (result.data.success) {
                 setPaymentData(result.data);
             } else {
@@ -931,31 +936,105 @@ const PaymentModal = ({ onClose, discount, onPaymentSuccess, user }) => {
         }
     };
 
-    // Initial fetch on mount using the initial accommodation state
+    // --- MODIFIED useEffect on mount ---
     useEffect(() => {
-        fetchPaymentDetails(needsAccommodation);
-    }, []);
+        const loadModalData = async () => {
+            setLoading(true);
+            setError(null);
+            let initialAccommodation = false; // Default
+            try {
+                // First, get the user's saved preference
+                const token = localStorage.getItem('token');
+                if (!token) throw new Error('Authentication token not found.');
+                
+                const accomResponse = await fetchWithTimeout(
+                    'https://s3conference.ksrce.ac.in/api/register/accommodation',
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Accept': 'application/json'
+                        }
+                    },
+                    10000 // 10 second timeout
+                );
+                
+                if (accomResponse.ok) {
+                    const accomData = await accomResponse.json();
+                    initialAccommodation = accomData.accommodation;
+                    setNeedsAccommodation(initialAccommodation);
+                } else {
+                    console.warn('Could not fetch accommodation preference, defaulting to false.');
+                }
+            } catch (err) {
+                console.warn('Error fetching accommodation status:', err.message);
+            }
 
-    // Function to handle accommodation toggle change
-    const handleAccommodationChange = async (newValue) => {
+            // Now, fetch payment details *using this initial state*
+            try {
+                const result = await retryApiCall(() => createOrder({ accommodation: initialAccommodation }));
+                if (result.data.success) {
+                    setPaymentData(result.data);
+                } else {
+                    setError(result.data.message || 'Failed to create payment order');
+                }
+            } catch (err) {
+                setError(err.message || 'Network error. Please check your connection and try again.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadModalData();
+    }, []); // Runs only on mount
+
+    // --- MODIFIED: Re-fetch order details if accommodation changes ---
+    useEffect(() => {
+        // Only re-fetch if paymentData *already exists* (meaning it's not the initial load)
+        // This is triggered by the `handleAccommodationToggle` function
+        if (paymentData) {
+            fetchPaymentDetails();
+        }
+    }, [needsAccommodation]); // Note: This dependency is now set by `handleAccommodationToggle`
+
+
+    // --- NEW: Handler for the accommodation toggle ---
+    const handleAccommodationToggle = async (isChecked) => {
+        setIsToggleLoading(true);
+        setError(null); // Clear old errors
+
         try {
-            setUpdatingAccommodation(true);
-            setNeedsAccommodation(newValue); // Optimistically update UI
+            // 1. Call the PATCH API to save the preference
+            const token = localStorage.getItem('token');
+            const response = await fetchWithTimeout(
+                'https://s3conference.ksrce.ac.in/api/register/accommodation',
+                {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ accommodation: isChecked })
+                },
+                10000
+            );
+
+            if (!response.ok) {
+                throw new Error('Failed to update accommodation preference');
+            }
             
-            // Update the preference in the backend
-            await retryApiCall(() => updateAccommodationPreference(newValue));
-            
-            // Re-fetch payment details with new accommodation preference
-            await fetchPaymentDetails(newValue);
+            // 2. Preference saved. Now update local state,
+            // which will trigger the useEffect to get a new payment order.
+            setNeedsAccommodation(isChecked);
 
         } catch (err) {
-            setError(`Failed to update preference: ${err.message}`);
-            // Revert the toggle if update fails
-            setNeedsAccommodation(!newValue);
+            setError(err.message);
+            // Don't revert, as the useEffect won't be triggered
         } finally {
-            setUpdatingAccommodation(false);
+            setIsToggleLoading(false);
         }
     };
+
 
     const handlePayment = async () => {
         setLoading(true);
@@ -1086,13 +1165,13 @@ const PaymentModal = ({ onClose, discount, onPaymentSuccess, user }) => {
 
             {/* Accommodation Section */}
             <div className="st-bill-section">
-                <h5 className="st-bill-section-title"><Building size={18} /> Accommodation (Optional)</h5>
+                <h5 className="st-bill-section-title"><Building size={18} /> Accommodation</h5>
                 
                 <div className="st-accommodation-toggle">
                     <div className="st-accommodation-info">
-                        <label htmlFor="accommodation-toggle">Add On-Campus Accommodation</label>
+                        <label htmlFor="accommodation-toggle">On-Campus Accommodation {needsAccommodation ? '(Selected)' : ''}</label>
                         <span className="st-accommodation-note">
-                            (Payable at Office - ₹350 per day)
+                            Optional - ₹350 per day (payable at office)
                         </span>
                     </div>
                     <label className="st-toggle-switch">
@@ -1100,16 +1179,22 @@ const PaymentModal = ({ onClose, discount, onPaymentSuccess, user }) => {
                             type="checkbox" 
                             id="accommodation-toggle"
                             checked={needsAccommodation}
-                            onChange={(e) => handleAccommodationChange(e.target.checked)}
-                            disabled={updatingAccommodation || loading}
+                            onChange={(e) => handleAccommodationToggle(e.target.checked)}
+                            disabled={isToggleLoading || loading} // Disable while loading
                         />
                         <span className="st-toggle-slider"></span>
                     </label>
                 </div>
-                {updatingAccommodation && (
-                    <p style={{ fontSize: '0.8rem', color: 'var(--brand-orange)', textAlign: 'center', margin: '0.5rem 0' }}>
-                        Updating accommodation preference...
-                    </p>
+
+                {/* --- Messages based on selection --- */}
+                {needsAccommodation ? (
+                    <div className="st-accommodation-message selected">
+                        <CheckCircle size={16} /> Accommodation selected – charges payable at office
+                    </div>
+                ) : (
+                    <div className="st-accommodation-message not-selected">
+                        No accommodation selected
+                    </div>
                 )}
             </div>
 
@@ -1133,7 +1218,7 @@ const PaymentModal = ({ onClose, discount, onPaymentSuccess, user }) => {
                 </p>
                 {needsAccommodation && (
                     <p className="st-bill-note accommodation">
-                        💡 Accommodation charges are separate and payable in cash at our office during the Conference.
+                        <AlertTriangle size={14} /> Accommodation charges (₹350/day) are separate and payable in cash at our office during the Conference.
                     </p>
                 )}
             </div>
@@ -1163,7 +1248,7 @@ const PaymentModal = ({ onClose, discount, onPaymentSuccess, user }) => {
     // Payment Form UI Component
     const PaymentFormUI = () => (
         <>
-            {loading && !paymentData && (
+            {(loading && !paymentData) && (
                 <div className="st-loading-container" style={{ minHeight: '200px', padding: '2rem' }}>
                     <div className="st-loader">
                         <div className="st-loader-dot"></div>
@@ -1179,8 +1264,8 @@ const PaymentModal = ({ onClose, discount, onPaymentSuccess, user }) => {
                     <strong>Payment Error:</strong> {error}
                     <div className="st-error-actions">
                         <button 
-                            onClick={() => fetchPaymentDetails(needsAccommodation)}
-                            disabled={loading || updatingAccommodation}
+                            onClick={fetchPaymentDetails}
+                            disabled={loading}
                             className="st-retry-btn"
                         >
                             Retry
@@ -1201,7 +1286,7 @@ const PaymentModal = ({ onClose, discount, onPaymentSuccess, user }) => {
                 <>
                     <button 
                         onClick={handlePayment}
-                        disabled={loading || updatingAccommodation}
+                        disabled={loading || isToggleLoading} // Disable if main content or toggle is loading
                         className="st-modal-submit-btn"
                     >
                         {loading ? 'Processing...' : `Pay ${formatCurrency(finalAmount, paymentData.currency)} Online`}
@@ -1209,10 +1294,20 @@ const PaymentModal = ({ onClose, discount, onPaymentSuccess, user }) => {
                 </>
             )}
 
+            {/* --- Added confirmation text --- */}
+            <div className="st-payment-note confirmation">
+                By proceeding, you confirm your accommodation selection: 
+                {needsAccommodation ? (
+                    <span className="confirm-yes"> YES</span>
+                ) : (
+                    <span className="confirm-no"> NO</span>
+                )}
+            </div>
+
             <button 
                 onClick={onClose}
                 className="st-modal-cancel-btn"
-                disabled={loading || updatingAccommodation}
+                disabled={loading || isToggleLoading}
             >
                 Cancel
             </button>
@@ -1271,8 +1366,7 @@ const SubmissionStatusTracker = () => {
                 abstractStatus: data.abstractStatus,
                 paperStatus: data.paperStatus,
                 paymentStatus: data.paymentStatus,
-                discount: data.discount,
-                needsAccommodation: data.needsAccommodation || false
+                discount: data.discount
             });
             setUser(data);
 
@@ -1288,14 +1382,15 @@ const SubmissionStatusTracker = () => {
     };
 
     useEffect(() => {
-        setLoading(true);
         fetchStatusData();
     }, [refreshTrigger]);
 
     const handlePaymentSuccess = () => {
         setIsPaymentModalOpen(false);
-        // Trigger a re-fetch of the status data to show the "Registration Complete" state
-        setRefreshTrigger(prev => prev + 1); 
+        setRefreshTrigger(prev => prev + 1);
+        setTimeout(() => {
+            fetchStatusData();
+        }, 1000);
     };
 
     const handleTicketClick = () => {
@@ -1323,9 +1418,7 @@ const SubmissionStatusTracker = () => {
         if (paperStatus === "submitted" || paperStatus === "correction required") return 3;
         if (paperStatus === "rejected") return 3;
         if (paperStatus === "approved" && paymentStatus === "unpaid") return 4;
-        if (paperStatus === "approved" && paymentStatus === "paid") return 5; // Handle case where paper is approved and paid
-        if (paperStatus === "submitted" && paymentStatus === "paid") return 5; // Handle case where paper is still "submitted" but payment is "paid" (e.g., admin override)
-
+        if ((paperStatus === "approved" || paperStatus === "submitted") && paymentStatus === "paid") return 5;
 
         return 0;
     };
@@ -1355,7 +1448,7 @@ const SubmissionStatusTracker = () => {
             case 2: 
                 if (isAbstractRejected) return "This step is unavailable as your abstract was not accepted.";
                 if (paperStatus === "no paper" || !paperStatus) return "Congratulations! Your abstract has been accepted. Please submit your full paper.";
-                return "Your paper has been submitted."; // Fallback if paper is submitted
+                return "Ready for paper submission.";
             case 3: 
                 if (isAbstractRejected) return "This step is unavailable as your abstract was not accepted.";
                 if (isPaperRejected) return "Unfortunately, your paper was not accepted. Please check your email for feedback.";
@@ -1366,8 +1459,7 @@ const SubmissionStatusTracker = () => {
             case 4: 
                 if (isAbstractRejected || isPaperRejected) return "This step is unavailable as your submission was not accepted.";
                 if (paymentStatus === "unpaid") return "Your paper has been approved! Please complete the payment to finalize your registration.";
-                if (paymentStatus === "paid") return "Payment has been received.";
-                return "Awaiting paper approval to proceed to payment.";
+                return "Payment processing...";
             case 5: 
                 return "Congratulations! Your registration is complete! We look forward to seeing you at the conference!";
             default: 
@@ -1381,9 +1473,6 @@ const SubmissionStatusTracker = () => {
             if ((isAbstractRejected && index === 1) || (isPaperRejected && index === 3)) {
                 return <XCircle className="status-icon rejected" />;
             }
-            if (isRegistrationComplete && index === 5) {
-                return <CheckCircle className="status-icon completed" />;
-            }
             return <Hourglass className="status-icon active" />;
         }
         return <div className="status-icon pending" />;
@@ -1392,13 +1481,8 @@ const SubmissionStatusTracker = () => {
     const showActionButton = (index) => {
         if (!statusData) return false;
         const { abstractStatus, paperStatus, paymentStatus } = statusData;
-        
-        // Show "Submit Paper" button
         if (index === 2 && abstractStatus === "approved" && (paperStatus === "no paper" || !paperStatus)) return true;
-        
-        // Show "Complete Payment" button
         if (index === 4 && paperStatus === "approved" && paymentStatus === "unpaid") return true;
-        
         return false;
     };
 
@@ -1437,8 +1521,7 @@ const SubmissionStatusTracker = () => {
                                     ${index < currentStatusIndex ? 'completed' : ''} 
                                     ${index === currentStatusIndex ? 'active' : ''}
                                     ${(isAbstractRejected && index === 1) ? 'rejected' : ''}
-                                    ${(isPaperRejected && index === 3) ? 'rejected' : ''}
-                                    ${(isRegistrationComplete && index === 5) ? 'completed' : ''}`
+                                    ${(isPaperRejected && index === 3) ? 'rejected' : ''}`
                                 }
                             >
                                 <div className="st-timeline-connector">
@@ -1450,7 +1533,7 @@ const SubmissionStatusTracker = () => {
                                     <h3 className="st-item-title">{stage.title}</h3>
                                     <p className="st-item-description">{getStatusDescription(index)}</p>
                                     
-                                    {showActionButton(index) && !isAbstractRejected && !isPaperRejected && (
+                                    {showActionButton(index) && (
                                         <button 
                                             onClick={() => handleActionButtonClick(index)}
                                             className="st-gateway-btn"
@@ -1479,7 +1562,7 @@ const SubmissionStatusTracker = () => {
                         onClose={() => setIsPaymentModalOpen(false)}
                         discount={statusData?.discount}
                         onPaymentSuccess={handlePaymentSuccess}
-                        user={user} // Pass the full user object
+                        user={user}
                     />
                 )}
             </main>

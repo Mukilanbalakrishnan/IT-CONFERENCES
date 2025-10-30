@@ -8,6 +8,7 @@ import axios from 'axios';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import base_url from "../../config";
+import { Link } from 'react-router-dom'; // Import Link for navigation
 
 // Simple Online QR Code with black color
 const OnlineQRCode = ({ value, size = 160 }) => {
@@ -46,9 +47,70 @@ const Loader = () => (
 // Function to extract numeric part from userId like "IC6850" -> "6850"
 const extractNumericUserId = (userid) => {
     if (!userid) return '';
-    // Remove non-numeric characters and return
     return userid.replace(/\D/g, '');
 };
+
+// --- HELPER FUNCTION ---
+// This function determines the registration status based on your logic.
+const getRegistrationStatus = (profileData) => {
+    // Set default values if fields are missing
+    const { 
+        abstractStatus = "no abstract", 
+        paperStatus = "no paper", 
+        paymentStatus = "unpaid" 
+    } = profileData;
+
+    const isAbstractRejected = abstractStatus === 'rejected';
+    const isPaperRejected = paperStatus === 'rejected';
+
+    // Case 0: Abstract not submitted
+    if (abstractStatus === "no abstract") {
+        return { isComplete: false, message: "Submit your abstract to begin the review process." };
+    }
+    
+    // Case 1: Abstract under review or rejected
+    if (abstractStatus === "submitted") {
+            return { isComplete: false, message: "Our committee is currently reviewing your abstract submission." };
+    }
+    if (isAbstractRejected) {
+        return { isComplete: false, message: "Unfortunately, your abstract was not accepted. Please check your email for feedback." };
+    }
+
+    // --- If here, abstract is 'approved' ---
+
+    // Case 2: Paper not submitted
+    if (abstractStatus === 'approved' && (paperStatus === "no paper" || !paperStatus)) {
+        return { isComplete: false, message: "Congratulations! Your abstract has been accepted. Please submit your full paper." };
+    }
+
+    // Case 3: Paper under review, needs correction, or rejected
+    if (paperStatus === "submitted") {
+        return { isComplete: false, message: "Your paper has been submitted and is under review by our committee." };
+    }
+    if (paperStatus === "correction required") {
+        return { isComplete: false, message: "Corrections are required for your paper. Please check your email for details." };
+    }
+    if (isPaperRejected) {
+        return { isComplete: false, message: "Unfortunately, your paper was not accepted. Please check your email for feedback." };
+    }
+
+    // --- If here, paper is 'approved' ---
+
+    // Case 4: Payment pending
+    if (paperStatus === "approved" && paymentStatus === "unpaid") {
+        return { isComplete: false, message: "Your paper has been approved! Please complete the payment to finalize your registration." };
+    }
+
+    // Case 5: Registration Complete!
+    // Assumes 'paid' is the final payment status
+    if (paperStatus === "approved" && paymentStatus === "paid") {
+            return { isComplete: true, message: "Congratulations! Your registration is complete! We look forward to seeing you at the conference!" };
+    }
+
+    // Fallback for any other unexpected state
+    return { isComplete: false, message: "Your registration status is pending. Please check your dashboard." };
+};
+
 
 // Main Ticket Page Component
 const TicketPage = () => {
@@ -74,15 +136,40 @@ const TicketPage = () => {
 
                 if (!response.data) throw new Error('No profile data found in the API response.');
                 setProfileData(response.data);
+            
             } catch (err) {
-                setError(err.response?.data?.message || err.message || 'Failed to fetch profile data.');
+                
+                // --- AUTHENTICATION ERROR HANDLING ---
+                // Check if the error is the JSON parse error (from receiving HTML)
+                // or if the server *did* send a 401 (Unauthorized) status
+                if (err.message.includes("Unexpected token '<'") || err.response?.status === 401) {
+                    
+                    setError("Your session has expired. Please log in again.");
+                    
+                    // Clear the invalid token and user data from storage
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('loginTime');
+
+                    // Give the user a second to see the message, then redirect to home.
+                    // This forces AppLayout to re-check auth and find nothing.
+                    setTimeout(() => {
+                        window.location.href = '/'; // Force reload to homepage
+                    }, 2000);
+
+                } else {
+                    // This is for other network errors (e.g., server is down)
+                    setError(err.response?.data?.message || err.message || 'Failed to fetch profile data.');
+                }
+                // --- END OF AUTH LOGIC ---
+
             } finally {
                 setTimeout(() => setIsLoading(false), 1000);
             }
         };
 
         fetchProfileData();
-    }, []);
+    }, []); // Empty dependency array ensures this runs once on mount
 
     // PDF Download Function
     const handleDownloadPdf = async () => {
@@ -120,16 +207,60 @@ const TicketPage = () => {
         }
     };
 
-    if (isLoading) return <Loader />;
-    if (error) return <div className="profile-page-error">Error: {error}</div>;
+    // --- RENDER LOGIC ---
 
+    if (isLoading) return <Loader />;
+    
+    if (error) return (
+        <main className="ticket-page-container">
+             <header className="tp-header" style={{ textAlign: 'center', maxWidth: '600px', margin: 'auto', padding: '2rem' }}>
+                <h1>Error</h1>
+                <p style={{ fontSize: '1.1rem', marginBottom: '2rem', lineHeight: '1.5', color: '#dc2626' }}>
+                    {error}
+                </p>
+                {/* Show login button if session expired */}
+                {error.includes("session has expired") && (
+                     <Link to="/" className="download-btn" style={{ textDecoration: 'none' }}>
+                        Return to Home
+                    </Link>
+                )}
+            </header>
+        </main>
+    );
+    
+    // Add a check in case profile data is empty
+    if (!profileData) return <div className="profile-page-error">Could not load profile data.</div>;
+
+    // Check registration status
+    const { isComplete, message } = getRegistrationStatus(profileData);
+
+    // If registration is NOT complete, show the status message
+    if (!isComplete) {
+        return (
+            <main className="ticket-page-container">
+                <header className="tp-header" style={{ textAlign: 'center', maxWidth: '600px', margin: 'auto', padding: '2rem' }}>
+                    <h1>Registration Incomplete</h1>
+                    <p style={{ fontSize: '1.1rem', marginBottom: '2rem', lineHeight: '1.5' }}>
+                        {message}
+                    </p>
+                    {/* Button to navigate user to their dashboard */}
+                    <Link to="/status" className="download-btn" style={{ textDecoration: 'none' }}>
+                        Check Status
+                    </Link>
+                </header>
+            </main>
+        );
+    }
+
+    // --- If registration IS complete, render the ticket ---
+    
     // Get the actual user ID from profile data
     const actualUserId = profileData?.userid || '';
 
     // Create simple QR code data
     const qrData = JSON.stringify({
         id: profileData.userid,
-        numericUserId: actualUserId,
+        numericUserId: actualUserId, // Use the extracted numeric ID if needed, or actualUserId
         event: "IT Conference 2024",
         type: "attendee"
     });
@@ -175,7 +306,7 @@ const TicketPage = () => {
                                     USER ID
                                 </span>
                                 <p className="ticket-value-large user-id-number">{actualUserId}</p>
-                             
+                            
                             </div>
 
                             <div className="primary-info-item">
@@ -184,14 +315,6 @@ const TicketPage = () => {
                                 </span>
                                 <p className="ticket-value-large">{profileData.track || 'Track 1'}</p>
                             </div>
-
-                            {/* <div className="primary-info-item">
-                                <span className="ticket-label">
-                                    <FaIdCard />
-                                    UNIQUE ID
-                                </span>
-                                <p className="ticket-value-mono">{profileData._id}</p>
-                            </div> */}
 
                             <div className="primary-info-item">
                                 <span className="ticket-label">
@@ -225,7 +348,8 @@ const TicketPage = () => {
                     <div className="ticket-body-footer">
                         <div className="transaction-info">
                             <span className="ticket-label">TRANSACTION ID</span>
-                            <p className="ticket-value-mono">N/A</p>
+                            {/* You might want to pull this from profileData.paymentTransactionId or similar */}
+                            <p className="ticket-value-mono">{profileData.paymentId || 'N/A'}</p>
                         </div>
                     </div>
                 </div>
