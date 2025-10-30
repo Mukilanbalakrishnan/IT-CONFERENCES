@@ -7,6 +7,7 @@ import {
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import base_url from "../../config";
 
 // Simple Online QR Code with black color
 const OnlineQRCode = ({ value, size = 160 }) => {
@@ -43,10 +44,10 @@ const Loader = () => (
 );
 
 // Function to extract numeric part from userId like "IC6850" -> "6850"
-const extractNumericUserId = (userId) => {
-    if (!userId) return '';
+const extractNumericUserId = (userid) => {
+    if (!userid) return '';
     // Remove non-numeric characters and return
-    return userId.replace(/\D/g, '');
+    return userid.replace(/\D/g, '');
 };
 
 // Main Ticket Page Component
@@ -67,7 +68,7 @@ const TicketPage = () => {
                 const token = localStorage.getItem('token');
                 if (!token) throw new Error('Authentication token not found. Please log in.');
 
-                const response = await axios.get('https://it-con-backend.onrender.com/api/users/me', {
+                const response = await axios.get(`${base_url}/users/me`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
@@ -123,13 +124,12 @@ const TicketPage = () => {
     if (error) return <div className="profile-page-error">Error: {error}</div>;
 
     // Get the actual user ID from profile data
-    const actualUserId = profileData?.userId || '';
-    const numericUserId = extractNumericUserId(actualUserId);
+    const actualUserId = profileData?.userid || '';
 
     // Create simple QR code data
     const qrData = JSON.stringify({
-        id: profileData.userId || profileData._id,
-        numericUserId: numericUserId,
+        id: profileData.userid,
+        numericUserId: actualUserId,
         event: "IT Conference 2024",
         type: "attendee"
     });
@@ -174,10 +174,8 @@ const TicketPage = () => {
                                     <FaIdCard />
                                     USER ID
                                 </span>
-                                <p className="ticket-value-large user-id-number">{numericUserId}</p>
-                                {actualUserId && (
-                                    <p className="ticket-value-small">Full ID: {actualUserId}</p>
-                                )}
+                                <p className="ticket-value-large user-id-number">{actualUserId}</p>
+                             
                             </div>
 
                             <div className="primary-info-item">
@@ -187,13 +185,13 @@ const TicketPage = () => {
                                 <p className="ticket-value-large">{profileData.track || 'Track 1'}</p>
                             </div>
 
-                            <div className="primary-info-item">
+                            {/* <div className="primary-info-item">
                                 <span className="ticket-label">
                                     <FaIdCard />
                                     UNIQUE ID
                                 </span>
                                 <p className="ticket-value-mono">{profileData._id}</p>
-                            </div>
+                            </div> */}
 
                             <div className="primary-info-item">
                                 <span className="ticket-label">

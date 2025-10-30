@@ -81,7 +81,7 @@ const TeamProfile = () => {
                         <div className="user-header-info">
                             <h2>{profileData.name}</h2>
                             <p>{profileData.participants[0]?.designation || 'Lead Participant'}</p>
-                            <span className="user-id-badge">{profileData.userId}</span>
+                            <span className="user-id-badge">{profileData.userid}</span>
 
                         </div>
                     </div>
