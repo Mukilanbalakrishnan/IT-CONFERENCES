@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './TicketPage.css';
 import {
     FaTicketAlt, FaIdCard, FaCalendarAlt,
-    FaBuilding, FaEnvelope, FaDownload
+    FaBuilding, FaEnvelope, FaDownload, FaUsers
 } from 'react-icons/fa';
 import axios from 'axios';
 import jsPDF from 'jspdf';
@@ -257,6 +257,8 @@ const TicketPage = () => {
     // Get the actual user ID from profile data
     const actualUserId = profileData?.userid || '';
 
+    const participantCount = profileData.participants?.length || 0;
+
     // Create simple QR code data
     const qrData = JSON.stringify({
         id: profileData.userid,
@@ -313,7 +315,7 @@ const TicketPage = () => {
                                 <span className="ticket-label">
                                     SELECTED TRACK
                                 </span>
-                                <p className="ticket-value-large">{profileData.track || 'Track 1'}</p>
+                                <p className="ticket-value-large">{profileData.track.toUpperCase() || 'Track 1'}</p>
                             </div>
 
                             <div className="primary-info-item">
@@ -322,6 +324,14 @@ const TicketPage = () => {
                                     EMAIL ADDRESS
                                 </span>
                                 <p className="ticket-value">{profileData.email}</p>
+                            </div>
+
+                            <div className="primary-info-item">
+                                    <span className="ticket-label">
+                                        <FaUsers />
+                                        PARTICIPANTS
+                                    </span>
+                                    <p className="ticket-value">{participantCount}</p>
                             </div>
                         </div>
 
@@ -341,6 +351,7 @@ const TicketPage = () => {
                                     </span>
                                     <p className="ticket-value">{profileData.participants?.[0]?.organisation || 'KSR'}</p>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -349,7 +360,7 @@ const TicketPage = () => {
                         <div className="transaction-info">
                             <span className="ticket-label">TRANSACTION ID</span>
                             {/* You might want to pull this from profileData.paymentTransactionId or similar */}
-                            <p className="ticket-value-mono">{profileData.paymentId || 'N/A'}</p>
+                            <p className="ticket-value-mono">{profileData.paymentid || 'N/A'}</p>
                         </div>
                     </div>
                 </div>
